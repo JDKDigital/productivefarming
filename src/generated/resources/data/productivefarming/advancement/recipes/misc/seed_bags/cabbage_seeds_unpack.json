@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cabbage_seeds": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:cabbage_seeds"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:seed_bags/cabbage_seeds_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cabbage_seeds"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:seed_bags/cabbage_seeds_unpack"
+    ]
+  }
+}

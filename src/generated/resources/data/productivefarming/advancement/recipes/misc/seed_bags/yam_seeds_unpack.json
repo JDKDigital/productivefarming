@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:seed_bags/yam_seeds_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_yam_seeds": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:yam_seeds"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_yam_seeds"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:seed_bags/yam_seeds_unpack"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "productivefarming:block/crates/redcurrant_crate"
+    }
+  }
+}

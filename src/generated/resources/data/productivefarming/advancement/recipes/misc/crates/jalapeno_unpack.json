@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_jalapeno": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:jalapeno"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/jalapeno_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_jalapeno"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/jalapeno_unpack"
+    ]
+  }
+}

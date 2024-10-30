@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "productivefarming:raw_tuna_crate"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "productivefarming:raw_tuna"
+  }
+}

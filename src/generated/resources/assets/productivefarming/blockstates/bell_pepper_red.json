@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "productivefarming:block/crops/bell_pepper_red_stage0"
+    },
+    "age=1": {
+      "model": "productivefarming:block/crops/bell_pepper_red_stage1"
+    },
+    "age=2": {
+      "model": "productivefarming:block/crops/bell_pepper_red_stage2"
+    },
+    "age=3": {
+      "model": "productivefarming:block/crops/bell_pepper_red_stage3"
+    }
+  }
+}

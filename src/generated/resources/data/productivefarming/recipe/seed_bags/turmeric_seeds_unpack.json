@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "productivefarming:turmeric_seeds_bag"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "productivefarming:turmeric_seeds"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_green_grape": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:green_grape"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/green_grape_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_green_grape"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/green_grape_unpack"
+    ]
+  }
+}

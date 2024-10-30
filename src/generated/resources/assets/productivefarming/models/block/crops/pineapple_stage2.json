@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/crop",
+  "textures": {
+    "crop": "productivefarming:block/crops/pineapple_stage2"
+  }
+}

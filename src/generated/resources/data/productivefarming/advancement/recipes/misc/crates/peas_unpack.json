@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_peas": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:peas"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/peas_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_peas"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/peas_unpack"
+    ]
+  }
+}

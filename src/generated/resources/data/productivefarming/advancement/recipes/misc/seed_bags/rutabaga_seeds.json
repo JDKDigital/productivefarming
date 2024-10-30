@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rutabaga_seeds": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:rutabaga_seeds"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:seed_bags/rutabaga_seeds"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rutabaga_seeds"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:seed_bags/rutabaga_seeds"
+    ]
+  }
+}

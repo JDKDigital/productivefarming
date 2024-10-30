@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_okra": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:okra"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/okra_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_okra"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/okra_unpack"
+    ]
+  }
+}

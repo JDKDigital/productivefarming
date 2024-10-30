@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "productivefarming:block/crates/concord_grape_crate"
+    }
+  }
+}

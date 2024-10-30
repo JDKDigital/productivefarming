@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "productivefarming:block/farm_controller",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "productivefarming:block/farm_controller",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "productivefarming:block/farm_controller"
+    },
+    "facing=west": {
+      "model": "productivefarming:block/farm_controller",
+      "y": 90
+    }
+  }
+}

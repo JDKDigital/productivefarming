@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "cookingtime": 600,
+  "experience": 0.35,
+  "ingredient": {
+    "item": "productivefarming:raw_shrimp"
+  },
+  "result": {
+    "count": 1,
+    "id": "productivefarming:cooked_shrimp"
+  }
+}

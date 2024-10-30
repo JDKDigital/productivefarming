@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_artichoke": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:artichoke"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/artichoke_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_artichoke"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/artichoke_unpack"
+    ]
+  }
+}

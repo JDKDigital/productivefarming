@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/cutout_leaves",
+  "textures": {
+    "all": "productivefarming:block/trellis/hops_leaves"
+  }
+}

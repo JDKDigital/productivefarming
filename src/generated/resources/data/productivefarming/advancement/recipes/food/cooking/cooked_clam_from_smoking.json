@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_clam": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:clam"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:cooking/cooked_clam_from_smoking"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_clam"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:cooking/cooked_clam_from_smoking"
+    ]
+  }
+}

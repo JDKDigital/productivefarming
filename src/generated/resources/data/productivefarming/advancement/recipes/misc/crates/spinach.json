@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_spinach": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:spinach"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/spinach"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_spinach"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/spinach"
+    ]
+  }
+}

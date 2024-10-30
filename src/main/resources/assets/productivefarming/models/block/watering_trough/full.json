@@ -1,0 +1,14 @@
+{
+  "textures": {
+    "inside": "minecraft:block/water_still"
+  },
+  "elements": [
+    {
+      "from": [1, 5, 1],
+      "to": [15, 11, 15],
+      "faces": {
+        "up": {"uv": [1, 1, 15, 15], "texture": "#inside", "tintindex":  0}
+      }
+    }
+  ]
+}

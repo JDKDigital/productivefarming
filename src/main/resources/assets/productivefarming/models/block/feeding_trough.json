@@ -1,0 +1,84 @@
+{
+  "parent": "block/block",
+  "render_type": "cutout",
+  "textures": {
+    "bottom": "minecraft:block/composter_bottom",
+    "legs": "tfc:block/wattle/wattle_sides"
+  },
+  "elements": [
+    {
+      "from": [2, 0, 2],
+      "to": [4, 4, 4],
+      "faces": {
+        "north": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "east": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "south": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "west": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "up": {"uv": [0, 0, 2, 2], "texture": "#legs"},
+        "down": {"uv": [0, 0, 2, 2], "texture": "#legs"}
+      }
+    },
+    {
+      "from": [2, 0, 12],
+      "to": [4, 4, 14],
+      "faces": {
+        "north": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "east": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "south": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "west": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "up": {"uv": [0, 0, 2, 2], "texture": "#legs"},
+        "down": {"uv": [0, 0, 2, 2], "texture": "#legs"}
+      }
+    },
+    {
+      "from": [12, 0, 2],
+      "to": [14, 4, 4],
+      "faces": {
+        "north": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "east": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "south": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "west": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "up": {"uv": [0, 0, 2, 2], "texture": "#legs"},
+        "down": {"uv": [0, 0, 2, 2], "texture": "#legs"}
+      }
+    },
+    {
+      "from": [12, 0, 12],
+      "to": [14, 4, 14],
+      "faces": {
+        "north": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "east": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "south": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "west": {"uv": [0, 0, 2, 4], "texture": "#legs"},
+        "up": {"uv": [0, 0, 2, 2], "texture": "#legs"},
+        "down": {"uv": [0, 0, 2, 2], "texture": "#legs"}
+      }
+    },
+    {
+      "name": "trough",
+      "from": [0, 4, 0],
+      "to": [16, 12, 16],
+      "faces": {
+        "north": {"uv": [0, 1, 16, 9], "texture": "#side"},
+        "east": {"uv": [0, 1, 16, 9], "texture": "#side"},
+        "south": {"uv": [0, 1, 16, 9], "texture": "#side"},
+        "west": {"uv": [0, 1, 16, 9], "texture": "#side"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#top"},
+        "down": {"uv": [0, 0, 16, 16], "texture": "#bottom"}
+      }
+    },
+    {
+      "name": "inner",
+      "from": [15, 12, 15],
+      "to": [1, 5, 1],
+      "faces": {
+        "north": {"uv": [1, 1, 15, 8], "texture": "#side"},
+        "east": {"uv": [1, 1, 15, 8], "texture": "#side"},
+        "south": {"uv": [1, 1, 15, 8], "texture": "#side"},
+        "west": {"uv": [1, 1, 15, 8], "texture": "#side"},
+        "up": {"uv": [1, 1, 15, 15], "texture": "#side"},
+        "down": {"uv": [1, 1, 15, 15], "texture": "#bottom"}
+      }
+    }
+  ]
+}

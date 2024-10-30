@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "productivefarming:monstera_deliciosa_crate"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "productivefarming:monstera_deliciosa"
+  }
+}

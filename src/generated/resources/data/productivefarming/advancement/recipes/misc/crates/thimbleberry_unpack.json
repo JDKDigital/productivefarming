@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/thimbleberry_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_thimbleberry": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:thimbleberry"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_thimbleberry"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/thimbleberry_unpack"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_spoon_gourd": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:spoon_gourd"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/spoon_gourd_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_spoon_gourd"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/spoon_gourd_unpack"
+    ]
+  }
+}

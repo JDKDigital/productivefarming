@@ -1,0 +1,33 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "productivefarming:block/watering_trough/empty"
+      }
+    },
+    {
+      "apply": {
+        "model": "productivefarming:block/watering_trough/empty"
+      },
+      "when": {
+        "level": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "productivefarming:block/watering_trough/half"
+      },
+      "when": {
+        "level": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "productivefarming:block/watering_trough/full"
+      },
+      "when": {
+        "level": "2"
+      }
+    }
+  ]
+}

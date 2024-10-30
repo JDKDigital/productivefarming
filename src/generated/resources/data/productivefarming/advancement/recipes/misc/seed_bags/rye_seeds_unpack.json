@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rye_seeds": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:rye_seeds"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:seed_bags/rye_seeds_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rye_seeds"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:seed_bags/rye_seeds_unpack"
+    ]
+  }
+}

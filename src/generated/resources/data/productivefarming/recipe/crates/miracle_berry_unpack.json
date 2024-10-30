@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "productivefarming:miracle_berry_crate"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "productivefarming:miracle_berry"
+  }
+}

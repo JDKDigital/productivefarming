@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:stone_bricks",
+    "productivefarming:farm_controller",
+    "productivefarming:farm_block",
+    "productivefarming:farm_hatch"
+  ]
+}

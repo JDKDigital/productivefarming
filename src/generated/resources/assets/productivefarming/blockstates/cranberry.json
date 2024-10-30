@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "productivefarming:block/bushes/cranberry_stage0"
+    },
+    "age=1": {
+      "model": "productivefarming:block/bushes/cranberry_stage1"
+    },
+    "age=2": {
+      "model": "productivefarming:block/bushes/cranberry_stage2"
+    },
+    "age=3": {
+      "model": "productivefarming:block/bushes/cranberry_stage3"
+    }
+  }
+}

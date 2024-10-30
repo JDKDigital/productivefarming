@@ -1,0 +1,28 @@
+package cy.jdkdigital.productivefarming.datagen;
+
+import cy.jdkdigital.productivefarming.ProductiveFarming;
+import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import cy.jdkdigital.productivefarming.registry.ModTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.PoiTypeTagsProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
+import java.util.concurrent.CompletableFuture;
+
+public class POITagProvider extends PoiTypeTagsProvider
+{
+    public POITagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
+        super(output, future, ProductiveFarming.MODID, helper);
+    }
+
+    @Override
+    protected void addTags(HolderLookup.Provider provider) {
+        tag(ModTags.SALT_LICK_POI_TAG).add(FarmingRegistrator.SALT_LICK_POI.getKey());
+    }
+
+    @Override
+    public String getName() {
+        return "Productive Farming POI Type Tag Provider";
+    }
+}

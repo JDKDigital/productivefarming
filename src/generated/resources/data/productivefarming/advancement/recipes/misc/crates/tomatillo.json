@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/tomatillo"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tomatillo": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:tomatillo"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tomatillo"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/tomatillo"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "textures": {
+    "inside": "productivefarming:block/feeding_trough/feed"
+  },
+  "elements": [
+    {
+      "from": [1, 5, 1],
+      "to": [15, 16, 15],
+      "faces": {
+        "north": {"uv": [0, 0, 14, 15], "texture": "#inside"},
+        "east": {"uv": [0, 0, 14, 15], "texture": "#inside"},
+        "south": {"uv": [0, 0, 14, 15], "texture": "#inside"},
+        "west": {"uv": [0, 0, 14, 15], "texture": "#inside"},
+        "up": {"uv": [1, 1, 15, 15], "texture": "#inside"}
+      }
+    }
+  ]
+}

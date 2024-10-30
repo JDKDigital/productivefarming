@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_kiwi": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:kiwi"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/kiwi_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_kiwi"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/kiwi_unpack"
+    ]
+  }
+}

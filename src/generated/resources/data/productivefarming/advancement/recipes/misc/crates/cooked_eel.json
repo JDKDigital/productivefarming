@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cooked_eel": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:cooked_eel"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/cooked_eel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cooked_eel"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/cooked_eel"
+    ]
+  }
+}

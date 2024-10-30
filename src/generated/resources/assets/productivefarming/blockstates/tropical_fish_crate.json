@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "productivefarming:block/crates/tropical_fish_crate"
+    }
+  }
+}

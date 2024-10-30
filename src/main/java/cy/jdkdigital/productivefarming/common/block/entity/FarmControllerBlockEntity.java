@@ -1,0 +1,229 @@
+package cy.jdkdigital.productivefarming.common.block.entity;
+
+import cy.jdkdigital.productivefarming.inventory.FarmControllerContainer;
+import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import cy.jdkdigital.productivefarming.registry.ModTags;
+import cy.jdkdigital.productivefarming.util.FarmConfig;
+import cy.jdkdigital.productivefarming.util.FarmValidator;
+import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class FarmControllerBlockEntity extends TickingBlockEntity implements MenuProvider
+{
+    FarmConfig farmConfig;
+
+    public final IItemHandlerModifiable inventoryHandler = new InventoryHandlerHelper.BlockEntityItemStackHandler(9, this)
+    {
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return true;
+        }
+
+        @Override
+        public boolean isInsertableSlot(int slot) {
+            return true;
+        }
+
+        @Override
+        public boolean isInputSlot(int slot) {
+            return false;
+        }
+
+        @Override
+        public int[] getOutputSlots() {
+            return new int[]{0,1,2,3,4,5,6,7,8};
+        }
+    };
+    private final IFluidHandler fluidHandler = new FluidTank(10000, fluidStack -> fluidStack.getFluid().isSame(FarmingRegistrator.NUTRIENT_WATER.get()));
+    
+    public FarmControllerBlockEntity(BlockPos pos, BlockState state) {
+        super(FarmingRegistrator.FARM_CONTROLLER_BLOCK_ENTITY.get(), pos, state);
+    }
+
+    @Override
+    public Component getName() {
+        return Component.translatable(this.getBlockState().getBlock().getDescriptionId());
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
+        return new FarmControllerContainer(pContainerId, pPlayerInventory, this);
+    }
+
+    public void setFarmConfig(FarmConfig farmConfig) {
+        this.farmConfig = farmConfig;
+    }
+
+    @Override
+    int tickRate() {
+        return 300;
+    }
+
+    @Override
+    public void tickServer(ServerLevel level, BlockPos blockPos, BlockState blockState, TickingBlockEntity blockEntity) {
+        if (blockEntity instanceof FarmControllerBlockEntity farmControllerBlockEntity) {
+            var farmConfig = farmControllerBlockEntity.farmConfig;
+            var cropPositions = BlockPos.betweenClosedStream(farmConfig.firstCorner(), farmConfig.secondCorner()).map(BlockPos::above).toList();
+            if (farmConfig.type().equals(FarmValidator.FARM_TYPE_FISH)) {
+                List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, (new AABB(farmConfig.firstCorner().getCenter(), farmConfig.secondCorner().getCenter()))).stream().filter(e -> e.getType().is(ModTags.FISH_FARM_ENTITIES) || e instanceof AbstractFish).toList();
+                if (entities.size() > 1) {
+                    // Entity count map
+                    Map<EntityType<?>, Integer> entityCount = new HashMap<>();
+                    entities.forEach(livingEntity -> {
+                        var type = livingEntity.getType();
+                        if (entityCount.containsKey(type)) {
+                            entityCount.put(type, entityCount.get(type) + 1);
+                        } else {
+                            entityCount.put(type, 1);
+                        }
+                    });
+                    List<Map.Entry<EntityType<?>, Integer>> list = new LinkedList<>(entityCount.entrySet());
+                    list.sort(Comparator.comparingInt(Map.Entry::getValue));
+
+                    int maxAllowedEntities = cropPositions.size() / 8;
+                    if (maxAllowedEntities < entities.size()) {
+                        // kill excess
+                        AtomicInteger toKill = new AtomicInteger(entities.size() - maxAllowedEntities);
+                        entities.forEach(entity -> {
+                            if (toKill.getAndDecrement() >= 0 && entityCount.get(entity.getType()) > 2) {
+                                entity.kill();
+                                entityCount.put(entity.getType(), entityCount.get(entity.getType()) - 1);
+                            }
+                        });
+                    }
+
+                    BlockPos middle = new BlockPos((farmConfig.firstCorner().getX() + farmConfig.secondCorner().getX()) / 2, farmConfig.firstCorner().getY() - 1, (farmConfig.firstCorner().getZ() + farmConfig.secondCorner().getZ()) / 2);
+                    List<EntityType<?>> bredSpecies = new ArrayList<>();
+                    entities.forEach(livingEntity -> {
+                        // breed
+                        var count = entityCount.get(livingEntity.getType());
+                        if (count >= 2 && !bredSpecies.contains(livingEntity.getType())) {
+                            bredSpecies.add(livingEntity.getType());
+                            var newBreeds = level.random.nextInt(count / 2);
+                            for (int i = 0; i < newBreeds; i++) {
+                                if (level.random.nextBoolean()) {
+                                    if (livingEntity instanceof Animal animal) {
+                                        var offSpring = animal.getBreedOffspring(level, animal);
+                                        if (offSpring != null) {
+                                            offSpring.setPos(middle.getX(), middle.getY(), middle.getZ());
+                                            level.addFreshEntity(offSpring);
+                                        }
+                                    } else {
+                                        livingEntity.getType().spawn(level, middle.relative(Direction.fromYRot(level.random.nextInt(360))), MobSpawnType.BREEDING);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Propagate clams and oysters
+                Map<BlockPos, BlockState> clamMap = new HashMap<>();
+                for(var pos : BlockPos.betweenClosed(farmConfig.firstCorner(), farmConfig.secondCorner())) {
+                    var state = level.getBlockState(pos);
+                    if (state.is(ModTags.FARMABLE_FISH_BLOCKS)) {
+                        clamMap.put(new BlockPos(pos), state);
+                    }
+                }
+
+                float clamChance = 0.1f; // TODO config
+
+                List<Direction> directions = Arrays.asList(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+                for (Map.Entry<BlockPos, BlockState> clamPos: clamMap.entrySet()) {
+                    var state = clamPos.getValue();
+                    if (level.random.nextFloat() < clamChance) {
+                        var hasPropagated = false;
+                        Collections.shuffle(directions);
+                        for (Direction dir: directions) {
+                            if (hasPropagated) continue;
+                            var neighborState = level.getBlockState(clamPos.getKey().relative(dir));
+                            if (neighborState.getFluidState().is(FluidTags.WATER) && level.random.nextBoolean()) {
+                                level.setBlockAndUpdate(clamPos.getKey().relative(dir), state.getBlock().defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, true));
+                                hasPropagated = true;
+                            }
+                        }
+                        // Harvest the clam
+                        if (hasPropagated && level.random.nextBoolean()) {
+                            level.destroyBlock(clamPos.getKey(), true);
+                        }
+                    }
+                }
+
+                // Calculate nutrient water production
+                int sludge = Math.max(entities.size() * 2 - clamMap.size() * 5, 0);
+                fluidHandler.fill(new FluidStack(FarmingRegistrator.NUTRIENT_WATER.get(), sludge), IFluidHandler.FluidAction.EXECUTE);
+            } else {
+                // do crop/tree farming
+
+                // initiate worker for cutting trees and harvesting crops
+            }
+
+            // collect loot, void excess
+            List<ItemEntity> lootStacks = level.getEntitiesOfClass(ItemEntity.class, (new AABB(farmConfig.firstCorner().above().getBottomCenter(), farmConfig.secondCorner().below().getBottomCenter()))).stream().toList();
+            lootStacks.forEach(itemEntity -> {
+                if (inventoryHandler instanceof InventoryHandlerHelper.BlockEntityItemStackHandler handler) {
+                    handler.addOutput(itemEntity.getItem());
+                    itemEntity.kill();
+                }
+            });
+        }
+    }
+
+    public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, FarmControllerBlockEntity blockEntity) {
+        if (blockEntity.farmConfig != null) {
+            blockEntity.tickHandler(level, blockPos, blockState, blockEntity);
+        }
+    }
+
+    @Override
+    public void savePacketNBT(CompoundTag tag, HolderLookup.Provider provider) {
+        super.savePacketNBT(tag, provider);
+
+        if (farmConfig != null) {
+            tag.putString("farm_type", farmConfig.type());
+            tag.putLong("first_corner", farmConfig.firstCorner().asLong());
+            tag.putLong("second_corner", farmConfig.secondCorner().asLong());
+        }
+    }
+
+    @Override
+    public void loadPacketNBT(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadPacketNBT(tag, provider);
+
+        if (tag.contains("farm_type")) {
+            farmConfig = new FarmConfig(tag.getString("farm_type"), BlockPos.of(tag.getLong("first_corner")), BlockPos.of(tag.getLong("second_corner")));
+        }
+    }
+}

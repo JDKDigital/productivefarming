@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/stem_attached",
+  "textures": {
+    "stem": "productivefarming:block/vines/stem"
+  }
+}

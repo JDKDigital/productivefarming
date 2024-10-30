@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "productivefarming:block/crops/attached_honey_dew_melon_stem",
+      "y": 180
+    },
+    "facing=north": {
+      "model": "productivefarming:block/crops/attached_honey_dew_melon_stem",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "productivefarming:block/crops/attached_honey_dew_melon_stem",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "productivefarming:block/crops/attached_honey_dew_melon_stem"
+    }
+  }
+}

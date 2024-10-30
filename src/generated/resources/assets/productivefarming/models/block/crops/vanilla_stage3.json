@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/stem_growth3",
+  "textures": {
+    "stem": "productivefarming:block/trellis/stem"
+  }
+}

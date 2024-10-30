@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_akebia": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:akebia"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/akebia"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_akebia"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/akebia"
+    ]
+  }
+}

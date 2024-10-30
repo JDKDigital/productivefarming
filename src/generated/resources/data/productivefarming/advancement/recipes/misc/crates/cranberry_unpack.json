@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cranberry": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:cranberry"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/cranberry_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cranberry"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/cranberry_unpack"
+    ]
+  }
+}

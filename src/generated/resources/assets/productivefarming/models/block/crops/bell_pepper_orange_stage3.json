@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/crop",
+  "textures": {
+    "crop": "productivefarming:block/crops/bell_pepper_orange_stage3"
+  }
+}

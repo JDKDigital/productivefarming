@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "productivefarming:block/crops/honey_dew_melon_top",
+    "side": "productivefarming:block/crops/honey_dew_melon_side"
+  }
+}

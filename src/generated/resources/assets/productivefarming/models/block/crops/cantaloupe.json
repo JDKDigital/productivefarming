@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "productivefarming:block/crops/cantaloupe_top",
+    "side": "productivefarming:block/crops/cantaloupe_side"
+  }
+}

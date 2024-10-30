@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_lettuce": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:lettuce"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/lettuce"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_lettuce"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/lettuce"
+    ]
+  }
+}

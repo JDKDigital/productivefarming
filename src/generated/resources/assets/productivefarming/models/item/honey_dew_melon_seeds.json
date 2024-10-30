@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:item/seeds/honey_dew_melon_seeds"
+  }
+}

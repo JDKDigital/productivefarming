@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "productivefarming:block/crates/cooked_crab_crate"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "productivefarming:honey_dew_melon_slice"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "productivefarming:honey_dew_melon_seeds"
+  }
+}
