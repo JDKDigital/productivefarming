@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "productivefarming:burdock_root_crate"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "productivefarming:burdock_root"
+  }
+}

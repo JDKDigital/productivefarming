@@ -14,13 +14,30 @@ public class Config
 
     public static class Server
     {
+        public final ModConfigSpec.IntValue farmMaxVolume;
+        public final ModConfigSpec.IntValue farmMaxCircumference;
+        public final ModConfigSpec.IntValue farmMaxHeight;
         public final ModConfigSpec.IntValue feedingTroughTickRate;
         public final ModConfigSpec.IntValue wateringTroughTickRate;
         public final ModConfigSpec.IntValue fishTrapTickRate;
         public final ModConfigSpec.IntValue childSeparatorTickRate;
 
+        public final ModConfigSpec.DoubleValue clamSpreadChance;
+
         public Server(ModConfigSpec.Builder builder) {
             builder.push("General");
+
+            farmMaxVolume = builder
+                    .comment("Max internal volume of the farm multiblock")
+                    .defineInRange("foundryMaxVolume", 200, 1, Integer.MAX_VALUE);
+
+            farmMaxCircumference = builder
+                    .comment("Max circumference of the farm multiblock")
+                    .defineInRange("foundryMaxCircumference", 200, 1, Integer.MAX_VALUE);
+
+            farmMaxHeight = builder
+                    .comment("Max height of the farm multiblock")
+                    .defineInRange("foundryMaxHeight", 20, 1, Integer.MAX_VALUE);
 
             feedingTroughTickRate = builder
                     .comment("Tickrate for Feeding Troughs")
@@ -37,6 +54,10 @@ public class Config
             childSeparatorTickRate = builder
                     .comment("Tickrate for Child Separator")
                     .defineInRange("childSeparatorTickRate", 600, 1, Integer.MAX_VALUE);
+
+            clamSpreadChance = builder
+                    .comment("Chance for clams to propagate in a fish farm")
+                    .defineInRange("clamSpreadChance", 0.1, 0, 1);
 
             builder.pop();
         }

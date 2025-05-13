@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_arugula_seeds": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:arugula_seeds"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:seed_bags/arugula_seeds"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_arugula_seeds"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:seed_bags/arugula_seeds"
+    ]
+  }
+}

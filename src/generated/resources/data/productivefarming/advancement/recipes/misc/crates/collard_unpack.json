@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_collard": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:collard"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/collard_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_collard"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/collard_unpack"
+    ]
+  }
+}

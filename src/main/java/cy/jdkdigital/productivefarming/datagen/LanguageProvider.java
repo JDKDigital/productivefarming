@@ -30,7 +30,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             if (itemRegistryObject.get() instanceof MobBucketItem) {
                 add(itemRegistryObject.get(), "Bucket of " + capName(BuiltInRegistries.ITEM.getKey(itemRegistryObject.get()).getPath().replace("_bucket", "")));
             } else if (!(itemRegistryObject.get() instanceof BlockItem) || itemRegistryObject.get() instanceof ItemNameBlockItem) {
-                add(itemRegistryObject.get(), capName(BuiltInRegistries.ITEM.getKey(itemRegistryObject.get()).getPath()));
+                var regName = BuiltInRegistries.ITEM.getKey(itemRegistryObject.get()).getPath();
+                if (regName.contains("grape_seeds")) {
+                    add(itemRegistryObject.get(), capName(regName.replace("seeds", "propagule")));
+                } else {
+                    add(itemRegistryObject.get(), capName(regName));
+                }
             }
         });
         ProductiveFarming.ENTITY_TYPES.getEntries().forEach(entityTypeRegistryObject -> {

@@ -45,6 +45,20 @@ public class ClientSetupEvents
                 return FastColor.ARGB32.color(i * 32, 255 - i * 8, i * 4);
             }, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem")));
         });
+        FarmingRegistrator.VINES.forEach(crop -> {
+            event.register((blockState, lightReader, pos, tintIndex) -> -2046180, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")));
+            event.register((blockState, lightReader, pos, tintIndex) -> {
+                int i = blockState.getValue(StemBlock.AGE);
+                return FastColor.ARGB32.color(i * 32, 255 - i * 8, i * 4);
+            }, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+        });
+        FarmingRegistrator.TRELLIS.forEach(crop -> {
+            event.register((blockState, lightReader, pos, tintIndex) -> -2046180, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")));
+            event.register((blockState, lightReader, pos, tintIndex) -> {
+                int i = blockState.getValue(StemBlock.AGE);
+                return FastColor.ARGB32.color(i * 32, 255 - i * 8, i * 4);
+            }, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+        });
     }
 
     @SubscribeEvent
@@ -55,8 +69,9 @@ public class ClientSetupEvents
 
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(FarmingRegistrator.VINE_LEAVES_BLOCK_ENTITY.get(), FencedCropBlockEntityRenderer::new);
-        event.registerBlockEntityRenderer(FarmingRegistrator.TRELLIS_LEAVES_BLOCK_ENTITY.get(), FencedCropBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(FarmingRegistrator.FENCED_VERTICAL_CROP_BLOCK_ENTITY.get(), FencedCropBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(FarmingRegistrator.FENCED_LEAVES_BLOCK_ENTITY.get(), FencedCropBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(FarmingRegistrator.FENCED_STEM_BLOCK_ENTITY.get(), FencedCropBlockEntityRenderer::new);
 
         FarmingRegistrator.FISHIES.forEach(fishConfig -> {
             if (fishConfig.entitySupplier() != null) {

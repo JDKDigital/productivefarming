@@ -71,26 +71,30 @@ public class ModelProvider implements DataProvider
         PackOutput.PathProvider modelPathProvider = packOutput.createPathProvider(PackOutput.Target.RESOURCE_PACK, "models");
 
         for (CropConfig crop : FarmingRegistrator.BERRIES) {
-            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/fruit/", modelOutput);
+            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/fruits/", modelOutput);
         }
 
         for (CropConfig crop : FarmingRegistrator.HERBS) {
-            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crop/", modelOutput);
+            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crops/", modelOutput);
         }
 
         for (CropConfig crop : FarmingRegistrator.CROPS) {
-            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crop/", modelOutput);
+            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crops/", modelOutput);
             if (crop.hasSeed()) {
                 generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")), "item/seeds/", modelOutput);
             }
         }
 
         for (CropConfig crop : FarmingRegistrator.TRELLIS) {
-            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crop/", modelOutput);
+            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crops/", modelOutput);
+        }
+
+        for (CropConfig crop : FarmingRegistrator.VERTICAL_TRELLIS) {
+            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crops/", modelOutput);
         }
 
         for (CropConfig crop : FarmingRegistrator.VINES) {
-            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crop/", modelOutput);
+            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crops/", modelOutput);
         }
 
         for (CropConfig crop : FarmingRegistrator.STEMS) {
@@ -121,8 +125,9 @@ public class ModelProvider implements DataProvider
 //            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, seedName.getPath() + "_bag"))), getFlatItemTextureMap(new ResourceLocation("item/bundle_filled"), "", ""), modelOutput);
         });
 
-        generateFlatItem(FarmingRegistrator.DRIED_LUFFA.get(), "item/materials", modelOutput);
-        generateFlatItem(FarmingRegistrator.CORN_PIPE.get(), "item/", modelOutput);
+        generateFlatItem(FarmingRegistrator.DRIED_LUFFA.get(), "item/materials/", modelOutput);
+        generateFlatItem(FarmingRegistrator.DRIED_TOBACCO.get(), "item/materials/", modelOutput);
+        generateFlatItem(FarmingRegistrator.CORN_COB_PIPE.get(), "item/", modelOutput);
 
         addBlockItemParentModel(FarmingRegistrator.FEEDING_TROUGH.get(), "", "/empty", itemModels);
         addBlockItemParentModel(FarmingRegistrator.WATERING_TROUGH.get(), "", "/empty", itemModels);
@@ -203,13 +208,17 @@ public class ModelProvider implements DataProvider
             FarmingRegistrator.TRELLIS.forEach(crop -> {
                 var leafBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_leaves"));
                 var stemBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
-                var attachedStemBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem"));
+                var attachedStemBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem"));
                 createFenceGrowingPlantBlock(stemBlock, attachedStemBlock, leafBlock, "crops/", "trellis/");
+            });
+            FarmingRegistrator.VERTICAL_TRELLIS.forEach(crop -> {
+                var leafBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                createFenceGrowingPlantLeafBlock(leafBlock, "trellis/", verticalTrellisLeaves);
             });
             FarmingRegistrator.VINES.forEach(crop -> {
                 var leafBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_leaves"));
                 var stemBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
-                var attachedStemBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem"));
+                var attachedStemBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem"));
                 createFenceGrowingPlantBlock(stemBlock, attachedStemBlock, leafBlock, "crops/", "vines/");
             });
             FarmingRegistrator.STEMS.forEach(crop -> {
@@ -238,20 +247,36 @@ public class ModelProvider implements DataProvider
 
             createFeedingTrough(FarmingRegistrator.FEEDING_TROUGH.get());
             createFeedingTrough(FarmingRegistrator.WATERING_TROUGH.get());
+
+            createAttachedMushroom(FarmingRegistrator.BROWN_MUSHROOM_GROWTH.get());
+            createAttachedMushroom(FarmingRegistrator.RED_MUSHROOM_GROWTH.get());
+            createAttachedMushroom(FarmingRegistrator.CRIMSON_FUNGUS_GROWTH.get());
+            createAttachedMushroom(FarmingRegistrator.WARPED_FUNGUS_GROWTH.get());
         }
 
-        static ModelTemplate vineLeaves = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/cutout_leaves")), Optional.empty(), TextureSlot.ALL);
-        static ModelTemplate attachedStemModel = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/stem_attached")), Optional.empty(), TextureSlot.STEM);
+        static ModelTemplate verticalTrellisLeaves = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/vertical_trellis_leaves")), Optional.empty(), TextureSlot.ALL);
+        static ModelTemplate vineLeaves = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/inset_leaves")), Optional.empty(), TextureSlot.ALL);
+        static ModelTemplate attachedFencedStemModel = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/fenced_stem_attached")), Optional.empty(), TextureSlot.STEM);
 
         private void createFenceGrowingPlantBlock(Block stem, Block attachedStem, Block leafBlock, String prefix, String type) {
             IntegerProperty prop = stem instanceof IAgeableCropBlock cropBlock ? cropBlock.getAgeProperty() : BlockStateProperties.AGE_3;
             this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(stem).with(PropertyDispatch.property(prop).generate((age) -> {
-                return Variant.variant().with(VariantProperties.MODEL, createSuffixedStemVariant(stem, prefix, "_stage" + age, new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/stem_growth" + age)), Optional.empty(), TextureSlot.STEM), type));
+                return Variant.variant().with(VariantProperties.MODEL, createSuffixedStemVariant(stem, prefix, "_stage_" + age, new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/fenced_stem_full")), Optional.empty(), TextureSlot.STEM), type, "stage_" + age));
             })));
-            this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(attachedStem, Variant.variant().with(VariantProperties.MODEL, createSuffixedStemVariant(attachedStem, prefix, "", attachedStemModel, type))));
-            // TODO multiple leaf stages
-            ResourceLocation resourceLocation = BuiltInRegistries.BLOCK.getKey(leafBlock).withPath((p) -> "block/crops/" + p);
-            this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(leafBlock, Variant.variant().with(VariantProperties.MODEL, vineLeaves.create(resourceLocation, TextureMapping.cube(TextureMapping.getBlockTexture(leafBlock).withPath(p -> "block/" + type + p.replace("block/", ""))), this.modelOutput))));
+
+            this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(attachedStem, Variant.variant().with(VariantProperties.MODEL, createSuffixedStemVariant(attachedStem, prefix, "", attachedFencedStemModel, type, "attached"))));
+
+            createFenceGrowingPlantLeafBlock(leafBlock, type, vineLeaves);
+        }
+
+        private void createFenceGrowingPlantLeafBlock(Block leafBlock, String type, ModelTemplate model) {
+            IntegerProperty prop = leafBlock instanceof IAgeableCropBlock cropBlock ? cropBlock.getAgeProperty() : BlockStateProperties.AGE_3;
+            this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(leafBlock).with(PropertyDispatch.property(prop).generate(age -> {
+                return Variant.variant().with(
+                        VariantProperties.MODEL, model.create(TextureMapping.getBlockTexture(leafBlock).withPath(p -> "block/" + type + p.replace("block/", "") + "_" + age),
+                                (new TextureMapping()).put(TextureSlot.ALL, TextureMapping.getBlockTexture(leafBlock).withPath(p -> "block/" + type + p.replace("block/", "").replace("_leaves", "") + "/stage_" + age)), modelOutput)
+                );
+            })));
         }
 
         private void createStemBlock(Block stem, Block attachedStem, Block fruitBlock, String prefix) {
@@ -302,7 +327,6 @@ public class ModelProvider implements DataProvider
         }
 
         static ModelTemplate crop = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/crop")), Optional.empty(), TextureSlot.CROP);
-
         private void createCropPlant(Block block, String prefix) {
             IntegerProperty prop = block instanceof IAgeableCropBlock cropBlock ? cropBlock.getAgeProperty() : BlockStateProperties.AGE_3;
             this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(PropertyDispatch.property(prop).generate((age) -> {
@@ -315,16 +339,21 @@ public class ModelProvider implements DataProvider
             return pModelTemplate.create(resourceLocation, pTextureMappingGetter.apply(resourceLocation), this.modelOutput);
         }
 
-        private ResourceLocation createSuffixedStemVariant(Block pBlock, String pPrefix, String pSuffix, ModelTemplate pModelTemplate, String type) {
+        private ResourceLocation createSuffixedStemVariant(Block pBlock, String pPrefix, String pSuffix, ModelTemplate pModelTemplate, String type, String textureSuffix) {
             ResourceLocation resourceLocation = BuiltInRegistries.BLOCK.getKey(pBlock).withPath((path) -> "block/" + pPrefix + path + pSuffix);
-            return pModelTemplate.create(resourceLocation, TextureMapping.singleSlot(TextureSlot.STEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/" + type + "stem")), this.modelOutput);
+            return pModelTemplate.create(resourceLocation, TextureMapping.singleSlot(TextureSlot.STEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/" + type + "stem/" + textureSuffix)), this.modelOutput);
         }
 
-        static ModelTemplate crateModel = new ModelTemplate(Optional.of(ResourceLocation.withDefaultNamespace("block/cube_bottom_top")), Optional.empty(), TextureSlot.TOP, TextureSlot.SIDE, TextureSlot.BOTTOM);
-
+        // TODO move to lib
+        static ModelTemplate crateModel = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/base_crate")), Optional.empty(), TextureSlot.BOTTOM, TextureSlot.SIDE, TextureSlot.TOP, TextureSlot.CROP);
         private void createCrate(Block block) {
             ResourceLocation top = BuiltInRegistries.BLOCK.getKey(block).withPath((p) -> "block/crate/" + p);
-            var textureMapping = (new TextureMapping()).put(TextureSlot.SIDE, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/crate/side")).put(TextureSlot.TOP, top).put(TextureSlot.BOTTOM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/crate/bottom"));
+            var textureMapping = (new TextureMapping())
+                    .put(TextureSlot.TOP, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/crate/top"))
+                    .put(TextureSlot.SIDE, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/crate/side"))
+                    .put(TextureSlot.BOTTOM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/crate/bottom"))
+                    .put(TextureSlot.CROP, top);
+
             this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, crateModel.create(BuiltInRegistries.BLOCK.getKey(block).withPath((p) -> "block/crates/" + p), textureMapping, this.modelOutput))));
         }
 
@@ -336,7 +365,19 @@ public class ModelProvider implements DataProvider
         }
 
         private static PropertyDispatch createFacingDispatch() {
-            return PropertyDispatch.properties(BlockStateProperties.ATTACH_FACE, BlockStateProperties.HORIZONTAL_FACING).select(AttachFace.FLOOR, Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)).select(AttachFace.FLOOR, Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)).select(AttachFace.FLOOR, Direction.SOUTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)).select(AttachFace.FLOOR, Direction.NORTH, Variant.variant()).select(AttachFace.WALL, Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).select(AttachFace.WALL, Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).select(AttachFace.WALL, Direction.SOUTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).select(AttachFace.WALL, Direction.NORTH, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).select(AttachFace.CEILING, Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)).select(AttachFace.CEILING, Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)).select(AttachFace.CEILING, Direction.SOUTH, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)).select(AttachFace.CEILING, Direction.NORTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.X_ROT, VariantProperties.Rotation.R180));
+            return PropertyDispatch.properties(BlockStateProperties.ATTACH_FACE, BlockStateProperties.HORIZONTAL_FACING)
+                    .select(AttachFace.FLOOR, Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90))
+                    .select(AttachFace.FLOOR, Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270))
+                    .select(AttachFace.FLOOR, Direction.SOUTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180))
+                    .select(AttachFace.FLOOR, Direction.NORTH, Variant.variant())
+                    .select(AttachFace.WALL, Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))
+                    .select(AttachFace.WALL, Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))
+                    .select(AttachFace.WALL, Direction.SOUTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))
+                    .select(AttachFace.WALL, Direction.NORTH, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))
+                    .select(AttachFace.CEILING, Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.X_ROT, VariantProperties.Rotation.R180))
+                    .select(AttachFace.CEILING, Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.X_ROT, VariantProperties.Rotation.R180))
+                    .select(AttachFace.CEILING, Direction.SOUTH, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R180))
+                    .select(AttachFace.CEILING, Direction.NORTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.X_ROT, VariantProperties.Rotation.R180));
         }
 
         private void createFeedingTrough(Block block) {
@@ -349,13 +390,29 @@ public class ModelProvider implements DataProvider
             );
         }
 
-        public void createTrivialBlock(Block block, TexturedModel.Provider provider, String prefix) {
-            this.blockStateOutput.accept(createSimpleBlock(block,
-                    provider.get(block).getTemplate().create(
-                            ModelLocationUtils.getModelLocation(block).withPath(p -> p.replace("block/", "block/" + prefix)),
-                            provider.get(block).getMapping(),
-                            this.modelOutput
-                    )
+        void createAttachedMushroom(Block block) {
+            ResourceLocation mushroomPlace = BuiltInRegistries.BLOCK.getKey(block).withPath((p) -> "block/mushroom_growth/" + p.replace("_growth", ""));
+
+            this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block)
+                    .with(PropertyDispatch.property(BlockStateProperties.AGE_4).generate((age) -> {
+                        ResourceLocation modelLocation = RenderTypedModelTemplate.CROP.create(mushroomPlace.withPath(p -> p + "_stage_" + age), TextureMapping.crop(TextureMapping.getBlockTexture(block)), this.modelOutput);
+                        return Variant.variant().with(VariantProperties.MODEL, modelLocation);
+                    }))
+                    .with(PropertyDispatch.property(BlockStateProperties.HORIZONTAL_FACING).
+                            select(Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).
+                            select(Direction.SOUTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).
+                            select(Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).
+                            select(Direction.NORTH, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))
+            ));
+        }
+
+        void createHorizontalFacing(Block block, ResourceLocation modelLocation) {
+            this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, modelLocation)).with(
+                    PropertyDispatch.property(BlockStateProperties.HORIZONTAL_FACING).
+                            select(Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.MODEL, modelLocation)).
+                            select(Direction.SOUTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)).
+                            select(Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)).
+                            select(Direction.NORTH, Variant.variant())
             ));
         }
 

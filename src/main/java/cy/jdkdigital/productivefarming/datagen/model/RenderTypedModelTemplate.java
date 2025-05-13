@@ -11,7 +11,10 @@ import java.util.stream.IntStream;
 
 public class RenderTypedModelTemplate extends ModelTemplate
 {
+    // TODO move to lib
     public static final ModelTemplate ATTACHED_STEM = create("stem_fruit", "cutout", TextureSlot.STEM, TextureSlot.UPPER_STEM);
+    public static final ModelTemplate CROSS = create("cross", "cutout", TextureSlot.CROSS);
+    public static final ModelTemplate CROP = create("crop", "cutout", TextureSlot.CROP);
     public static final ModelTemplate[] STEMS = IntStream.range(0, 8)
             .mapToObj(p_125729_ -> create("stem_growth" + p_125729_, "cutout", "_stage" + p_125729_, TextureSlot.STEM))
             .toArray(ModelTemplate[]::new);

@@ -1,6 +1,7 @@
 {
   "entries": [
-    "productivefarming:fishing"
+    "productivefarming:fishing",
+    "productivefarming:pipe"
   ],
   "replace": false
 }

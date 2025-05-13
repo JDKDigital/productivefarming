@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "productivefarming:block/crates/iceberg_lettuce_crate"
+    }
+  }
+}

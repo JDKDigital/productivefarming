@@ -109,6 +109,22 @@ public class LootDataProvider implements DataProvider
             for (CropConfig crop : FarmingRegistrator.BERRIES) {
                 dropSeedlessCrop(crop, false);
             }
+            for (CropConfig crop : FarmingRegistrator.TRELLIS) {
+                if (crop.hasSeed()) {
+                    dropSeedCrop(crop);
+                } else {
+                    dropSeedlessCrop(crop);
+                }
+                var seed = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + (crop.hasSeed() ? "_seeds" : "")));
+                this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), block -> this.createStemDrops(block, seed));
+                this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedStemDrops(block, seed));
+            }
+            for (CropConfig crop : FarmingRegistrator.VINES) {
+                dropSeedlessCrop(crop);
+                var seed = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + (crop.hasSeed() ? "_seeds" : "")));
+                this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), block -> this.createStemDrops(block, seed));
+                this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedVineStemDrops(block, seed));
+            }
             for (CropConfig crop : FarmingRegistrator.STEMS) {
                 this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem")), block -> this.createStemDrops(block, BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"))));
                 this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedStemDrops(block, BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"))));
@@ -196,6 +212,18 @@ public class LootDataProvider implements DataProvider
             return LootTable.lootTable().withPool(
                     LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                             .add(builder));
+        }
+
+        public LootTable.Builder createAttachedVineStemDrops(Block block, Item item) {
+            return LootTable.lootTable()
+                    .withPool(
+                            this.applyExplosionDecay(
+                                    block,
+                                    LootPool.lootPool()
+                                            .setRolls(UniformGenerator.between(1.0F, 3.0F))
+                                            .add(LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(3, 0.53333336F))))
+                            )
+                    );
         }
     }
 }

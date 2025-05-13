@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "productivefarming:item/fruit/miracle_berry"
+    "layer0": "productivefarming:item/fruits/miracle_berry"
   }
 }

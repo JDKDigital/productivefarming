@@ -1,13 +1,15 @@
 {
   "values": [
-    "#c:herbs/dill",
-    "#c:herbs/parsley",
-    "#c:herbs/mint",
-    "#c:herbs/coriander",
     "#c:herbs/basil",
-    "#c:herbs/oregano",
-    "#c:herbs/rosemary",
     "#c:herbs/chives",
-    "#c:herbs/sage"
+    "#c:herbs/coriander",
+    "#c:herbs/dill",
+    "#c:herbs/mint",
+    "#c:herbs/oregano",
+    "#c:herbs/parsley",
+    "#c:herbs/rosemary",
+    "#c:herbs/sage",
+    "#c:herbs/fat_hen",
+    "#c:herbs/ostrich_fiddlehead"
   ]
 }

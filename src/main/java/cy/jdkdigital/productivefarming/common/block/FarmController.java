@@ -1,19 +1,25 @@
 package cy.jdkdigital.productivefarming.common.block;
 
 import com.mojang.serialization.MapCodec;
+import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.FarmControllerBlockEntity;
-import cy.jdkdigital.productivefarming.exception.InvalidStructureException;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
-import cy.jdkdigital.productivefarming.util.FarmValidator;
+import cy.jdkdigital.productivefarming.registry.ModTags;
 import cy.jdkdigital.productivelib.common.block.CapabilityContainerBlock;
+import cy.jdkdigital.productivelib.common.block.IMultiBlockController;
+import cy.jdkdigital.productivelib.exception.InvalidStructureException;
+import cy.jdkdigital.productivelib.util.MultiBlockDetector;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -29,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
-public class FarmController extends CapabilityContainerBlock
+public class FarmController extends CapabilityContainerBlock implements IMultiBlockController
 {
     public static final MapCodec<FarmController> CODEC = simpleCodec(FarmController::new);
 
@@ -59,7 +65,7 @@ public class FarmController extends CapabilityContainerBlock
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, pContext.getHorizontalDirection());
+        return this.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, pContext.getHorizontalDirection().getOpposite());
     }
 
     @Nullable
@@ -80,14 +86,25 @@ public class FarmController extends CapabilityContainerBlock
 
 
     @Override
+    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+        if (level instanceof ServerLevel serverLevel && serverLevel.getBlockEntity(pos) instanceof FarmControllerBlockEntity blockEntity) {
+            try {
+                var foundryData = MultiBlockDetector.detectStructure(serverLevel, pos, ModTags.Blocks.FARM_BLOCKS, ModTags.Blocks.FARM_BLOCKS, true, true, Config.SERVER.farmMaxVolume.get(), Config.SERVER.farmMaxCircumference.get(), Config.SERVER.farmMaxHeight.get());
+                blockEntity.setMultiBlockData(foundryData);
+            } catch (InvalidStructureException ise) {
+            }
+        }
+        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+    }
+
+    @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FarmControllerBlockEntity blockEntity) {
             try {
-                var farmConfig = FarmValidator.validateFarmStructureBlocks(level, blockEntity);
-                ProductiveFarming.LOGGER.info("found farm type " + farmConfig.type());
+                var farmConfig = MultiBlockDetector.detectStructure(level, pos, ModTags.Blocks.FARM_BLOCKS, null, false, true, Config.SERVER.farmMaxVolume.get(), Config.SERVER.farmMaxCircumference.get(), Config.SERVER.farmMaxHeight.get());
                 player.sendSystemMessage(Component.translatable(ProductiveFarming.MODID + ".message.farm_formed"));
                 level.setBlockAndUpdate(pos, blockEntity.getBlockState().setValue(BlockStateProperties.ATTACHED, true));
-                blockEntity.setFarmConfig(farmConfig);
+                blockEntity.setMultiBlockData(farmConfig);
                 openGui((ServerPlayer) player, blockEntity);
             } catch (InvalidStructureException ise) {
                 player.sendSystemMessage(Component.translatable(ProductiveFarming.MODID + ".message.farm_invalid", ise.getMessage(), "" + level.getBlockState(ise.getPos())));

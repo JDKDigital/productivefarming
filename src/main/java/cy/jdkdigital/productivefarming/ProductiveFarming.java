@@ -1,7 +1,9 @@
 package cy.jdkdigital.productivefarming;
 
 import com.mojang.logging.LogUtils;
+import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -53,6 +55,7 @@ public class ProductiveFarming
     public static final DeferredRegister<LootPoolEntryType> LOOT_POOL_ENTRIES = DeferredRegister.create(Registries.LOOT_POOL_ENTRY_TYPE, MODID);
     public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+    public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, MODID);
 
     public ProductiveFarming(IEventBus modEventBus, ModContainer modContainer)
     {
@@ -71,12 +74,16 @@ public class ProductiveFarming
         FEATURES.register(modEventBus);
         TREE_DECORATORS.register(modEventBus);
         POI_TYPES.register(modEventBus);
+        DATA_COMPONENTS.register(modEventBus);
 
         FarmingRegistrator.init();
+        FarmingDataComponents.init();
 
         // TODO
         // multiblock farm: controller, siding, in/output, RF?
         // different soil?
+
+        // Tamable lobster that brings you fishing loot in the morning
 
         // Fish farming:
         // persist entities in fish farms

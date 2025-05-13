@@ -1,11 +1,10 @@
 package cy.jdkdigital.productivefarming.common.block;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
+import cy.jdkdigital.productivefarming.common.block.entity.FencedStemBlockEntity;
 import cy.jdkdigital.productivefarming.registry.ModTags;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
@@ -20,17 +19,19 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Optional;
 
-public class AttachedFencedStemBlock extends BushBlock
+public class AttachedFencedStemBlock extends BushBlock implements EntityBlock
 {
     public static final MapCodec<AttachedFencedStemBlock> CODEC = RecordCodecBuilder.mapCodec(
             p_308799_ -> p_308799_.group(
@@ -72,6 +73,12 @@ public class AttachedFencedStemBlock extends BushBlock
     @Override
     protected MapCodec<? extends BushBlock> codec() {
         return CODEC;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new FencedStemBlockEntity(pos, state);
     }
 
     @Override

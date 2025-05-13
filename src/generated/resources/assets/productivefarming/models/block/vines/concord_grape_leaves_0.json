@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/inset_leaves",
+  "textures": {
+    "all": "productivefarming:block/vines/concord_grape/stage_0"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/fenced_stem_full",
+  "textures": {
+    "stem": "productivefarming:block/vines/stem/stage_6"
+  }
+}

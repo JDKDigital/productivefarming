@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bok_choy": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:bok_choy"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/bok_choy_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bok_choy"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/bok_choy_unpack"
+    ]
+  }
+}

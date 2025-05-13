@@ -3,7 +3,7 @@ package cy.jdkdigital.productivefarming.common.block;
 import com.mojang.datafixers.DataFixUtils;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.FencedCropBlockEntity;
-import cy.jdkdigital.productivefarming.common.block.entity.VineLeafBlockEntity;
+import cy.jdkdigital.productivefarming.common.block.entity.FencedLeafBlockEntity;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,9 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -29,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -45,7 +42,7 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements Entit
     public FencedPlantLeafBlock(CropConfig crop, Properties pProperties) {
         super(crop, pProperties);
 
-        this.stem = ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem"));
+        this.stem = ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem"));
         this.fruit = ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
         this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.FACING, Direction.DOWN).setValue(BlockStateProperties.DISTANCE, 1));
     }
@@ -53,12 +50,23 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements Entit
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new VineLeafBlockEntity(pPos, pState);
+        return new FencedLeafBlockEntity(pPos, pState);
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return Shapes.block();
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext pContext) {
+        Vec3 vec3 = state.getOffset(level, pos);
+        return Shapes.block().move(vec3.x, vec3.y, vec3.z);
+    }
+
+    @Override
+    protected float getMaxHorizontalOffset() {
+        return 0.05F;
+    }
+
+    @Override
+    protected float getMaxVerticalOffset() {
+        return 0.03F;
     }
 
     @Override
@@ -68,12 +76,12 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements Entit
 
     @Override
     public IntegerProperty getAgeProperty() {
-        return BlockStateProperties.AGE_3;
+        return BlockStateProperties.AGE_7;
     }
 
     @Override
     public int getMaxAge() {
-        return BlockStateProperties.MAX_AGE_3;
+        return BlockStateProperties.MAX_AGE_7;
     }
 
     abstract Direction[] validGrowthDirections(Level level, BlockPos pos);
@@ -111,9 +119,9 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements Entit
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!level.isAreaLoaded(pos, 1)) return;
-        // Check if there's any fences touching the leaf and replace with leaf copies
         if (level.getRawBrightness(pos, 0) >= 9) {
             float f = getGrowthSpeed(state, level, pos);
+            // Check if there's any fences touching the leaf and replace with leaf copies
             for (Direction dir : validGrowthDirections(level, pos)) {
                 var fenceState = level.getBlockState(pos.relative(dir));
                 if (fenceState.is(Tags.Blocks.FENCES)) {
@@ -129,7 +137,7 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements Entit
                 }
             }
             int i = this.getAge(state);
-            if (i < this.getMaxAge()) {
+            if (i < this.getMaxAge() && canGrow(level, pos, state)) {
                 if (CommonHooks.canCropGrow(level, pos, state, random.nextInt((int)(25.0F / f) + 1) == 0)) {
                     level.setBlock(pos, state.setValue(this.getAgeProperty(), i  + 1), Block.UPDATE_CLIENTS);
                     CommonHooks.fireCropGrowPost(level, pos, state);
@@ -138,29 +146,14 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements Entit
         }
     }
 
-    @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (isMaxAge(state)) {
-            if (!level.isClientSide) {
-                popResource(level, pos.relative(hitResult.getDirection()), getCloneItemStack(level, pos, state));
-                level.setBlock(pos, state.setValue(this.getAgeProperty(), 0), Block.UPDATE_CLIENTS);
-            }
-            player.swing(InteractionHand.MAIN_HAND);
-            return InteractionResult.SUCCESS_NO_ITEM_USED;
-        }
-        return super.useWithoutItem(state, level, pos, player, hitResult);
+    protected boolean canGrow(ServerLevel level, BlockPos pos, BlockState state) {
+        return true;
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         super.createBlockStateDefinition(pBuilder);
         pBuilder.add(BlockStateProperties.FACING).add(BlockStateProperties.DISTANCE);
-    }
-
-    @Override
-    public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
-        var attachedState = pLevel.getBlockState(pPos.relative(pState.getValue(BlockStateProperties.FACING)));
-        return attachedState.is(this.stem) || attachedState.is(this);
     }
 
     @Override

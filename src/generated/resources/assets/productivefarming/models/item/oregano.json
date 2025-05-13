@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "productivefarming:item/crop/oregano"
+    "layer0": "productivefarming:item/crops/oregano"
   }
 }

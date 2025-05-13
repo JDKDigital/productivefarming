@@ -129,7 +129,7 @@ configurations {
 
 dependencies {
     implementation "local.libs:productivelib-${lib_version}"
-    jarJar(group: 'cy.jdkdigital.productivelib', name: 'productivelib', version: '[0.1.1,)') {
+    jarJar(group: 'cy.jdkdigital.productivelib', name: 'productivelib', version: "${lib_version_range}") {
         transitive(false)
     }
 //    implementation "local.libs:productivebees-${pb_version}"
@@ -139,8 +139,6 @@ dependencies {
 
 //    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
 //    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
-
-    compileOnly "com.almostreliable.mods:almostunified-neoforge:1.21-1.0.0:api"
 
 //    runtimeOnly "curse.maven:productivebees-377897:5611632"
 //    runtimeOnly "curse.maven:productivetrees-377897:5611632"

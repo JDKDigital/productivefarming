@@ -1,0 +1,29 @@
+{
+  "ambientocclusion": false,
+  "render_type": "cutout",
+  "textures": {
+    "particle": "#stem"
+  },
+  "elements": [
+    {
+      "from": [8, 0, 0],
+      "to": [8, 16, 16],
+      "shade": false,
+      "rotation": {"angle": 0, "axis": "y", "origin": [2, 0, 2]},
+      "faces": {
+        "east": {"uv": [16, 0, 0, 16], "texture": "#stem", "tintindex": 0},
+        "west": {"uv": [0, 0, 16, 16], "texture": "#stem", "tintindex": 0}
+      }
+    },
+    {
+      "from": [0, 0, 8],
+      "to": [16, 16, 8],
+      "shade": false,
+      "rotation": {"angle": 0, "axis": "y", "origin": [1, 0, 0]},
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#stem", "tintindex": 0},
+        "south": {"uv": [16, 0, 0, 16], "texture": "#stem", "tintindex": 0}
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_endive": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:endive"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/endive_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_endive"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/endive_unpack"
+    ]
+  }
+}

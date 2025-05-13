@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_parsnip": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:parsnip"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/parsnip"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_parsnip"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/parsnip"
+    ]
+  }
+}

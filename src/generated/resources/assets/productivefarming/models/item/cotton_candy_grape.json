@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "productivefarming:item/crop/cotton_candy_grape"
+    "layer0": "productivefarming:item/crops/cotton_candy_grape"
   }
 }

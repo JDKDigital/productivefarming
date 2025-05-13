@@ -1,6 +1,0 @@
-{
-  "parent": "productivefarming:block/cutout_leaves",
-  "textures": {
-    "all": "productivefarming:block/vines/red_grape_leaves"
-  }
-}

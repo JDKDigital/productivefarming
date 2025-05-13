@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "productivefarming:item/crop/butternut_squash"
+    "layer0": "productivefarming:item/crops/butternut_squash"
   }
 }

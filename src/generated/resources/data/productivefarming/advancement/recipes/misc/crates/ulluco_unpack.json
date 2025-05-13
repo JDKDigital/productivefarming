@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/ulluco_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_ulluco": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:ulluco"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ulluco"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/ulluco_unpack"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "productivefarming:block/crates/romain_lettuce_crate"
+    }
+  }
+}

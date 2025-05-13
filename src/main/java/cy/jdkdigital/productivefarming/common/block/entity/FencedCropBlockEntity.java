@@ -52,4 +52,16 @@ public abstract class FencedCropBlockEntity extends AbstractBlockEntity
             tag.putBoolean("west", this.fence.getValue(FenceBlock.WEST));
         }
     }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+        savePacketNBT(tag, provider);
+    }
+
+    @Override
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
+        loadPacketNBT(tag, provider);
+    }
 }

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_malanga": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:malanga"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/malanga_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_malanga"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/malanga_unpack"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/vertical_trellis_leaves",
+  "textures": {
+    "all": "productivefarming:block/trellis/luffa/stage_7"
+  }
+}

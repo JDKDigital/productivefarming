@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "productivefarming:block/crates/cooked_porkchop_crate"
+    }
+  }
+}

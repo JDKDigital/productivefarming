@@ -2,16 +2,20 @@ package cy.jdkdigital.productivefarming.datagen;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import cy.jdkdigital.productivefarming.registry.ModTags;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import cy.jdkdigital.productivefarming.util.FishConfig;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
 import java.util.concurrent.CompletableFuture;
@@ -52,6 +56,14 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
                 .unlockedBy(getHasName(FarmingRegistrator.DRIED_LUFFA.get()), has(FarmingRegistrator.DRIED_LUFFA.get()))
                 .requires(FarmingRegistrator.DRIED_LUFFA.get(), 9)
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "sponge_from_dried_luffa"));
+
+        var cornTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "corn"));
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FarmingRegistrator.CORN_COB_PIPE.get())
+                .unlockedBy("has_corn", has(cornTag))
+                .pattern("CS")
+                .define('C', cornTag)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "corn_cob_pipe"));
 
         buildCrateRecipes(recipeOutput);
         buildSeedBagRecipes(recipeOutput);

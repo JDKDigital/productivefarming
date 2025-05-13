@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "productivefarming:item/crop/garlic"
+    "layer0": "productivefarming:item/crops/garlic"
   }
 }

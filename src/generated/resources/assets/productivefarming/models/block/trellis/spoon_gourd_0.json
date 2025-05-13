@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/vertical_trellis_leaves",
+  "textures": {
+    "all": "productivefarming:block/trellis/spoon_gourd/stage_0"
+  }
+}

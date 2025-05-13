@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_butterhead_lettuce": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:butterhead_lettuce"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/butterhead_lettuce"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_butterhead_lettuce"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/butterhead_lettuce"
+    ]
+  }
+}

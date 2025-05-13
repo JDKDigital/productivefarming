@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/inset_leaves",
+  "textures": {
+    "all": "productivefarming:block/trellis/goji_berry/stage_5"
+  }
+}

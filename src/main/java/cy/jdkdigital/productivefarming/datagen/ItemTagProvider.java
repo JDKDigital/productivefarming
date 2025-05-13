@@ -29,7 +29,11 @@ public class ItemTagProvider extends ItemTagsProvider
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        tag(ItemTags.DURABILITY_ENCHANTABLE).add(FarmingRegistrator.CORN_COB_PIPE.get());
         tag(ModTags.FERTILIZERS).add(Items.BONE_MEAL);
+        tag(ModTags.MUSHROOMS).add(Items.BROWN_MUSHROOM, Items.RED_MUSHROOM, Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS);
+        tag(ModTags.DRIED_TOBACCO).add(FarmingRegistrator.DRIED_TOBACCO.get());
+        tag(ModTags.TOBACCO).addTag(ModTags.DRIED_TOBACCO);
 
         tag(ModTags.CRAB_FOOD)
                 .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "shrimp")))

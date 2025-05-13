@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "productivefarming:item/crop/monstera_deliciosa"
+    "layer0": "productivefarming:item/crops/monstera_deliciosa"
   }
 }

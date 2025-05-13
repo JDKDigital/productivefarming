@@ -1,28 +1,19 @@
 package cy.jdkdigital.productivefarming.common.block;
 
-import cy.jdkdigital.productivefarming.ProductiveFarming;
-import cy.jdkdigital.productivefarming.common.block.entity.VineLeafBlockEntity;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.common.Tags;
-import org.jetbrains.annotations.Nullable;
 
 public class VineLeafBlock extends FencedPlantLeafBlock
 {
     public VineLeafBlock(CropConfig crop, Properties pProperties) {
         super(crop, pProperties);
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new VineLeafBlockEntity(pPos, pState);
     }
 
     @Override
@@ -39,5 +30,11 @@ public class VineLeafBlock extends FencedPlantLeafBlock
                         attachedState.getValue(BlockStateProperties.DISTANCE) < 4 &&
                         (level.getBlockState(pos.relative(dir).below()).is(Tags.Blocks.FENCES) || !requiresSupport)
                 );
+    }
+
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        var attachedState = level.getBlockState(pos.relative(state.getValue(BlockStateProperties.FACING)));
+        return hasSufficientLight(level, pos) && (attachedState.is(this.stem) || attachedState.is(this));
     }
 }

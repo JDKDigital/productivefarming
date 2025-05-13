@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "productivefarming:item/crop/artichoke"
+    "layer0": "productivefarming:item/crops/artichoke"
   }
 }

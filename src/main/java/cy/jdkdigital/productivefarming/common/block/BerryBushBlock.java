@@ -21,45 +21,37 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.function.Supplier;
 
-public class BerryBushBlock extends SweetBerryBushBlock
+public class BerryBushBlock extends ProductiveCropBlock
 {
-    private final Supplier<Item> itemSupplier;
-
     public BerryBushBlock(CropConfig crop, Properties pProperties) {
-        super(pProperties);
-        this.itemSupplier = () -> BuiltInRegistries.ITEM.get(BuiltInRegistries.BLOCK.getKey(this));
+        super(crop, pProperties);
     }
 
-    @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
-        return new ItemStack(itemSupplier.get());
-    }
+//    @Override
+//    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+//        int i = state.getValue(AGE);
+//        boolean isFullyGrown = i == 3;
+//        return !isFullyGrown && stack.is(ModTags.FERTILIZERS)
+//                ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
+//                : super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+//    }
 
-    @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        int i = state.getValue(AGE);
-        boolean isFullyGrown = i == 3;
-        return !isFullyGrown && stack.is(ModTags.FERTILIZERS)
-                ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
-                : super.useItemOn(stack, state, level, pos, player, hand, hitResult);
-    }
-
-    @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        int age = state.getValue(AGE);
-        boolean isFullyGrown = age == 3;
-        if (age > 1) {
-            int j = 1 + level.random.nextInt(2);
-            popResource(level, pos, new ItemStack(itemSupplier.get(), j + (isFullyGrown ? 1 : 0)));
-            level.playSound(
-                    null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F
-            );
-            BlockState blockstate = state.setValue(AGE, Integer.valueOf(1));
-            level.setBlock(pos, blockstate, 2);
-            level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockstate));
-            return InteractionResult.sidedSuccess(level.isClientSide);
-        } else {
-            return super.useWithoutItem(state, level, pos, player, hitResult);
-        }
-    }
+//    @Override
+//    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+//        int age = state.getValue(AGE);
+//        boolean isFullyGrown = age == 3;
+//        if (age > 1) {
+//            int j = 1 + level.random.nextInt(2);
+//            popResource(level, pos, new ItemStack(itemSupplier.get(), j + (isFullyGrown ? 1 : 0)));
+//            level.playSound(
+//                    null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F
+//            );
+//            BlockState blockstate = state.setValue(AGE, Integer.valueOf(1));
+//            level.setBlock(pos, blockstate, 2);
+//            level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockstate));
+//            return InteractionResult.sidedSuccess(level.isClientSide);
+//        } else {
+//            return super.useWithoutItem(state, level, pos, player, hitResult);
+//        }
+//    }
 }

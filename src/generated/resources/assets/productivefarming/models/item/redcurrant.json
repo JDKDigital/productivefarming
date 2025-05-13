@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "productivefarming:item/fruit/redcurrant"
+    "layer0": "productivefarming:item/fruits/redcurrant"
   }
 }

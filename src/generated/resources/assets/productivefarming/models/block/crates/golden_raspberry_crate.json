@@ -1,8 +1,9 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
+  "parent": "productivefarming:block/base_crate",
   "textures": {
     "bottom": "productivefarming:block/crate/bottom",
+    "crop": "productivefarming:block/crate/golden_raspberry_crate",
     "side": "productivefarming:block/crate/side",
-    "top": "productivefarming:block/crate/golden_raspberry_crate"
+    "top": "productivefarming:block/crate/top"
   }
 }

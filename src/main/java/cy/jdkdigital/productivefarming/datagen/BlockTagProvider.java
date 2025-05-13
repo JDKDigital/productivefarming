@@ -25,7 +25,7 @@ public class BlockTagProvider extends BlockTagsProvider
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         tag(ModTags.FARMLAND).add(Blocks.FARMLAND);
-        tag(ModTags.FARM_BLOCKS).add(Blocks.STONE_BRICKS, FarmingRegistrator.FARM_CONTROLLER.get(), FarmingRegistrator.FARM_BLOCK.get(), FarmingRegistrator.FARM_HATCH.get());
+        tag(ModTags.Blocks.FARM_BLOCKS).add(Blocks.STONE_BRICKS, FarmingRegistrator.FARM_CONTROLLER.get(), FarmingRegistrator.FARM_BLOCK.get(), FarmingRegistrator.FARM_HATCH.get());
 
         tag(BlockTags.create(ResourceLocation.parse("utilitarian:farmland_cansurvive"))).addTag(Tags.Blocks.FENCES);
 

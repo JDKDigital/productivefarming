@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_romain_lettuce": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:romain_lettuce"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/romain_lettuce"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_romain_lettuce"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/romain_lettuce"
+    ]
+  }
+}
