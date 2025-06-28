@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/lily_of_the_valley/lily_of_the_valley",
+    "edge": "productivefarming:block/flowers/lily_of_the_valley/lily_of_the_valley_flower"
+  }
+}

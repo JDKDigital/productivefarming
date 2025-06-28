@@ -8,29 +8,80 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "block": "productivefarming:salsify",
-          "condition": "minecraft:block_state_property",
-          "properties": {
-            "age": "3"
-          }
-        }
-      ],
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "productivefarming:salsify"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "productivefarming:salsify",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "6"
+                  }
+                }
+              ],
+              "name": "productivefarming:salsify"
+            },
+            {
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "minecraft:copy_components",
+                  "include": [
+                    "productivefarming:growth",
+                    "productivefarming:yield",
+                    "productivefarming:resistance",
+                    "productivefarming:mutability"
+                  ],
+                  "source": "block_entity"
+                }
+              ],
+              "name": "productivefarming:salsify_seeds"
+            }
+          ]
         }
       ],
       "rolls": 1.0
     },
     {
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "productivefarming:salsify",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "age": "6"
+          }
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "productivefarming:salsify"
+          "functions": [
+            {
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:binomial_with_bonus_count",
+              "function": "minecraft:apply_bonus",
+              "parameters": {
+                "extra": 3,
+                "probability": 0.5714286
+              }
+            },
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "productivefarming:growth",
+                "productivefarming:yield",
+                "productivefarming:resistance",
+                "productivefarming:mutability"
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "productivefarming:salsify_seeds"
         }
       ],
       "rolls": 1.0

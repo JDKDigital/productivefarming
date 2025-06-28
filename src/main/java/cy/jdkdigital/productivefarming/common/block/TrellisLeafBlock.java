@@ -1,13 +1,16 @@
 package cy.jdkdigital.productivefarming.common.block;
 
+import cy.jdkdigital.productivefarming.common.block.entity.FencedLeafBlockEntity;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jetbrains.annotations.Nullable;
 
 public class TrellisLeafBlock extends FencedPlantLeafBlock
 {
@@ -15,13 +18,15 @@ public class TrellisLeafBlock extends FencedPlantLeafBlock
         super(crop, pProperties);
     }
 
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new FencedLeafBlockEntity(pPos, pState);
+    }
+
     @Override
     Direction[] validGrowthDirections(Level level, BlockPos pos) {
-        var growthFromState = level.getBlockState(pos);
-        if (growthFromState.is(this) && growthFromState.getValue(BlockStateProperties.DISTANCE) >= 3) {
-            return new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-        }
-        return new Direction[]{Direction.UP};
+        return new Direction[]{Direction.UP, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     }
 
     @Override

@@ -1,28 +1,46 @@
 {
   "variants": {
-    "age=0": {
-      "model": "productivefarming:block/crops/monstera_deliciosa_stage0"
+    "age=0,half=lower": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/lower/stage_0"
     },
-    "age=1": {
-      "model": "productivefarming:block/crops/monstera_deliciosa_stage1"
+    "age=0,half=upper": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/upper/stage_0"
     },
-    "age=2": {
-      "model": "productivefarming:block/crops/monstera_deliciosa_stage2"
+    "age=1,half=lower": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/lower/stage_1"
     },
-    "age=3": {
-      "model": "productivefarming:block/crops/monstera_deliciosa_stage3"
+    "age=1,half=upper": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/upper/stage_1"
     },
-    "age=4": {
-      "model": "productivefarming:block/crops/monstera_deliciosa_stage4"
+    "age=2,half=lower": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/lower/stage_2"
     },
-    "age=5": {
-      "model": "productivefarming:block/crops/monstera_deliciosa_stage5"
+    "age=2,half=upper": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/upper/stage_2"
     },
-    "age=6": {
-      "model": "productivefarming:block/crops/monstera_deliciosa_stage6"
+    "age=3,half=lower": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/lower/stage_3"
     },
-    "age=7": {
-      "model": "productivefarming:block/crops/monstera_deliciosa_stage7"
+    "age=3,half=upper": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/upper/stage_3"
+    },
+    "age=4,half=lower": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/lower/stage_4"
+    },
+    "age=4,half=upper": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/upper/stage_4"
+    },
+    "age=5,half=lower": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/lower/stage_5"
+    },
+    "age=5,half=upper": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/upper/stage_5"
+    },
+    "age=6,half=lower": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/lower/stage_6"
+    },
+    "age=6,half=upper": {
+      "model": "productivefarming:block/crops/monstera_deliciosa/upper/stage_6"
     }
   }
 }

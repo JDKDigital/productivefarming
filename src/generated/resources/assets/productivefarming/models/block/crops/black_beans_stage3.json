@@ -1,6 +1,0 @@
-{
-  "parent": "productivefarming:block/crop",
-  "textures": {
-    "crop": "productivefarming:block/crops/black_beans_stage3"
-  }
-}

@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/dandelion/dandelion",
+    "edge": "productivefarming:block/flowers/dandelion/dandelion_flower"
+  }
+}

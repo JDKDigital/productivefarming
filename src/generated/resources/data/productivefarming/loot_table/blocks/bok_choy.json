@@ -19,7 +19,7 @@
                   "block": "productivefarming:bok_choy",
                   "condition": "minecraft:block_state_property",
                   "properties": {
-                    "age": "3"
+                    "age": "6"
                   }
                 }
               ],
@@ -27,6 +27,18 @@
             },
             {
               "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "minecraft:copy_components",
+                  "include": [
+                    "productivefarming:growth",
+                    "productivefarming:yield",
+                    "productivefarming:resistance",
+                    "productivefarming:mutability"
+                  ],
+                  "source": "block_entity"
+                }
+              ],
               "name": "productivefarming:bok_choy_seeds"
             }
           ]
@@ -41,7 +53,7 @@
           "block": "productivefarming:bok_choy",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "age": "3"
+            "age": "6"
           }
         }
       ],
@@ -57,6 +69,16 @@
                 "extra": 3,
                 "probability": 0.5714286
               }
+            },
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "productivefarming:growth",
+                "productivefarming:yield",
+                "productivefarming:resistance",
+                "productivefarming:mutability"
+              ],
+              "source": "block_entity"
             }
           ],
           "name": "productivefarming:bok_choy_seeds"

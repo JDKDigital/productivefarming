@@ -4,5 +4,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public interface IAgeableCropBlock
 {
-    public IntegerProperty getAgeProperty();
+    IntegerProperty getAgeProperty();
+
+    int getHarvestedAge();
 }

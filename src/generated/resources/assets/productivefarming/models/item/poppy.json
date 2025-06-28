@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/poppy/poppy",
+    "layer1": "productivefarming:block/flowers/poppy/poppy_flower"
+  }
+}

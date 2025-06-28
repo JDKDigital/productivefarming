@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/crops/yellow_dent_corn/upper/stage_6",
+    "edge": "productivefarming:block/crops/yellow_dent_corn/upper/mutation_overlay"
+  }
+}

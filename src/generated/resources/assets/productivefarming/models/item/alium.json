@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/alium/alium",
+    "layer1": "productivefarming:block/flowers/alium/alium_flower"
+  }
+}

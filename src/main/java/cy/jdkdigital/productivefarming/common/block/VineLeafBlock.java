@@ -1,19 +1,28 @@
 package cy.jdkdigital.productivefarming.common.block;
 
+import cy.jdkdigital.productivefarming.common.block.entity.FencedLeafBlockEntity;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.common.Tags;
+import org.jetbrains.annotations.Nullable;
 
 public class VineLeafBlock extends FencedPlantLeafBlock
 {
     public VineLeafBlock(CropConfig crop, Properties pProperties) {
         super(crop, pProperties);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new FencedLeafBlockEntity(pPos, pState);
     }
 
     @Override

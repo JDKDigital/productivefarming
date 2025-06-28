@@ -19,15 +19,39 @@
                   "block": "productivefarming:strawberry",
                   "condition": "minecraft:block_state_property",
                   "properties": {
-                    "age": "3"
+                    "age": "6"
                   }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:copy_components",
+                  "include": [
+                    "productivefarming:growth",
+                    "productivefarming:yield",
+                    "productivefarming:resistance",
+                    "productivefarming:mutability"
+                  ],
+                  "source": "block_entity"
                 }
               ],
               "name": "productivefarming:strawberry"
             },
             {
               "type": "minecraft:item",
-              "name": "productivefarming:strawberry_seeds"
+              "functions": [
+                {
+                  "function": "minecraft:copy_components",
+                  "include": [
+                    "productivefarming:growth",
+                    "productivefarming:yield",
+                    "productivefarming:resistance",
+                    "productivefarming:mutability"
+                  ],
+                  "source": "block_entity"
+                }
+              ],
+              "name": "productivefarming:strawberry"
             }
           ]
         }
@@ -41,7 +65,7 @@
           "block": "productivefarming:strawberry",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "age": "3"
+            "age": "6"
           }
         }
       ],
@@ -57,9 +81,19 @@
                 "extra": 3,
                 "probability": 0.5714286
               }
+            },
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "productivefarming:growth",
+                "productivefarming:yield",
+                "productivefarming:resistance",
+                "productivefarming:mutability"
+              ],
+              "source": "block_entity"
             }
           ],
-          "name": "productivefarming:strawberry_seeds"
+          "name": "productivefarming:strawberry"
         }
       ],
       "rolls": 1.0

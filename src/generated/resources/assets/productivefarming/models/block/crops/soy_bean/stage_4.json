@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/cross",
+  "textures": {
+    "cross": "productivefarming:block/crops/soy_bean/stage_4"
+  }
+}

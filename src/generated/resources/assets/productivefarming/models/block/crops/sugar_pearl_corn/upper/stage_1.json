@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/cross",
+  "textures": {
+    "cross": "productivefarming:block/crops/sugar_pearl_corn/upper/stage_1"
+  }
+}

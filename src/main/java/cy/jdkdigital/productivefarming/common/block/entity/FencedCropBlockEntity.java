@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class FencedCropBlockEntity extends AbstractBlockEntity
+public abstract class FencedCropBlockEntity extends CropBlockEntity
 {
     private BlockState fence;
 
@@ -51,17 +51,5 @@ public abstract class FencedCropBlockEntity extends AbstractBlockEntity
             tag.putBoolean("east", this.fence.getValue(FenceBlock.EAST));
             tag.putBoolean("west", this.fence.getValue(FenceBlock.WEST));
         }
-    }
-
-    @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
-        savePacketNBT(tag, provider);
-    }
-
-    @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        loadPacketNBT(tag, provider);
     }
 }

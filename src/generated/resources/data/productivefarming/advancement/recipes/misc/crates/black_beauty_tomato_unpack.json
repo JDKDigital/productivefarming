@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_black_beauty_tomato": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:black_beauty_tomato"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/black_beauty_tomato_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_black_beauty_tomato"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/black_beauty_tomato_unpack"
+    ]
+  }
+}

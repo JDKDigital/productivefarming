@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/wither_rose/wither_rose",
+    "edge": "productivefarming:block/flowers/wither_rose/wither_rose_flower"
+  }
+}

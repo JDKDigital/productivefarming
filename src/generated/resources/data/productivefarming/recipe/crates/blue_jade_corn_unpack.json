@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "productivefarming:blue_jade_corn_crate"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "productivefarming:blue_jade_corn"
+  }
+}

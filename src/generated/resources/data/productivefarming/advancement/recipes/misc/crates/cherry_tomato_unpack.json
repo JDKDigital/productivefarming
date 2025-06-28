@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cherry_tomato": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:cherry_tomato"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/cherry_tomato_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cherry_tomato"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/cherry_tomato_unpack"
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 package cy.jdkdigital.productivefarming.inventory;
 
-import cy.jdkdigital.productivefarming.common.block.FarmController;
+import cy.jdkdigital.productivefarming.common.block.FarmControllerBlock;
 import cy.jdkdigital.productivefarming.common.block.entity.FarmControllerBlockEntity;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivelib.container.AbstractContainer;
@@ -29,7 +29,7 @@ public class FarmControllerContainer extends AbstractContainer
         this.blockEntity = blockEntity;
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
 
-        addSlotBox(this.blockEntity.inventoryHandler, 0, 67, 17, 3, 18, 3, 18);
+        addSlotBox(this.blockEntity.inventoryHandler, 0, 62, 19, 3, 18, 3, 18);
 
         layoutPlayerInventorySlots(playerInventory, 0, 8, 84);
     }
@@ -46,7 +46,7 @@ public class FarmControllerContainer extends AbstractContainer
 
     @Override
     public boolean stillValid(@Nonnull final Player player) {
-        return canInteractWithCallable.evaluate((world, pos) -> world.getBlockState(pos).getBlock() instanceof FarmController && player.distanceToSqr((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D, true);
+        return canInteractWithCallable.evaluate((world, pos) -> world.getBlockState(pos).getBlock() instanceof FarmControllerBlock && player.distanceToSqr((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D, true);
     }
 
     @Override

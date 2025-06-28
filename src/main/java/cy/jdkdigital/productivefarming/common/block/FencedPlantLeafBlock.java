@@ -2,8 +2,8 @@ package cy.jdkdigital.productivefarming.common.block;
 
 import com.mojang.datafixers.DataFixUtils;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
+import cy.jdkdigital.productivefarming.common.block.entity.CropBlockEntity;
 import cy.jdkdigital.productivefarming.common.block.entity.FencedCropBlockEntity;
-import cy.jdkdigital.productivefarming.common.block.entity.FencedLeafBlockEntity;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,9 +19,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.PipeBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,9 +30,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.Tags;
-import org.jetbrains.annotations.Nullable;
+import net.neoforged.neoforge.common.util.TriState;
 
-abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements EntityBlock
+abstract class FencedPlantLeafBlock extends ProductiveCropBlock
 {
     protected final ResourceKey<Block> stem;
     protected final ResourceKey<Item> fruit;
@@ -45,12 +43,6 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements Entit
         this.stem = ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem"));
         this.fruit = ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
         this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.FACING, Direction.DOWN).setValue(BlockStateProperties.DISTANCE, 1));
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new FencedLeafBlockEntity(pPos, pState);
     }
 
     @Override
@@ -76,12 +68,12 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements Entit
 
     @Override
     public IntegerProperty getAgeProperty() {
-        return BlockStateProperties.AGE_7;
+        return AGE_6;
     }
 
     @Override
     public int getMaxAge() {
-        return BlockStateProperties.MAX_AGE_7;
+        return 6;
     }
 
     abstract Direction[] validGrowthDirections(Level level, BlockPos pos);
@@ -131,6 +123,9 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements Entit
                             level.setBlockAndUpdate(pos.relative(dir), propagationState(level, pos, dir));
                             if (level.getBlockEntity(pos.relative(dir)) instanceof FencedCropBlockEntity fencedCropBlockEntity) {
                                 fencedCropBlockEntity.setFence(fenceState);
+                                if (level.getBlockEntity(pos) instanceof CropBlockEntity cropBlockEntity) {
+                                    fencedCropBlockEntity.copyTraitsFromOtherCrop(cropBlockEntity);
+                                }
                             }
                         }
                     }
@@ -167,5 +162,19 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock implements Entit
             level.setBlockAndUpdate(pos, fencedCropBlockEntity.getFence());
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    @Override
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        net.neoforged.neoforge.common.util.TriState soilDecision = level.getBlockState(pos.below()).canSustainPlant(level, pos.below(), net.minecraft.core.Direction.UP, state);
+        if (!soilDecision.isDefault()) return soilDecision.isTrue();
+
+        var stateAt = level.getBlockState(pos); // where the plant will go
+        return (stateAt.is(this) || stateAt.is(Tags.Blocks.FENCES)) && super.canSurvive(state, level, pos);
+    }
+
+    @Override
+    public TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos soilPosition, Direction facing, BlockState plant) {
+        return level.getBlockState(soilPosition).is(this) ? TriState.TRUE : TriState.DEFAULT;
     }
 }

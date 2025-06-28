@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/wither_rose/wither_rose",
+    "layer1": "productivefarming:block/flowers/wither_rose/wither_rose_flower"
+  }
+}

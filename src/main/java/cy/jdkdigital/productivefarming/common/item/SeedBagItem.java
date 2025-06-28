@@ -31,7 +31,7 @@ public class SeedBagItem extends Item
 
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
-        if (pContext.getPlayer() != null && pContext.getLevel().getBlockState(pContext.getClickedPos()).is(ModTags.FARMLAND)) {
+        if (pContext.getPlayer() != null && pContext.getLevel().getBlockState(pContext.getClickedPos()).is(ModTags.Blocks.FARMLAND)) {
             var seedItem = BuiltInRegistries.ITEM.get(seed);
             if (seedItem instanceof BlockItem seedBlock) {
                 // Plant in a 3x3 area
@@ -39,7 +39,7 @@ public class SeedBagItem extends Item
 
                 AtomicInteger plantedSeeds = new AtomicInteger(0);
                 BlockPos.betweenClosedStream(area).forEach(blockPos -> {
-                    if (pContext.getLevel().getBlockState(blockPos).is(ModTags.FARMLAND) && pContext.getLevel().getBlockState(blockPos.above()).isAir()) {
+                    if (pContext.getLevel().getBlockState(blockPos).is(ModTags.Blocks.FARMLAND) && pContext.getLevel().getBlockState(blockPos.above()).isAir()) {
                         pContext.getLevel().setBlockAndUpdate(blockPos.above(), seedBlock.getBlock().defaultBlockState());
                         plantedSeeds.getAndIncrement();
                     }

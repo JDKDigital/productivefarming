@@ -21,6 +21,8 @@ public class Config
         public final ModConfigSpec.IntValue wateringTroughTickRate;
         public final ModConfigSpec.IntValue fishTrapTickRate;
         public final ModConfigSpec.IntValue childSeparatorTickRate;
+        public final ModConfigSpec.IntValue pollenChanceFromSieve;
+        public final ModConfigSpec.BooleanValue traitsOnVanillaCrops;
 
         public final ModConfigSpec.DoubleValue clamSpreadChance;
 
@@ -58,6 +60,14 @@ public class Config
             clamSpreadChance = builder
                     .comment("Chance for clams to propagate in a fish farm")
                     .defineInRange("clamSpreadChance", 0.1, 0, 1);
+
+            pollenChanceFromSieve = builder
+                    .comment("Chance to get a pollen when using sieve upgrades in hives")
+                    .defineInRange("pollenChanceFromSieve", 2, 1, 100);
+
+            traitsOnVanillaCrops = builder
+                    .comment("Add traits to vanilla crops. This will add components to vanilla crop items and the crop block will be overwritten.")
+                    .define("traitsOnVanillaCrops", true);
 
             builder.pop();
         }

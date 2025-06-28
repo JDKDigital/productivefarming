@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/crop",
+  "textures": {
+    "crop": "productivefarming:block/crops/wheat/stage_1"
+  }
+}

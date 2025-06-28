@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/stem_growth1",
+  "render_type": "cutout",
+  "textures": {
+    "stem": "productivefarming:block/crops/honeydew_melon_stem"
+  }
+}

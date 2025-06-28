@@ -132,18 +132,14 @@ dependencies {
     jarJar(group: 'cy.jdkdigital.productivelib', name: 'productivelib', version: "${lib_version_range}") {
         transitive(false)
     }
-//    implementation "local.libs:productivebees-${pb_version}"
 
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
-//    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
-//    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
-
-//    runtimeOnly "curse.maven:productivebees-377897:5611632"
-//    runtimeOnly "curse.maven:productivetrees-377897:5611632"
-    runtimeOnly "curse.maven:jade-324717:5655385"
-    runtimeOnly "curse.maven:utilitarian-929559:5815028"
+    implementation "curse.maven:productivebees-377897:6702701"
+    implementation "curse.maven:jade-324717:6667790"
+    implementation "curse.maven:dyenamics-509276:6620953"
+//    runtimeOnly "curse.maven:utilitarian-929559:5815028"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

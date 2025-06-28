@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/blue_orchid/blue_orchid",
+    "edge": "productivefarming:block/flowers/blue_orchid/blue_orchid_flower"
+  }
+}

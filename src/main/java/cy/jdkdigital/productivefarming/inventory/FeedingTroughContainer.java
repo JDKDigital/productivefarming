@@ -29,7 +29,7 @@ public class FeedingTroughContainer extends AbstractContainer
         this.blockEntity = blockEntity;
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
 
-        addSlotBox(this.blockEntity.getItemHandler(), 0, 67, 17, 3, 18, 3, 18);
+        addSlotBox(this.blockEntity.getItemHandler(), 0, 62, 19, 3, 18, 3, 18);
 
         layoutPlayerInventorySlots(playerInventory, 0, 8, 84);
     }

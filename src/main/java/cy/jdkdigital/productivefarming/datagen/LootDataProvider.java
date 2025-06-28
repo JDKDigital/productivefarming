@@ -2,9 +2,12 @@ package cy.jdkdigital.productivefarming.datagen;
 
 import com.google.common.collect.Maps;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
+import cy.jdkdigital.productivefarming.common.block.ColorfulTallFlowerBlock;
+import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import cy.jdkdigital.productivefarming.util.FishConfig;
+import cy.jdkdigital.productivefarming.util.FlowerConfig;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -15,23 +18,24 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.StemBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
-import net.minecraft.world.level.storage.loot.functions.LimitCount;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -96,6 +100,13 @@ public class LootDataProvider implements DataProvider
         protected void generate() {
             HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 
+            for (CropConfig crop : FarmingRegistrator.VANILLA_CROPS) {
+                if (crop.hasSeed()) {
+                    dropSeedCrop(crop);
+                } else {
+                    dropSeedlessCrop(crop);
+                }
+            }
             for (CropConfig crop : FarmingRegistrator.CROPS) {
                 if (crop.hasSeed()) {
                     dropSeedCrop(crop);
@@ -147,6 +158,9 @@ public class LootDataProvider implements DataProvider
                     dropSelf(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, fish.name())));
                 }
             }
+            for (FlowerConfig flower : FarmingRegistrator.FLOWERS) {
+                createFlowerDrops(flower);
+            }
         }
 
         @Override
@@ -169,9 +183,20 @@ public class LootDataProvider implements DataProvider
             if (block instanceof CropBlock cropBlock) {
                 var cropItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
                 var seedItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"));
+                if (cropItem.equals(Items.AIR)) {
+                    cropItem = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(crop.name()));
+                }if (seedItem.equals(Items.AIR)) {
+                    seedItem = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(crop.name() + "_seeds"));
+                }
                 LootItemCondition.Builder builder = LootItemBlockStatePropertyCondition
                         .hasBlockStateProperties(cropBlock)
                         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(cropBlock.getAgeProperty(), cropBlock.getMaxAge()));
+
+                if (block.defaultBlockState().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
+                    builder = LootItemBlockStatePropertyCondition
+                            .hasBlockStateProperties(cropBlock)
+                            .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(cropBlock.getAgeProperty(), cropBlock.getMaxAge()).hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
+                }
 
                 this.add(cropBlock, this.createCropDrops(cropBlock, cropItem, seedItem, builder));
             }
@@ -185,15 +210,20 @@ public class LootDataProvider implements DataProvider
             var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             if (block instanceof CropBlock cropBlock) {
                 var cropItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                if (cropItem.equals(Items.AIR)) {
+                    cropItem = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(crop.name()));
+                }
                 LootItemCondition.Builder builder = LootItemBlockStatePropertyCondition
                         .hasBlockStateProperties(cropBlock)
                         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(cropBlock.getAgeProperty(), cropBlock.getMaxAge()));
 
-                var lootTable = LootTable.lootTable().withPool(LootPool.lootPool().when(builder).add(LootItem.lootTableItem(cropItem))); // TODO .apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.FORTUNE, 0.5714286F, 3))));
-                if (dropSelf) {
-                    lootTable = lootTable.withPool(LootPool.lootPool().add(LootItem.lootTableItem(cropItem)));
+                if (block.defaultBlockState().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
+                    builder = LootItemBlockStatePropertyCondition
+                            .hasBlockStateProperties(cropBlock)
+                            .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(cropBlock.getAgeProperty(), cropBlock.getMaxAge()).hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
                 }
-                this.add(cropBlock, this.applyExplosionDecay(cropBlock, lootTable));
+
+                this.add(cropBlock, this.createSeedlessCropDrops(cropBlock, cropItem, dropSelf ? cropItem : Items.AIR, builder));
             }
         }
 
@@ -224,6 +254,93 @@ public class LootDataProvider implements DataProvider
                                             .add(LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(3, 0.53333336F))))
                             )
                     );
+        }
+
+        @Override
+        protected LootTable.Builder createCropDrops(Block cropBlock, Item grownCropItem, Item seedsItem, LootItemCondition.Builder dropGrownCropCondition) {
+            HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+            return this.applyExplosionDecay(
+                    cropBlock,
+                    LootTable.lootTable()
+                            .withPool(
+                                    LootPool.lootPool().add(
+                                            LootItem.lootTableItem(grownCropItem).when(dropGrownCropCondition)
+                                                    .otherwise(LootItem.lootTableItem(seedsItem).apply(cropComponents()))
+
+                                    )
+                            )
+                            .withPool(
+                                    LootPool.lootPool().when(dropGrownCropCondition)
+                                            .add(
+                                                    LootItem.lootTableItem(seedsItem)
+                                                            .apply(ApplyBonusCount.addBonusBinomialDistributionCount(registrylookup.getOrThrow(Enchantments.FORTUNE), 0.5714286F, 3))
+                                                            .apply(cropComponents())
+                                            )
+                            )
+            );
+        }
+
+        protected LootTable.Builder createSeedlessCropDrops(Block cropBlock, Item grownCropItem, Item seedsItem, LootItemCondition.Builder dropGrownCropCondition) {
+            HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+            return this.applyExplosionDecay(
+                    cropBlock,
+                    LootTable.lootTable()
+                            .withPool(
+                                    LootPool.lootPool().add(
+                                            LootItem.lootTableItem(grownCropItem).apply(cropComponents()).when(dropGrownCropCondition)
+                                                    .otherwise(LootItem.lootTableItem(seedsItem).apply(cropComponents()))
+
+                                    )
+                            )
+                            .withPool(
+                                    LootPool.lootPool()
+                                            .when(dropGrownCropCondition)
+                                            .add(
+                                                    LootItem.lootTableItem(seedsItem)
+                                                            .apply(ApplyBonusCount.addBonusBinomialDistributionCount(registrylookup.getOrThrow(Enchantments.FORTUNE), 0.5714286F, 3))
+                                                            .apply(cropComponents())
+                                            )
+                            )
+            );
+        }
+
+        private static LootItemFunction.Builder cropComponents() {
+            return CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                    .include(FarmingDataComponents.GROWTH.get())
+                    .include(FarmingDataComponents.YIELD.get())
+                    .include(FarmingDataComponents.RESISTANCE.get())
+                    .include(FarmingDataComponents.MUTABILITY.get());
+        }
+
+        private void createFlowerDrops(FlowerConfig flower) {
+            var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flower.name()));
+            if (block instanceof ColorfulTallFlowerBlock) {
+                // handled in code because double plants don't get components applied correctly, thanks Mojang
+//                this.add(block, createSinglePropConditionTable(block, DoublePlantBlock.HALF, DoubleBlockHalf.LOWER));
+            } else {
+                LootPoolEntryContainer.Builder<?> builder = LootItem.lootTableItem(block)
+                        .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(FarmingDataComponents.COLOR.get()))
+                        .when(ExplosionCondition.survivesExplosion());
+
+                this.add(block, LootTable.lootTable().withPool(
+                        LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                                .add(builder)));
+            }
+        }
+
+        protected <T extends Comparable<T> & StringRepresentable> LootTable.Builder createSinglePropConditionTable(Block block, Property<T> property, T value) {
+            return LootTable.lootTable().withPool(this.applyExplosionCondition(block,
+                    LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(block)
+                            .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                                    .include(FarmingDataComponents.COLOR.get()))
+                            .when(
+                                    LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                            .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(property, value))
+                            )
+                    )
+                )
+            );
         }
     }
 }

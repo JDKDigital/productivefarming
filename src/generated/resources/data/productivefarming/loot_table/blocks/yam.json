@@ -19,15 +19,40 @@
                   "block": "productivefarming:yam",
                   "condition": "minecraft:block_state_property",
                   "properties": {
-                    "age": "3"
+                    "age": "6",
+                    "half": "upper"
                   }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:copy_components",
+                  "include": [
+                    "productivefarming:growth",
+                    "productivefarming:yield",
+                    "productivefarming:resistance",
+                    "productivefarming:mutability"
+                  ],
+                  "source": "block_entity"
                 }
               ],
               "name": "productivefarming:yam"
             },
             {
               "type": "minecraft:item",
-              "name": "productivefarming:yam_seeds"
+              "functions": [
+                {
+                  "function": "minecraft:copy_components",
+                  "include": [
+                    "productivefarming:growth",
+                    "productivefarming:yield",
+                    "productivefarming:resistance",
+                    "productivefarming:mutability"
+                  ],
+                  "source": "block_entity"
+                }
+              ],
+              "name": "productivefarming:yam"
             }
           ]
         }
@@ -41,7 +66,8 @@
           "block": "productivefarming:yam",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "age": "3"
+            "age": "6",
+            "half": "upper"
           }
         }
       ],
@@ -57,9 +83,19 @@
                 "extra": 3,
                 "probability": 0.5714286
               }
+            },
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "productivefarming:growth",
+                "productivefarming:yield",
+                "productivefarming:resistance",
+                "productivefarming:mutability"
+              ],
+              "source": "block_entity"
             }
           ],
-          "name": "productivefarming:yam_seeds"
+          "name": "productivefarming:yam"
         }
       ],
       "rolls": 1.0

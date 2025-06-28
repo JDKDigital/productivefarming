@@ -19,7 +19,8 @@
                   "block": "productivefarming:tea",
                   "condition": "minecraft:block_state_property",
                   "properties": {
-                    "age": "7"
+                    "age": "6",
+                    "half": "upper"
                   }
                 }
               ],
@@ -27,6 +28,18 @@
             },
             {
               "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "minecraft:copy_components",
+                  "include": [
+                    "productivefarming:growth",
+                    "productivefarming:yield",
+                    "productivefarming:resistance",
+                    "productivefarming:mutability"
+                  ],
+                  "source": "block_entity"
+                }
+              ],
               "name": "productivefarming:tea_seeds"
             }
           ]
@@ -41,7 +54,8 @@
           "block": "productivefarming:tea",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "age": "7"
+            "age": "6",
+            "half": "upper"
           }
         }
       ],
@@ -57,6 +71,16 @@
                 "extra": 3,
                 "probability": 0.5714286
               }
+            },
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "productivefarming:growth",
+                "productivefarming:yield",
+                "productivefarming:resistance",
+                "productivefarming:mutability"
+              ],
+              "source": "block_entity"
             }
           ],
           "name": "productivefarming:tea_seeds"

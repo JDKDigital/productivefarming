@@ -1,6 +1,0 @@
-{
-  "parent": "productivefarming:block/cross",
-  "textures": {
-    "cross": "productivefarming:block/bushes/miracle_berry_stage5"
-  }
-}

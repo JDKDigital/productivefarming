@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/blue_orchid/blue_orchid",
+    "layer1": "productivefarming:block/flowers/blue_orchid/blue_orchid_flower"
+  }
+}

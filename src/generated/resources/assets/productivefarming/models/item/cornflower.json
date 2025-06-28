@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/cornflower/cornflower",
+    "layer1": "productivefarming:block/flowers/cornflower/cornflower_flower"
+  }
+}

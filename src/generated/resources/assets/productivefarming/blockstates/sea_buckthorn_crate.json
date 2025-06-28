@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "productivefarming:block/crates/sea_buckthorn_crate"
+    }
+  }
+}

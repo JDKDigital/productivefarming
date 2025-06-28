@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cardamon": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:cardamon"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/cardamon_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cardamon"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/cardamon_unpack"
+    ]
+  }
+}

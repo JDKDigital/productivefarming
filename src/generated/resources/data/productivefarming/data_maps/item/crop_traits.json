@@ -1,0 +1,10 @@
+{
+  "values": {
+    "productivefarming:blue_jade_corn": {
+      "growth": 0,
+      "mutability": 0,
+      "resistance": 0,
+      "yield": 2
+    }
+  }
+}

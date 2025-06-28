@@ -42,7 +42,7 @@ public class CornPipeItem extends Item
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        boolean hasTobacco = player.getItemInHand(InteractionHand.OFF_HAND).is(ModTags.DRIED_TOBACCO);
+        boolean hasTobacco = player.getItemInHand(InteractionHand.OFF_HAND).is(ModTags.Items.DRIED_TOBACCO);
         boolean hasLighter = player.getItemInHand(InteractionHand.OFF_HAND).is(Items.FLINT_AND_STEEL);
         boolean isStuffed = itemStack.getOrDefault(FarmingDataComponents.CHARGES, 16) > 0;
         if (isStuffed && itemStack.getOrDefault(FarmingDataComponents.IS_LIT, false)) {
@@ -102,7 +102,7 @@ public class CornPipeItem extends Item
 
     @Override
     public @NotNull ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
-        boolean hasTobacco = livingEntity.getItemInHand(InteractionHand.OFF_HAND).is(ModTags.DRIED_TOBACCO);
+        boolean hasTobacco = livingEntity.getItemInHand(InteractionHand.OFF_HAND).is(ModTags.Items.DRIED_TOBACCO);
         if (hasTobacco) {
             stack.set(FarmingDataComponents.CHARGES, 32);
             if (!livingEntity.hasInfiniteMaterials()) {

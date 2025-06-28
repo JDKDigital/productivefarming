@@ -3,13 +3,20 @@
     "#c:herbs/basil",
     "#c:herbs/chives",
     "#c:herbs/coriander",
+    "#c:herbs/cumin",
     "#c:herbs/dill",
-    "#c:herbs/mint",
+    "#c:herbs/fat_hen",
+    "#c:herbs/fenugreek",
+    "#c:herbs/spearmint",
+    "#c:herbs/peppermint",
+    "#c:herbs/watermint",
+    "#c:herbs/lemon_balm",
+    "#c:herbs/lemongrass",
     "#c:herbs/oregano",
     "#c:herbs/parsley",
     "#c:herbs/rosemary",
     "#c:herbs/sage",
-    "#c:herbs/fat_hen",
+    "#c:herbs/thyme",
     "#c:herbs/ostrich_fiddlehead"
   ]
 }

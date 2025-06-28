@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/rose_bush/upper",
+    "edge": "productivefarming:block/flowers/rose_bush/upper_flower"
+  }
+}

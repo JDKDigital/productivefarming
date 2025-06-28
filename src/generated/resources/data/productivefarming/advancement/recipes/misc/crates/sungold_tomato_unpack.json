@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sungold_tomato": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:sungold_tomato"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/sungold_tomato_unpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sungold_tomato"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/sungold_tomato_unpack"
+    ]
+  }
+}

@@ -1,11 +1,20 @@
 package cy.jdkdigital.productivefarming.datagen;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
+import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import cy.jdkdigital.productivefarming.util.FarmUtil;
+import cy.jdkdigital.productivefarming.util.TraitsHelper;
+import cy.jdkdigital.productivelib.util.ColorUtil;
+import cy.jdkdigital.productivelib.util.LangUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.MobBucketItem;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LanguageProvider extends net.neoforged.neoforge.common.data.LanguageProvider
 {
@@ -17,14 +26,27 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
     protected void addTranslations() {
         add("itemGroup." + ProductiveFarming.MODID, "Productive Farming");
         add("jei." + ProductiveFarming.MODID + ".crop_fruiting", "Crop Fruiting");
+        add("jade." + ProductiveFarming.MODID + ".mutation", "Mutation: %s");
+        add("config.jade.plugin_" + ProductiveFarming.MODID + ".crop", "Crops");
         add(ProductiveFarming.MODID + ".screen.progress", "Progress: %s");
-        add(ProductiveFarming.MODID + ".message.farm_formed", "Farm structure assembled");
+        add(ProductiveFarming.MODID + ".message.farm_formed", "Farm structure assembled with height %s");
         add(ProductiveFarming.MODID + ".message.farm_invalid", "Farm structure invalid. %s");
 
-        add("block." + ProductiveFarming.MODID + ".nutrient_water", "Nutrient Water");
+        add(ProductiveFarming.MODID + ".pollen.name", "%s");
+        add(ProductiveFarming.MODID + ".information.pollen", "Use on a fully grown crop to manually pollinate it.");
+        add(ProductiveFarming.MODID + ".tooltip.extend", "Hold [SHIFT] for more info");
+        add(ProductiveFarming.MODID + ".trait." + TraitsHelper.GROWTH, "Growth speed: %s");
+        add(ProductiveFarming.MODID + ".trait." + TraitsHelper.YIELD, "Yield: %s");
+        add(ProductiveFarming.MODID + ".trait." + TraitsHelper.RESISTANCE, "Resistance: %s");
+        add(ProductiveFarming.MODID + ".trait." + TraitsHelper.MUTABILITY, "Mutability: %s");
+        add(ProductiveFarming.MODID + ".trait_value.none", "None");
+        add(ProductiveFarming.MODID + ".trait_value.low", "Low");
+        add(ProductiveFarming.MODID + ".trait_value.medium", "Medium");
+        add(ProductiveFarming.MODID + ".trait_value.high", "High");
+        add(ProductiveFarming.MODID + ".trait_value.very_high", "Very High");
 
         ProductiveFarming.BLOCKS.getEntries().forEach(itemRegistryObject -> {
-            add(itemRegistryObject.get(), capName(BuiltInRegistries.BLOCK.getKey(itemRegistryObject.get()).getPath()));
+            add(itemRegistryObject.get(), LangUtil.capName(BuiltInRegistries.BLOCK.getKey(itemRegistryObject.get()).getPath()));
         });
         ProductiveFarming.ITEMS.getEntries().forEach(itemRegistryObject -> {
             if (itemRegistryObject.get() instanceof MobBucketItem) {
@@ -32,14 +54,41 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             } else if (!(itemRegistryObject.get() instanceof BlockItem) || itemRegistryObject.get() instanceof ItemNameBlockItem) {
                 var regName = BuiltInRegistries.ITEM.getKey(itemRegistryObject.get()).getPath();
                 if (regName.contains("grape_seeds")) {
-                    add(itemRegistryObject.get(), capName(regName.replace("seeds", "propagule")));
+                    add(itemRegistryObject.get(), LangUtil.capName(regName.replace("seeds", "propagule")));
+                } else if (regName.contains("sarsaparilla_vine_seeds")) {
+                    add(itemRegistryObject.get(), LangUtil.capName(regName.replace("seeds", "roots")));
                 } else {
-                    add(itemRegistryObject.get(), capName(regName));
+                    add(itemRegistryObject.get(), LangUtil.capName(regName));
                 }
             }
         });
         ProductiveFarming.ENTITY_TYPES.getEntries().forEach(entityTypeRegistryObject -> {
             add(entityTypeRegistryObject.get(), capName(BuiltInRegistries.ENTITY_TYPE.getKey(entityTypeRegistryObject.get()).getPath()));
+        });
+
+        FarmingRegistrator.CROPS.forEach(crop -> {
+            add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
+        });
+        FarmingRegistrator.VANILLA_CROPS.forEach(crop -> {
+            add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
+        });
+        FarmingRegistrator.VINES.forEach(crop -> {
+            add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
+        });
+        FarmingRegistrator.BERRIES.forEach(crop -> {
+            add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
+        });
+        FarmingRegistrator.HERBS.forEach(crop -> {
+            add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
+        });
+        FarmingRegistrator.STEMS.forEach(crop -> {
+            add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
+        });
+        FarmingRegistrator.TRELLIS.forEach(crop -> {
+            add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
+        });
+        FarmingRegistrator.VERTICAL_TRELLIS.forEach(crop -> {
+            add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
         });
     }
 
@@ -55,6 +104,163 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             nameParts[i] = nameParts[i].substring(0, 1).toUpperCase() + nameParts[i].substring(1);
         }
 
-        return String.join(" ", nameParts);
+        return String.join(" ", nameParts) + "s";
+    }
+
+    private static String getLatinName(String name) {
+        Map<String, String> names = new HashMap<>() {{
+            put("wheat", "Triticum aestivum");
+            put("potato", "Solanum tuberosum");
+            put("carrot", "Daucus carota");
+            put("beetroot", "Beta vulgaris");
+
+            put("kadsura", "Kadsura japonica");
+            put("blackberry", "Rubus fruticosus");
+            put("blackcurrant", "Ribes nigrum");
+            put("blueberry", "Vaccinium myrtillus");
+            put("boysenberry", "Rubus fruticosus × Rubus idaeus");
+            put("cloudberry", "Rubus chamaemorus");
+            put("checkerberry", "Gaultheria procumbens");
+            put("cranberry", "Vaccinium oxycoccos");
+            put("golden_raspberry", "Rubus idaeus 'All Gold'");
+            put("gooseberry", "Ribes uva-crispa");
+            put("huckleberry", "Vaccinium ovatum");
+            put("lingoberry", "Vaccinium vitis-idaea");
+            put("miracle_berry", "Synsepalum dulcificum");
+            put("raspberry", "Rubus idaeus");
+            put("redcurrant", "Ribes rubrum");
+            put("thimbleberry", "Rubus parviflorus");
+            put("basil", "Ocimum basilicum");
+            put("chives", "Allium schoenoprasum");
+            put("coriander", "Coriandrum sativum");
+            put("cotton", "Gossypium arboreum");
+            put("cumin", "Cuminum cyminum");
+            put("dill", "Anethum graveolens");
+            put("mint", "Mentha spicata");
+            put("oregano", "Origanum vulgare");
+            put("parsley", "Petroselinum crispum");
+            put("rosemary", "Salvia rosmarinus");
+            put("sage", "Salvia officinalis");
+            put("fat_hen", "Chenopodium album");
+            put("ferula", "Ferula assa-foetida");
+            put("fenugreek", "Trigonella foenum-graecum");
+            put("ostrich_fiddlehead", "Matteuccia struthiopteris");
+            put("cantaloupe", "Cucumis melo var. Cantalupensis");
+            put("honeydew_melon", "Cucumis melo var. Inodorus");
+            put("red_grape", "Vitis vinifera");
+            put("fox_grape", "Vitis labrusca");
+            put("concord_grape", "Vitis labrusca x Vitis vinifera");
+            put("cotton_candy_grape", "IFG Seven");
+            put("green_grape", ""); // https://en.wikipedia.org/wiki/List_of_grape_varieties#Vitis_labrusca_(wine_and_table)
+            put("butternut_squash", "Cucurbita moschata");
+            put("spoon_gourd", "Cucurbita pepo var. ovifera");
+            put("luffa", "Luffa aegyptiaca");
+            put("cucumber", "Cucumis sativus");
+            put("zucchini", "Cucurbita pepo var. longa");
+            put("kiwi", "Actinidia deliciosa");
+            put("hops", "Humulus lupulus");
+            put("vanilla", "Vanilla planifolia");
+            put("akebia", "Akebia quinata");
+            put("goji_berry", "Lycium barbarum");
+            put("arrowroot", "Maranta arundinacea");
+            put("arugula", "Eruca sativa");
+            put("green_bell_pepper", "");
+            put("orange_bell_pepper", "");
+            put("red_bell_pepper", "");
+            put("yellow_bell_pepper", "");
+            put("black_bell_pepper", "");
+            put("purple_bell_pepper", "");
+            put("white_bell_pepper", "");
+            put("black_beans", "");
+            put("bok_choy", "Brassica rapa s. chinensis");
+            put("broccoli", "Brassica oleracea var. italica");
+            put("brussels_sprout", "Brassica oleracea var. gemmifera");
+            put("burdock_root", "Arctium lappa");
+            put("butterhead_lettuce", "Lactuca sativa var. capitata");
+            put("cabbage", "Brassica oleracea var. capitata f. alba");
+            put("cauliflower", "Brassica oleracea var. botrytis");
+            put("cassava", "Manihot esculenta");
+            put("celery", "Apium graveolens var. dulce");
+            put("chard", "Beta vulgaris subsp. vulgaris var. cicla");
+            put("chili_pepper", "");
+            put("collard", "Brassica oleracea var. viridis");
+            put("daikon", "Raphanus sativus var. longipinnatus");
+            put("eddoe", "Colocasia antiquorum");
+            put("eggplant", "Solanum melongena");
+            put("endive", "Cichorium intybus");
+            put("garlic", "Allium sativum");
+            put("iceberg_lettuce", "Lactuca sativa var. capitata");
+            put("jalapeno", "Capsicum annuum");
+            put("jute", "Corchorus capsularis");
+            put("kale", "Brassica oleracea var. sabellica");
+            put("kidney_beans", "Phaseolus vulgaris");
+            put("kohlrabi", "Brassica oleracea var. gongylodes");
+            put("leek", "Allium ampeloprasum var. porrum");
+            put("lima_beans", "Phaseolus lunatus");
+            put("onion", "Allium cepa");
+            put("parsnip", "Pastinaca sativa");
+            put("peas", "Lathyrus oleraceus");
+            put("pinto_beans", "Phaseolus vulgaris");
+            put("radish", "Raphanus sativus");
+            put("rhubarb", "Rheum rhabarbarum");
+            put("romain_lettuce", "Lactuca sativa var. longifolia");
+            put("rutabaga", "Brassica napus var. napobrassica");
+            put("salsify", "Tragopogon porrifolius");
+            put("spinach", "Spinacia oleracea");
+            put("strawberry", "Fragaria × ananassa");
+            put("sugar_beet", "Beta vulgaris var. saccharifera");
+            put("turnip", "Brassica rapa var. rapa");
+            put("ulluco", "Ullucus tuberosus");
+            put("wasabi", "Eutrema japonicum");
+            put("yam", "Dioscorea cayenensis");
+            put("peanuts", "Arachis hypogaea");
+            put("ginger", "Zingiber officinale");
+            put("green_bean", "Phaseolus vulgaris");
+            put("spring_onion", "Allium fistulosum");
+            put("saguaro", "Carnegiea gigantea");
+            put("squash", "Cucurbita Pepo");
+            put("sarsaparilla_vine", "Smilax ornata");
+            put("sweet_potato", "Ipomoea batatas");
+            put("lentils", "Vicia lens");
+            put("chickpeas", "Cicer arietinum");
+            put("mustard", "Brassica juncea");
+            put("black_pepper", "Piper nigrum");
+            put("turmeric", "Curcuma longa");
+            put("rice", "Oryza sativa");
+            put("oats", "Avena sativa");
+            put("barley", "Hordeum vulgare");
+            put("rye", "Secale cereale");
+            put("amaranth", "Amaranthus blitum");
+            put("pitaya", "Selenicereus undatus");
+            put("monstera_deliciosa", "Monstera deliciosa");
+            put("tobacco", "Nicotiana tabacum");
+            put("tea", "Camellia sinensis");
+            put("pineapple", "Ananas comosus");
+            put("yellow_dent_corn", "Zea mays convar. saccharata var. rugosa"); // TODO correct names for corn variants
+            put("sugar_pearl_corn", "Zea mays convar. saccharata var. rugosa");
+            put("rainbow_corn", "Zea mays convar. saccharata var. rugosa");
+            put("blue_jade_corn", "Zea mays convar. saccharata var. rugosa");
+            put("black_aztec_corn", "Zea mays convar. saccharata var. rugosa");
+            put("tomatillo", "Physalis philadelphica");
+            put("thyme", "Thymus vulgaris");
+            put("beefsteak_tomato", "Solanum lycopersicum var. coustralee");
+            put("black_beauty_tomato", "Solanum lycopersicum var. gates");
+            put("blue_beauty_tomato", "Solanum lycopersicum");
+            put("chocolate_pear_tomato", "Solanum lycopersicum var. terrior");
+            put("sungold_tomato", "Solanum lycopersicum");
+            put("white_wonder_tomato", "Solanum lycopersicum");
+            put("yellow_pear_tomato", "Solanum lycopersicum");
+            put("konjac", "Amorphophallus konjac");
+            put("okra", "Abelmoschus esculentus");
+            put("asparagus", "Asparagus officinalis");
+            put("artichoke", "Cynara cardunculus var. scolymus");
+            put("malanga", "Xanthosoma sagittifolium");
+            put("water_chestnut", "Eleocharis dulcis");
+            put("watercress", "Nasturtium officinale");
+            put("water_caltrop", "Trapa natans");
+            put("prickly_pear", "Opuntia ficus-indica");
+        }};
+
+        return names.getOrDefault(name, "Missing taxonomy for " + name);
     }
 }

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/azure_bluet/azure_bluet",
+    "layer1": "productivefarming:block/flowers/azure_bluet/azure_bluet_flower"
+  }
+}

@@ -1,16 +1,25 @@
 {
   "variants": {
     "age=0": {
-      "model": "productivefarming:block/crops/salsify_stage0"
+      "model": "productivefarming:block/crops/salsify/stage_0"
     },
     "age=1": {
-      "model": "productivefarming:block/crops/salsify_stage1"
+      "model": "productivefarming:block/crops/salsify/stage_1"
     },
     "age=2": {
-      "model": "productivefarming:block/crops/salsify_stage2"
+      "model": "productivefarming:block/crops/salsify/stage_2"
     },
     "age=3": {
-      "model": "productivefarming:block/crops/salsify_stage3"
+      "model": "productivefarming:block/crops/salsify/stage_3"
+    },
+    "age=4": {
+      "model": "productivefarming:block/crops/salsify/stage_4"
+    },
+    "age=5": {
+      "model": "productivefarming:block/crops/salsify/stage_5"
+    },
+    "age=6": {
+      "model": "productivefarming:block/crops/salsify/stage_6"
     }
   }
 }

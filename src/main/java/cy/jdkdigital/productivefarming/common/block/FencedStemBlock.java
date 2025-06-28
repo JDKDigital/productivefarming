@@ -30,6 +30,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
@@ -38,11 +40,18 @@ import java.util.Optional;
 
 public class FencedStemBlock extends StemBlock implements IAgeableCropBlock, EntityBlock
 {
+    private static final VoxelShape AABBS = Block.box(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
+
     public FencedStemBlock(CropConfig crop, Properties properties) {
         super(
                 ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_leaves")),
                 ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")),
-                ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seed")), properties);
+                ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")), properties);
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return AABBS;
     }
 
     @Nullable
@@ -54,6 +63,11 @@ public class FencedStemBlock extends StemBlock implements IAgeableCropBlock, Ent
     @Override
     public IntegerProperty getAgeProperty() {
         return BlockStateProperties.AGE_7;
+    }
+
+    @Override
+    public int getHarvestedAge() {
+        return 0;
     }
 
     @Override
@@ -71,7 +85,7 @@ public class FencedStemBlock extends StemBlock implements IAgeableCropBlock, Ent
                         BlockPos leafPos = pos.relative(Direction.UP);
                         BlockState fenceBlockState = level.getBlockState(leafPos);
                         BlockState farmlandBlockState = level.getBlockState(pos.below());
-                        if (fenceBlockState.is(Tags.Blocks.FENCES) && farmlandBlockState.is(ModTags.FARMLAND)) {
+                        if (fenceBlockState.is(Tags.Blocks.FENCES) && farmlandBlockState.is(ModTags.Blocks.FARMLAND)) {
                             Registry<Block> registry = level.registryAccess().registryOrThrow(Registries.BLOCK);
                             Optional<Block> fruitBlock = registry.getOptional(this.fruit);
                             Optional<Block> attachedStemBlock = registry.getOptional(this.attachedStem);
@@ -97,7 +111,7 @@ public class FencedStemBlock extends StemBlock implements IAgeableCropBlock, Ent
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-        return state.is(ModTags.FARMLAND);
+        return state.is(ModTags.Blocks.FARMLAND);
     }
 
     @Override
@@ -107,5 +121,14 @@ public class FencedStemBlock extends StemBlock implements IAgeableCropBlock, Ent
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        // check if state has changed, and it's not changed to the attached stem state
+        if (!state.is(newState.getBlock()) && !(newState.getBlock() instanceof AttachedFencedStemBlock) && level.getBlockEntity(pos) instanceof FencedCropBlockEntity fencedCropBlockEntity && fencedCropBlockEntity.getFence() != null) {
+            level.setBlockAndUpdate(pos, fencedCropBlockEntity.getFence());
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 }

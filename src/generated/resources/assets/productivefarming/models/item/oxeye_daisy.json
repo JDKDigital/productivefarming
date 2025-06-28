@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/oxeye_daisy/oxeye_daisy",
+    "layer1": "productivefarming:block/flowers/oxeye_daisy/oxeye_daisy_flower"
+  }
+}

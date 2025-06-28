@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sea_buckthorn": {
+      "conditions": {
+        "items": [
+          {
+            "items": "productivefarming:sea_buckthorn"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "productivefarming:crates/sea_buckthorn"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sea_buckthorn"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "productivefarming:crates/sea_buckthorn"
+    ]
+  }
+}

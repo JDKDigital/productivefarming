@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/peony/upper",
+    "layer1": "productivefarming:block/flowers/peony/upper_flower"
+  }
+}

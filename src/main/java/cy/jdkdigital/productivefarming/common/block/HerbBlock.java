@@ -16,7 +16,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.Tags;
 
-public class HerbBlock extends FastCropBlock
+public class HerbBlock extends ProductiveCropBlock
 {
     public HerbBlock(CropConfig crop, Properties pProperties) {
         super(crop, pProperties);
@@ -25,10 +25,10 @@ public class HerbBlock extends FastCropBlock
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         boolean isFullyGrown = state.getValue(getAgeProperty()) == getMaxAge();
-        if (!isFullyGrown && player.getItemInHand(hand).is(ModTags.FERTILIZERS)) {
+        if (!isFullyGrown && player.getItemInHand(hand).is(ModTags.Items.FERTILIZERS)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         } else if (state.getValue(getAgeProperty()) > 1 && player.getItemInHand(hand).is(Tags.Items.TOOLS_SHEAR)) {
-            popResource(level, pos, new ItemStack(itemSupplier.get(), level.random.nextInt(state.getValue(getAgeProperty()))));
+            popResource(level, pos, getCloneItemStack(level, pos, state));
             level.playSound(null, pos, SoundEvents.MOOSHROOM_SHEAR, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
             BlockState blockstate = state.setValue(getAgeProperty(), state.getValue(getAgeProperty()) - 1);
             level.setBlock(pos, blockstate, UPDATE_CLIENTS);

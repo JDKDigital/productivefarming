@@ -2,33 +2,41 @@ package cy.jdkdigital.productivefarming.event;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import cy.jdkdigital.productivelib.registry.LibItems;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cod;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.IBlockCapabilityProvider;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.Nullable;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = ProductiveFarming.MODID)
 public class ModEventHandler
 {
     @SubscribeEvent
-    public static void registerParticles(RegisterParticleProvidersEvent event) {
-    }
-
-    @SubscribeEvent
     public static void buildContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey().equals(FarmingRegistrator.TAB_KEY)) {
             for (DeferredHolder<Item, ? extends Item> item : ProductiveFarming.ITEMS.getEntries()) {
                 event.accept(item.value());
+            }
+            if (ModList.get().isLoaded("productivebees")) {
+                event.accept(LibItems.UPGRADE_POLLEN_SIEVE.get());
             }
         }
     }
@@ -46,7 +54,7 @@ public class ModEventHandler
     }
 
     @SubscribeEvent
-    public static void registerBlockEntityCapabilities(RegisterCapabilitiesEvent event) {
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 FarmingRegistrator.FEEDING_TROUGH_BLOCK_ENTITY.get(),
@@ -55,7 +63,12 @@ public class ModEventHandler
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 FarmingRegistrator.FARM_CONTROLLER_BLOCK_ENTITY.get(),
-                (myBlockEntity, side) -> myBlockEntity.inventoryHandler
+                (myBlockEntity, side) -> myBlockEntity.getItemHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                FarmingRegistrator.FARM_CONTROLLER_BLOCK_ENTITY.get(),
+                (myBlockEntity, side) -> myBlockEntity.getFluidHandler()
         );
 //        event.registerBlockEntity(
 //                Capabilities.ItemHandler.BLOCK,

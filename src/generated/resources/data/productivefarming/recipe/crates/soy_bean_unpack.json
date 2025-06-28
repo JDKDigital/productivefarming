@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "productivefarming:soy_bean_crate"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "productivefarming:soy_bean"
+  }
+}

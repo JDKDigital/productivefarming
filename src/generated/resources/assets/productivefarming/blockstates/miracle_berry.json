@@ -1,28 +1,25 @@
 {
   "variants": {
     "age=0": {
-      "model": "productivefarming:block/bushes/miracle_berry_stage0"
+      "model": "productivefarming:block/bushes/miracle_berry/stage_0"
     },
     "age=1": {
-      "model": "productivefarming:block/bushes/miracle_berry_stage1"
+      "model": "productivefarming:block/bushes/miracle_berry/stage_1"
     },
     "age=2": {
-      "model": "productivefarming:block/bushes/miracle_berry_stage2"
+      "model": "productivefarming:block/bushes/miracle_berry/stage_2"
     },
     "age=3": {
-      "model": "productivefarming:block/bushes/miracle_berry_stage3"
+      "model": "productivefarming:block/bushes/miracle_berry/stage_3"
     },
     "age=4": {
-      "model": "productivefarming:block/bushes/miracle_berry_stage4"
+      "model": "productivefarming:block/bushes/miracle_berry/stage_4"
     },
     "age=5": {
-      "model": "productivefarming:block/bushes/miracle_berry_stage5"
+      "model": "productivefarming:block/bushes/miracle_berry/stage_5"
     },
     "age=6": {
-      "model": "productivefarming:block/bushes/miracle_berry_stage6"
-    },
-    "age=7": {
-      "model": "productivefarming:block/bushes/miracle_berry_stage7"
+      "model": "productivefarming:block/bushes/miracle_berry/stage_6"
     }
   }
 }

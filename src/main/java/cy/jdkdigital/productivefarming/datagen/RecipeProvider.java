@@ -1,6 +1,7 @@
 package cy.jdkdigital.productivefarming.datagen;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
+import cy.jdkdigital.productivefarming.datagen.recipe.CropPollinationRecipeBuilder;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.registry.ModTags;
 import cy.jdkdigital.productivefarming.util.CropConfig;
@@ -67,6 +68,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
 
         buildCrateRecipes(recipeOutput);
         buildSeedBagRecipes(recipeOutput);
+        buildPollinationRecipes(recipeOutput);
     }
 
     protected static <T extends AbstractCookingRecipe> void simpleCookingRecipe(RecipeOutput pFinishedRecipeConsumer, String pCookingMethod, RecipeSerializer<T> pCookingSerializer, int pCookingTime, ItemLike pIngredient, ItemLike pResult, float pExperience, AbstractCookingRecipe.Factory<T> recipeFactory) {
@@ -109,5 +111,23 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
                     .define('#', seedItem)
                     .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "seed_bags/" + seedName.getPath()));
         });
+    }
+
+    private void buildPollinationRecipes(RecipeOutput recipeOutput) {
+        // Corn mutations
+        CropPollinationRecipeBuilder.direct(getCropIngredient("yellow_dent_corn"), ResourceLocation.withDefaultNamespace("cornflower"), ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "blue_jade_corn"), 1.0f)
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "pollination/blue_jade_corn_from_yellow_dent_corn"));
+
+        // Tomato mutations
+
+        // Bell Pepper mutations
+
+        // Grape mutations
+
+        // Berry mutation (miracle berry, golden raspberry)
+    }
+
+    private static ResourceLocation getCropIngredient(String cropname) {
+        return ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, cropname);
     }
 }

@@ -8,6 +8,7 @@ import cy.jdkdigital.productivefarming.registry.ModTags;
 import cy.jdkdigital.productivelib.common.block.entity.IMultiBlockControllerBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
 import cy.jdkdigital.productivelib.util.MultiBlockDetector;
+import cy.jdkdigital.productivelib.util.harvest.HarvestCompatHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -28,6 +29,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -35,12 +37,14 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class FarmControllerBlockEntity extends TickingBlockEntity implements IMultiBlockControllerBlockEntity, MenuProvider
 {
@@ -93,25 +97,34 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
     @Override
     public void tickServer(ServerLevel level, BlockPos blockPos, BlockState blockState, TickingBlockEntity blockEntity) {
         if (blockEntity instanceof FarmControllerBlockEntity farmControllerBlockEntity) {
-            var farmConfig = farmControllerBlockEntity.farmConfig;
-            var cropPositions = BlockPos.betweenClosedStream(farmConfig.topCorners().getFirst(), farmConfig.topCorners().getFirst()).map(BlockPos::above).toList();
-
-            if (farmConfig.height() > 1) {
-                ProductiveFarming.LOGGER.info("tick fishy");
-                farmControllerBlockEntity.processFishFarm(cropPositions);
+            // Only harvest when there's an empty slot in the inventory
+            boolean canHarvest = false;
+            for (int slot = 0; slot < farmControllerBlockEntity.getItemHandler().getSlots(); slot++) {
+                if (farmControllerBlockEntity.getItemHandler().getStackInSlot(slot).isEmpty()) {
+                    canHarvest = true;
+                }
             }
 
-            // do crop/tree farming
-            // initiate worker for cutting trees and harvesting crops
+            if (canHarvest) {
+                var farmConfig = farmControllerBlockEntity.farmConfig;
+                var cropPositions = BlockPos.betweenClosedStream(farmConfig.topCorners().getFirst(), farmConfig.topCorners().getSecond()).map(BlockPos::above).collect(Collectors.toCollection(ArrayList::new));
 
-            // collect items, void excess
-            List<ItemEntity> lootStacks = level.getEntitiesOfClass(ItemEntity.class, (new AABB(farmConfig.topCorners().getFirst().above().getBottomCenter(), farmConfig.topCorners().getSecond().below().getBottomCenter()))).stream().toList();
-            lootStacks.forEach(itemEntity -> {
-                if (inventoryHandler instanceof InventoryHandlerHelper.BlockEntityItemStackHandler handler) {
-                    handler.addOutput(itemEntity.getItem());
-                    itemEntity.kill();
+                if (farmConfig.height() > 1) {
+                    farmControllerBlockEntity.processFishFarm(cropPositions);
                 }
-            });
+
+                // do crop farming
+                // initiate worker for harvesting crops
+                processCropFarm(cropPositions);
+
+                // collect items, void excess
+                List<ItemEntity> lootStacks = level.getEntitiesOfClass(ItemEntity.class, (new AABB(farmConfig.topCorners().getFirst().above(2).getBottomCenter(), farmConfig.topCorners().getSecond().below().getBottomCenter()))).stream().toList();
+                lootStacks.forEach(itemEntity -> {
+                    if (inventoryHandler instanceof InventoryHandlerHelper.BlockEntityItemStackHandler handler && handler.addOutput(itemEntity.getItem()).isEmpty()) {
+                        itemEntity.kill();
+                    }
+                });
+            }
         }
     }
 
@@ -119,6 +132,16 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
         if (blockEntity.farmConfig != null) {
             blockEntity.tickHandler(level, blockPos, blockState, blockEntity);
         }
+    }
+
+    @Override
+    public IItemHandler getItemHandler() {
+        return inventoryHandler;
+    }
+
+    @Override
+    public IFluidHandler getFluidHandler() {
+        return fluidHandler;
     }
 
     @Override
@@ -199,7 +222,7 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
             Map<BlockPos, BlockState> clamMap = new HashMap<>();
             for (var pos : BlockPos.betweenClosed(farmConfig.topCorners().getFirst(), farmConfig.topCorners().getSecond())) {
                 var state = serverLevel.getBlockState(pos);
-                if (state.is(ModTags.FARMABLE_FISH_BLOCKS)) {
+                if (state.is(ModTags.Blocks.FARMABLE_FISH_BLOCKS)) {
                     clamMap.put(new BlockPos(pos), state);
                 }
             }
@@ -235,9 +258,20 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
 
     private void processCropFarm(List<BlockPos> cropPositions) {
         if (level instanceof ServerLevel serverLevel) {
-            BlockPos.betweenClosedStream(cropPositions.getFirst(), cropPositions.getLast()).forEach(pos -> {
-                var state = level.getBlockState(pos);
-                ProductiveFarming.LOGGER.info("State at " + pos + " " + state);
+            Collections.shuffle(cropPositions);
+            cropPositions.forEach(p -> {
+                for (BlockPos pos: new BlockPos[]{p, p.above()}) {
+                    HarvestCompatHandler.harvestBlock(serverLevel, pos);
+
+                    if (fluidHandler.getFluidInTank(0).getAmount() >= 100) {
+                        var state = serverLevel.getBlockState(pos);
+                        if (state.getBlock() instanceof BonemealableBlock bonemealableBlock) {
+                            bonemealableBlock.performBonemeal(serverLevel, serverLevel.random, pos, state);
+                            fluidHandler.drain(100, IFluidHandler.FluidAction.EXECUTE);
+                            level.levelEvent(1505, pos, 15);
+                        }
+                    }
+                }
             });
         }
     }
@@ -259,5 +293,6 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
 
     public void sync(Level level) {
         level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        invalidateCapabilities();
     }
 }

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "productivefarming:chocolate_pear_tomato_crate"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "productivefarming:chocolate_pear_tomato"
+  }
+}

@@ -1,6 +1,0 @@
-{
-  "parent": "productivefarming:block/fenced_stem_attached",
-  "textures": {
-    "stem": "productivefarming:block/trellis/stem/attached"
-  }
-}

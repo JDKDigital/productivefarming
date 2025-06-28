@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/rose_bush/upper",
+    "layer1": "productivefarming:block/flowers/rose_bush/upper_flower"
+  }
+}

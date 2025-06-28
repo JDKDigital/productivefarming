@@ -1,5 +1,6 @@
 package cy.jdkdigital.productivefarming.common.block;
 
+import cy.jdkdigital.productivefarming.common.block.entity.MushroomGrowthCropBlockEntity;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,9 +10,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -65,6 +68,11 @@ public class MushroomGrowthBlock extends ProductiveCropBlock
     }
 
     @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new MushroomGrowthCropBlockEntity(pos, state);
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(this.getAgeProperty()).add(BlockStateProperties.HORIZONTAL_FACING);
     }
@@ -81,7 +89,7 @@ public class MushroomGrowthBlock extends ProductiveCropBlock
     }
 
     @Override
-    protected BlockState getStateForAge(BlockState state, ServerLevel level, BlockPos pos, int age) {
+    protected BlockState getStateForAge(BlockState state, Level level, BlockPos pos, int age) {
         return super.getStateForAge(age).setValue(BlockStateProperties.HORIZONTAL_FACING, state.getValue(BlockStateProperties.HORIZONTAL_FACING));
     }
 

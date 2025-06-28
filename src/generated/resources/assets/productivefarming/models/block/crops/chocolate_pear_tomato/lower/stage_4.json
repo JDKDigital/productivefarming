@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/cross",
+  "textures": {
+    "cross": "productivefarming:block/crops/chocolate_pear_tomato/lower/stage_4"
+  }
+}

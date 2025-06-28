@@ -6,15 +6,13 @@
     "#c:berries/blueberry",
     "#c:berries/boysenberry",
     "#c:berries/cloudberry",
+    "#c:berries/checkerberry",
     "#c:berries/cranberry",
     "#c:berries/golden_raspberry",
     "#c:berries/gooseberry",
-    "#c:berries/huckleberry",
     "#c:berries/lingoberry",
     "#c:berries/miracle_berry",
-    "#c:berries/mulberry",
     "#c:berries/raspberry",
-    "#c:berries/redcurrant",
-    "#c:berries/thimbleberry"
+    "#c:berries/redcurrant"
   ]
 }

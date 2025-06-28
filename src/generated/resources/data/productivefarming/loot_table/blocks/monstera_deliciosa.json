@@ -19,15 +19,40 @@
                   "block": "productivefarming:monstera_deliciosa",
                   "condition": "minecraft:block_state_property",
                   "properties": {
-                    "age": "7"
+                    "age": "6",
+                    "half": "upper"
                   }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:copy_components",
+                  "include": [
+                    "productivefarming:growth",
+                    "productivefarming:yield",
+                    "productivefarming:resistance",
+                    "productivefarming:mutability"
+                  ],
+                  "source": "block_entity"
                 }
               ],
               "name": "productivefarming:monstera_deliciosa"
             },
             {
               "type": "minecraft:item",
-              "name": "productivefarming:monstera_deliciosa_seeds"
+              "functions": [
+                {
+                  "function": "minecraft:copy_components",
+                  "include": [
+                    "productivefarming:growth",
+                    "productivefarming:yield",
+                    "productivefarming:resistance",
+                    "productivefarming:mutability"
+                  ],
+                  "source": "block_entity"
+                }
+              ],
+              "name": "productivefarming:monstera_deliciosa"
             }
           ]
         }
@@ -41,7 +66,8 @@
           "block": "productivefarming:monstera_deliciosa",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "age": "7"
+            "age": "6",
+            "half": "upper"
           }
         }
       ],
@@ -57,9 +83,19 @@
                 "extra": 3,
                 "probability": 0.5714286
               }
+            },
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "productivefarming:growth",
+                "productivefarming:yield",
+                "productivefarming:resistance",
+                "productivefarming:mutability"
+              ],
+              "source": "block_entity"
             }
           ],
-          "name": "productivefarming:monstera_deliciosa_seeds"
+          "name": "productivefarming:monstera_deliciosa"
         }
       ],
       "rolls": 1.0

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "productivefarming:block/flowers/lilac/lower"
+    },
+    "half=upper": {
+      "model": "productivefarming:block/flowers/lilac/upper"
+    }
+  }
+}

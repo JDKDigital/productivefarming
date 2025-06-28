@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/oxeye_daisy/oxeye_daisy",
+    "edge": "productivefarming:block/flowers/oxeye_daisy/oxeye_daisy_flower"
+  }
+}

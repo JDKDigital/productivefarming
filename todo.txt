@@ -1,0 +1,23 @@
+- Mutation recipes
+
+- Colored flowers, flower to dye recipes
+- Flower pot support
+
+- Implement ways to increase stats through random mutation
+
+- Implement growth speed trait
+- Implement growth resistance trait
+- Implement growth mutability trait
+
+- Make a way for a crop to have a better starting trait be default
+- Seeds from creative should have default traits
+
+- Shear flowers for petals (Rose bush, Crocus)
+
+- New cactus plants with flowers/crops on top
+
+- Crop duster bee, bonemeals crops in an area and causes mutations/stat increases
+
+- Patchouli guide book "Big Book of Agronomy"
+
+

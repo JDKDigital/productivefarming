@@ -150,7 +150,7 @@ public class Crab extends Animal implements VariantHolder<Crab.Variant>, Product
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(ModTags.CRAB_FOOD);
+        return stack.is(ModTags.Items.CRAB_FOOD);
     }
 
     public static enum Variant implements StringRepresentable

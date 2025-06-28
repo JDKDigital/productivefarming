@@ -1,6 +1,0 @@
-{
-  "parent": "productivefarming:block/crop",
-  "textures": {
-    "crop": "productivefarming:block/herbs/parsley_stage3"
-  }
-}

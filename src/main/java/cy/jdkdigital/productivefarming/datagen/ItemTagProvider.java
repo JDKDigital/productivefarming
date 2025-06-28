@@ -29,13 +29,17 @@ public class ItemTagProvider extends ItemTagsProvider
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        copy(BlockTags.SMALL_FLOWERS, ItemTags.SMALL_FLOWERS);
+        copy(BlockTags.TALL_FLOWERS, ItemTags.TALL_FLOWERS);
         tag(ItemTags.DURABILITY_ENCHANTABLE).add(FarmingRegistrator.CORN_COB_PIPE.get());
-        tag(ModTags.FERTILIZERS).add(Items.BONE_MEAL);
-        tag(ModTags.MUSHROOMS).add(Items.BROWN_MUSHROOM, Items.RED_MUSHROOM, Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS);
-        tag(ModTags.DRIED_TOBACCO).add(FarmingRegistrator.DRIED_TOBACCO.get());
-        tag(ModTags.TOBACCO).addTag(ModTags.DRIED_TOBACCO);
+        tag(ModTags.Items.FERTILIZERS).add(Items.BONE_MEAL);
+        tag(ModTags.Items.MUSHROOMS).add(Items.BROWN_MUSHROOM, Items.RED_MUSHROOM, Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS);
+        tag(ModTags.Items.DRIED_TOBACCO).add(FarmingRegistrator.DRIED_TOBACCO.get());
+        tag(ModTags.Items.TOBACCO).addTag(ModTags.Items.DRIED_TOBACCO);
 
-        tag(ModTags.CRAB_FOOD)
+        tag(ModTags.Items.VANILLA_SEEDS).add(Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS, Items.POTATO, Items.CARROT);
+
+        tag(ModTags.Items.CRAB_FOOD)
                 .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "shrimp")))
                 .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "mussel")))
                 .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "anchovy")));
@@ -43,13 +47,13 @@ public class ItemTagProvider extends ItemTagsProvider
         for (CropConfig crop: FarmingRegistrator.HERBS) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "herbs/" + crop.name()));
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
-            tag(ModTags.HERBS).addTag(tag);
+            tag(ModTags.Items.HERBS).addTag(tag);
 
         }
         for (CropConfig crop: FarmingRegistrator.BERRIES) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "berries/" + crop.name()));
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
-            tag(ModTags.BERRIES).addTag(tag);
+            tag(ModTags.Items.BERRIES).addTag(tag);
         }
         for (CropConfig crop: FarmingRegistrator.CROPS) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
@@ -69,7 +73,7 @@ public class ItemTagProvider extends ItemTagsProvider
             } else {
                 tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "raw_" + fish.name())));
             }
-            tag(ModTags.FISHES).addTag(tag);
+            tag(ModTags.Items.FISHES).addTag(tag);
         }
 
         FarmingRegistrator.CRATED_CROPS.forEach(resourceLocation -> {

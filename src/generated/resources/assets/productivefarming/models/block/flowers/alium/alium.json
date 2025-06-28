@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/alium/alium",
+    "edge": "productivefarming:block/flowers/alium/alium_flower"
+  }
+}

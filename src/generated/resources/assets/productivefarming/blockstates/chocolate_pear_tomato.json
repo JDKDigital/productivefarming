@@ -1,0 +1,46 @@
+{
+  "variants": {
+    "age=0,half=lower": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/lower/stage_0"
+    },
+    "age=0,half=upper": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/upper/stage_0"
+    },
+    "age=1,half=lower": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/lower/stage_1"
+    },
+    "age=1,half=upper": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/upper/stage_1"
+    },
+    "age=2,half=lower": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/lower/stage_2"
+    },
+    "age=2,half=upper": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/upper/stage_2"
+    },
+    "age=3,half=lower": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/lower/stage_3"
+    },
+    "age=3,half=upper": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/upper/stage_3"
+    },
+    "age=4,half=lower": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/lower/stage_4"
+    },
+    "age=4,half=upper": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/upper/stage_4"
+    },
+    "age=5,half=lower": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/lower/stage_5"
+    },
+    "age=5,half=upper": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/upper/stage_5"
+    },
+    "age=6,half=lower": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/lower/stage_6"
+    },
+    "age=6,half=upper": {
+      "model": "productivefarming:block/crops/chocolate_pear_tomato/upper/stage_6"
+    }
+  }
+}

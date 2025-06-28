@@ -5,18 +5,18 @@ import cy.jdkdigital.productivefarming.client.render.entity.WalleyeRenderer;
 import cy.jdkdigital.productivefarming.common.block.*;
 import cy.jdkdigital.productivefarming.common.block.FarmBlock;
 import cy.jdkdigital.productivefarming.common.block.entity.*;
+import cy.jdkdigital.productivefarming.common.datamap.CropTrait;
 import cy.jdkdigital.productivefarming.common.entity.*;
 import cy.jdkdigital.productivefarming.common.feature.SeaFloorFeature;
-import cy.jdkdigital.productivefarming.common.fluid.NutrientWater;
-import cy.jdkdigital.productivefarming.common.fluid.type.NutrientWaterType;
-import cy.jdkdigital.productivefarming.common.item.CornPipeItem;
-import cy.jdkdigital.productivefarming.common.item.SeedBagItem;
-import cy.jdkdigital.productivefarming.common.item.StemGrowinSeedItem;
+import cy.jdkdigital.productivefarming.common.item.*;
 import cy.jdkdigital.productivefarming.inventory.FarmControllerContainer;
 import cy.jdkdigital.productivefarming.inventory.FeedingTroughContainer;
 import cy.jdkdigital.productivefarming.recipe.CropFruitingRecipe;
+import cy.jdkdigital.productivefarming.recipe.CropPollinationRecipe;
+import cy.jdkdigital.productivefarming.recipe.FlowerDyeCraftingRecipe;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import cy.jdkdigital.productivefarming.util.FishConfig;
+import cy.jdkdigital.productivefarming.util.FlowerConfig;
 import net.minecraft.client.renderer.entity.CodRenderer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -42,11 +42,14 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.CountConfiguration;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.datamaps.DataMapType;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -54,109 +57,145 @@ import java.util.stream.Stream;
 
 public class FarmingRegistrator
 {
+    public static final FoodProperties LEAFY = new FoodProperties.Builder().nutrition(1).build();
+
+    public static List<CropConfig> VANILLA_CROPS = new ArrayList<>() {{
+        add(new CropConfig("wheat", true, null, GrainCropBlock::new));
+        add(new CropConfig("potato", false, Foods.POTATO, GrainCropBlock::new));
+        add(new CropConfig("carrot", false, Foods.CARROT, GrainCropBlock::new));
+        add(new CropConfig("beetroot", true, Foods.BEETROOT, GrainCropBlock::new));
+    }};
     public static List<CropConfig> CROPS = new ArrayList<>()
     {{
         add(new CropConfig("arrowroot", false, Foods.POTATO));
-        add(new CropConfig("artichoke", false, Foods.BEETROOT));
-        add(new CropConfig("arugula", true, Foods.BEETROOT)); // salad
-        add(new CropConfig("asparagus", true, Foods.BEETROOT));
-        add(new CropConfig("bell_pepper_green", false, Foods.BEETROOT));
-        add(new CropConfig("bell_pepper_orange", false, Foods.BEETROOT));
-        add(new CropConfig("bell_pepper_red", false, Foods.BEETROOT));
-        add(new CropConfig("bell_pepper_yellow", false, Foods.BEETROOT));
+        add(new CropConfig("arugula", true, LEAFY)); // salad
+        add(new CropConfig("green_bell_pepper", false, Foods.BEETROOT));
+        add(new CropConfig("orange_bell_pepper", false, Foods.BEETROOT));
+        add(new CropConfig("red_bell_pepper", false, Foods.BEETROOT));
+        add(new CropConfig("yellow_bell_pepper", false, Foods.BEETROOT));
+        add(new CropConfig("black_bell_pepper", false, Foods.BEETROOT));
+        add(new CropConfig("purple_bell_pepper", false, Foods.BEETROOT));
+        add(new CropConfig("white_bell_pepper", false, Foods.BEETROOT));
         add(new CropConfig("black_beans", false, null));
-        add(new CropConfig("bok_choy", true, Foods.BEETROOT));
-        add(new CropConfig("broccoli", true, Foods.BEETROOT));
-        add(new CropConfig("brussel_sprouts", true, Foods.BEETROOT));
-        add(new CropConfig("burdock_root", false, Foods.BEETROOT)); // see salsify, also will cling to the player when walked through
-        add(new CropConfig("butterhead_lettuce", true, Foods.BEETROOT));
-        add(new CropConfig("cabbage", true, Foods.BEETROOT));
+        add(new CropConfig("bok_choy", true, LEAFY));
+        add(new CropConfig("broccoli", true, LEAFY));
+        add(new CropConfig("brussels_sprout", true, LEAFY));
+        add(new CropConfig("burdock_root", false, Foods.BEETROOT)); // see salsify, TODO will cling to the player when walked through
+        add(new CropConfig("butterhead_lettuce", true, LEAFY));
+        add(new CropConfig("cabbage", true, LEAFY));
+        add(new CropConfig("catnip", true, null));
         add(new CropConfig("cauliflower", true, Foods.BEETROOT));
-        add(new CropConfig("celery", true, Foods.BEETROOT));
-        add(new CropConfig("chard", false, Foods.BEETROOT));
+        add(new CropConfig("caraway", false, null));
+        add(new CropConfig("celery", true, LEAFY));
+        add(new CropConfig("chard", true, LEAFY));
+        add(new CropConfig("chamomile", true, null));
         add(new CropConfig("chili_pepper", false, Foods.BEETROOT));
-        add(new CropConfig("collard", true, Foods.BEETROOT));
-        add(new CropConfig("daikon", true, Foods.BEETROOT));
+        add(new CropConfig("collard", true, LEAFY));
+        add(new CropConfig("daikon", true, LEAFY));
         add(new CropConfig("eddoe", false, Foods.BEETROOT));
-        add(new CropConfig("eggplant", true, Foods.BEETROOT));
-        add(new CropConfig("endive", true, Foods.BEETROOT));
+        add(new CropConfig("eggplant", false, Foods.BEETROOT));
+        add(new CropConfig("endive", true, LEAFY));
+        add(new CropConfig("flax", true, null));
         add(new CropConfig("garlic", false, Foods.BEETROOT));
-        add(new CropConfig("iceberg_lettuce", true, Foods.BEETROOT));
+        add(new CropConfig("iceberg_lettuce", true, LEAFY));
         add(new CropConfig("jalapeno", false, Foods.BEETROOT));
-        add(new CropConfig("jute", false, Foods.BEETROOT)); // molokhia
-        add(new CropConfig("kale", true, Foods.BEETROOT));
+        add(new CropConfig("kale", true, LEAFY));
         add(new CropConfig("kidney_beans", false, null));
         add(new CropConfig("kohlrabi", true, Foods.BEETROOT));
-        add(new CropConfig("konjac", false, Foods.BEETROOT));
         add(new CropConfig("leek", true, Foods.BEETROOT));
         add(new CropConfig("lima_beans", false, null));
-        add(new CropConfig("malanga", false, Foods.BEETROOT));
-        add(new CropConfig("okra", false, Foods.BEETROOT));
         add(new CropConfig("onion", true, Foods.BEETROOT));
         add(new CropConfig("parsnip", true, Foods.BEETROOT));
         add(new CropConfig("peas", false, Foods.BEETROOT));
-        add(new CropConfig("pineapple", true, Foods.BEETROOT)); // plant the top?
         add(new CropConfig("pinto_beans", false, null));
-        add(new CropConfig("prickly_pear", false, Foods.BEETROOT)); // TODO it's a cactus fruit
         add(new CropConfig("radish", true, Foods.BEETROOT));
         add(new CropConfig("rhubarb", false, Foods.BEETROOT));
-        add(new CropConfig("romain_lettuce", false, Foods.BEETROOT));
+        add(new CropConfig("romain_lettuce", true, LEAFY));
         add(new CropConfig("rutabaga", true, Foods.BEETROOT));
-        add(new CropConfig("salsify", false, Foods.BEETROOT)); // maybe a weed you can propagate, not actually farm (shear to get the flower, break to get the root?)
-        add(new CropConfig("spinach", true, Foods.BEETROOT));
-        add(new CropConfig("strawberry", true, null));
-        add(new CropConfig("sugar_beet", true, null)); // missing textures
-        add(new CropConfig("tomatillo", true, Foods.BEETROOT));
-        add(new CropConfig("tomato", true, Foods.BEETROOT));
+        add(new CropConfig("salsify", true, Foods.BEETROOT)); // maybe a weed you can propagate, not actually farm (shear to get the flower, break to get the root?)
+        add(new CropConfig("soy_bean", false, Foods.BEETROOT));
+        add(new CropConfig("spinach", true, LEAFY));
+        add(new CropConfig("strawberry", false, null));
+        add(new CropConfig("sugar_beet", true, null));
+        add(new CropConfig("sweet_marjoram", true, null));
         add(new CropConfig("turnip", true, Foods.BEETROOT));
         add(new CropConfig("ulluco", false, Foods.POTATO));
-        add(new CropConfig("wasabi", false, null));
-        add(new CropConfig("yam", true, Foods.BEETROOT));
-        add(new CropConfig("zucchini", true, Foods.BEETROOT));
+        add(new CropConfig("wasabi", true, null));
 
-        add(new CropConfig("peanuts", false, Foods.BEETROOT)); // missing texture
-        add(new CropConfig("corn", true, Foods.BEETROOT, ProductiveCropBlock::new));
+        add(new CropConfig("peanuts", false, Foods.BEETROOT));
         add(new CropConfig("ginger", false, Foods.BEETROOT));
-        add(new CropConfig("green_bean", true, Foods.BEETROOT));
-        add(new CropConfig("green_onion", true, Foods.BEETROOT));
-        add(new CropConfig("saguaro", true, Foods.BEETROOT));
-        add(new CropConfig("squash", true, Foods.BEETROOT));
+        add(new CropConfig("green_bean", false, Foods.BEETROOT));
+        add(new CropConfig("spring_onion", true, LEAFY));
+        add(new CropConfig("saguaro", false, Foods.BEETROOT)); // it's a cactus
         add(new CropConfig("sweet_potato", false, Foods.BEETROOT));
         add(new CropConfig("lentils", false, null));
         add(new CropConfig("chickpeas", false, null));
+        add(new CropConfig("mustard", false, null));
 
-        add(new CropConfig("mustard", true, null));
-        add(new CropConfig("pepper", true, null));
-        add(new CropConfig("turmeric", true, null));
-
-        add(new CropConfig("rice", true, null));
-        add(new CropConfig("oats", true, null, ProductiveCropBlock::new));
-        add(new CropConfig("barley", true, null, ProductiveCropBlock::new));
-        add(new CropConfig("rye", true, null, ProductiveCropBlock::new));
-        add(new CropConfig("amaranth", true, null, ProductiveCropBlock::new));
-        add(new CropConfig("cassava", false, null, ProductiveCropBlock::new));
+        add(new CropConfig("rice", false, null, GrainCropBlock::new));
+        add(new CropConfig("oats", true, null, GrainCropBlock::new));
+        add(new CropConfig("barley", true, null, GrainCropBlock::new));
+        add(new CropConfig("rye", true, null, GrainCropBlock::new));
+        add(new CropConfig("hops", false, null, GrainCropBlock::new));
+        add(new CropConfig("amaranth", true, null, DoubleCropBlock::new));
+        add(new CropConfig("sorghum", true, null, DoubleCropBlock::new));
         // Double block crops
-        add(new CropConfig("pitaya", true, Foods.SWEET_BERRIES, DoubleCropBlock::new)); // dragonfruit
-        add(new CropConfig("monstera_deliciosa", true, Foods.SWEET_BERRIES, DoubleCropBlock::new));
+        add(new CropConfig("agave", false, Foods.SWEET_BERRIES, DoubleCropBlock::new));
+        add(new CropConfig("ferula", true, Foods.SWEET_BERRIES, DoubleCropBlock::new)); // Asafoetida
+        add(new CropConfig("cardamon", false, Foods.SWEET_BERRIES, DoubleCropBlock::new));
+        add(new CropConfig("cassava", false, null, DoubleCropBlock::new));
+        add(new CropConfig("pitaya", false, Foods.SWEET_BERRIES, DoubleCropBlock::new)); // dragonfruit
+        add(new CropConfig("monstera_deliciosa", false, Foods.SWEET_BERRIES, DoubleCropBlock::new));
         add(new CropConfig("tobacco", true, null, DoubleCropBlock::new));
         add(new CropConfig("tea", true, null, DoubleCropBlock::new));
+        add(new CropConfig("black_pepper", false, null, DoubleCropBlock::new));
+        add(new CropConfig("jute", true, Foods.BEETROOT, DoubleCropBlock::new)); // molokhia
+        add(new CropConfig("cotton", true, null, DoubleCropBlock::new));
+        add(new CropConfig("turmeric", false, null, DoubleCropBlock::new));
+        add(new CropConfig("pineapple", false, Foods.BEETROOT, DoubleCropBlock::new)); // plant the top?
+        add(new CropConfig("black_aztec_corn", false, Foods.BEETROOT, DoubleCropBlock::new, 0xff191929));
+        add(new CropConfig("blue_jade_corn", false, Foods.BEETROOT, DoubleCropBlock::new, 0xff91ace4));
+        add(new CropConfig("rainbow_corn", false, Foods.BEETROOT, DoubleCropBlock::new, 0xffae4145));
+        add(new CropConfig("sugar_pearl_corn", false, Foods.BEETROOT, DoubleCropBlock::new, 0xffecece6));
+        add(new CropConfig("yellow_dent_corn", false, Foods.BEETROOT, DoubleCropBlock::new, 0xffeac237));
+        add(new CropConfig("tomatillo", false, Foods.BEETROOT));
+        add(new CropConfig("huckleberry", false, BERRY_FOOD, DoubleCropBlock::new));
+        add(new CropConfig("roma_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("beefsteak_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("black_beauty_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("blue_beauty_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("white_wonder_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("cherry_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("chocolate_pear_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("sungold_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("yellow_pear_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("sea_buckthorn", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("konjac", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("okra", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("asparagus", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("artichoke", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("malanga", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("yam", false, Foods.BEETROOT, DoubleCropBlock::new));
         // Water grown plants
-        add(new CropConfig("water_chestnut", true, null, WaterCropBlock::new));
+        add(new CropConfig("water_chestnut", false, null, WaterCropBlock::new));
         add(new CropConfig("watercress", false, null, WaterCropBlock::new)); // spawns in rivers
-        add(new CropConfig("water_caltrop", true, null, WaterCropBlock::new));
+        add(new CropConfig("water_caltrop", false, null, WaterCropBlock::new));
+
+        add(new CropConfig("prickly_pear", false, Foods.BEETROOT)); // TODO it's a cactus fruit
     }};
     public static List<CropConfig> TRELLIS = new ArrayList<>() {{
         add(new CropConfig("kiwi", false, Foods.BEETROOT, TrellisLeafBlock::new));
-        add(new CropConfig("hops", false, null, TrellisLeafBlock::new));
         add(new CropConfig("vanilla", true, null, TrellisLeafBlock::new));
-        add(new CropConfig("akebia", true, Foods.APPLE, TrellisLeafBlock::new));
         add(new CropConfig("goji_berry", false, BERRY_FOOD, TrellisLeafBlock::new));
     }};
     public static List<CropConfig> VERTICAL_TRELLIS = new ArrayList<>() {{
-        add(new CropConfig("butternut_squash", true, Foods.BEETROOT, VerticalTrellisLeafBlock::new));
-        add(new CropConfig("spoon_gourd", true, Foods.BEETROOT, VerticalTrellisLeafBlock::new));
-        add(new CropConfig("luffa", true, Foods.MELON_SLICE, VerticalTrellisLeafBlock::new));
-        add(new CropConfig("cucumber", true, Foods.MELON_SLICE, VerticalTrellisLeafBlock::new));
+        add(new CropConfig("butternut_squash", false, Foods.BEETROOT, VerticalTrellisLeafBlock::new));
+        add(new CropConfig("spoon_gourd", false, Foods.BEETROOT, VerticalTrellisLeafBlock::new));
+        add(new CropConfig("luffa", false, Foods.MELON_SLICE, VerticalTrellisLeafBlock::new));
+        add(new CropConfig("cucumber", false, Foods.MELON_SLICE, VerticalTrellisLeafBlock::new));
+        add(new CropConfig("zucchini", false, Foods.MELON_SLICE, VerticalTrellisLeafBlock::new));
+        add(new CropConfig("akebia", false, Foods.APPLE, VerticalTrellisLeafBlock::new));
+        add(new CropConfig("sarsaparilla_vine", true, null, VerticalTrellisLeafBlock::new)); // TODO seed is root
     }};
     public static List<CropConfig> VINES = new ArrayList<>() {{
         add(new CropConfig("red_grape", true, Foods.SWEET_BERRIES, VineLeafBlock::new));
@@ -165,42 +204,47 @@ public class FarmingRegistrator
         add(new CropConfig("green_grape", true, Foods.SWEET_BERRIES, VineLeafBlock::new));
     }};
     public static List<CropConfig> STEMS = new ArrayList<>() {{
-        add(new CropConfig("cantaloupe", true, Foods.MELON_SLICE)); // TODO stem plant
-        add(new CropConfig("honey_dew_melon", true, Foods.MELON_SLICE)); // TODO stem plant
+        add(new CropConfig("cantaloupe", true, Foods.MELON_SLICE)); // TODO melon slice
+        add(new CropConfig("honeydew_melon", true, Foods.MELON_SLICE)); // TODO melon slice
     }};
     public static List<CropConfig> HERBS = new ArrayList<>()
     {{
-        add(new CropConfig("basil", false, null, HerbBlock::new)); // missing texture
-        add(new CropConfig("chives", false, null, HerbBlock::new));
-        add(new CropConfig("coriander", false, null, HerbBlock::new));
-        add(new CropConfig("dill", false, null, HerbBlock::new));
-        add(new CropConfig("mint", false, null, HerbBlock::new));
-        add(new CropConfig("oregano", false, null, HerbBlock::new));
-        add(new CropConfig("parsley", false, null, HerbBlock::new));
-        add(new CropConfig("rosemary", false, null, HerbBlock::new));
-        add(new CropConfig("sage", false, null, HerbBlock::new));
-        add(new CropConfig("fat_hen", false, null, HerbBlock::new));
-        add(new CropConfig("ostrich_fiddlehead", false, null, HerbBlock::new)); // worldgen
+        add(new CropConfig("basil", true, null, HerbBlock::new)); // missing texture
+        add(new CropConfig("chives", true, null, HerbBlock::new));
+        add(new CropConfig("coriander", true, null, HerbBlock::new));
+        add(new CropConfig("cumin", false, null, HerbBlock::new));
+        add(new CropConfig("dill", true, null, HerbBlock::new));
+        add(new CropConfig("fat_hen", true, null, HerbBlock::new));
+        add(new CropConfig("fenugreek", true, null, HerbBlock::new));
+        add(new CropConfig("spearmint", true, null, HerbBlock::new));
+        add(new CropConfig("peppermint", true, null, HerbBlock::new));
+        add(new CropConfig("watermint", true, null, HerbBlock::new));
+        add(new CropConfig("lemon_balm", true, null, HerbBlock::new));
+        add(new CropConfig("lemongrass", true, null, HerbBlock::new));
+        add(new CropConfig("oregano", true, null, HerbBlock::new));
+        add(new CropConfig("parsley", true, null, HerbBlock::new));
+        add(new CropConfig("rosemary", true, null, HerbBlock::new));
+        add(new CropConfig("sage", true, null, HerbBlock::new));
+        add(new CropConfig("thyme", true, null, HerbBlock::new));
+        add(new CropConfig("ostrich_fiddlehead", true, null, HerbBlock::new)); // TODO worldgen
     }};
     static final FoodProperties BERRY_FOOD = (new FoodProperties.Builder()).alwaysEdible().fast().nutrition(1).saturationModifier(0.1F).build();
     public static List<CropConfig> BERRIES = new ArrayList<>()
     {{
-        add(new CropConfig("kadsura", false, BERRY_FOOD, BerryBushBlock::new)); // TODO it's a shrub
+        add(new CropConfig("kadsura", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("blackberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("blackcurrant", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("blueberry", false, BERRY_FOOD, BerryBushBlock::new));
-        add(new CropConfig("boysenberry", false, BERRY_FOOD, BerryBushBlock::new));
+        add(new CropConfig("boysenberry", false, BERRY_FOOD, BerryBushBlock::new)); // breed between raspberry and blackberry
         add(new CropConfig("cloudberry", false, BERRY_FOOD, BerryBushBlock::new));
+        add(new CropConfig("checkerberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("cranberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("golden_raspberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("gooseberry", false, BERRY_FOOD, BerryBushBlock::new));
-        add(new CropConfig("huckleberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("lingoberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("miracle_berry", false, BERRY_FOOD, BerryBushBlock::new));
-        add(new CropConfig("mulberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("raspberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("redcurrant", false, BERRY_FOOD, BerryBushBlock::new));
-        add(new CropConfig("thimbleberry", false, BERRY_FOOD, BerryBushBlock::new));
     }};
     public static List<FishConfig> FISHIES = new ArrayList<>()
     {{
@@ -222,10 +266,7 @@ public class FarmingRegistrator
 
     public static List<ResourceLocation> CRATED_CROPS = new ArrayList<>()
     {{
-        add(ResourceLocation.withDefaultNamespace("potato"));
         add(ResourceLocation.withDefaultNamespace("baked_potato"));
-        add(ResourceLocation.withDefaultNamespace("carrot"));
-        add(ResourceLocation.withDefaultNamespace("beetroot"));
         add(ResourceLocation.withDefaultNamespace("apple"));
         add(ResourceLocation.withDefaultNamespace("chorus_fruit"));
         add(ResourceLocation.withDefaultNamespace("sweet_berries"));
@@ -256,20 +297,48 @@ public class FarmingRegistrator
     }};
     public static List<ResourceLocation> SEED_BAGS = new ArrayList<>()
     {{
-        add(ResourceLocation.withDefaultNamespace("wheat_seeds"));
         add(ResourceLocation.withDefaultNamespace("pumpkin_seeds"));
         add(ResourceLocation.withDefaultNamespace("melon_seeds"));
-        add(ResourceLocation.withDefaultNamespace("beetroot_seeds"));
         add(ResourceLocation.withDefaultNamespace("torchflower_seeds"));
         add(ResourceLocation.withDefaultNamespace("pitcher_pod"));
     }};
+    public static List<FlowerConfig> FLOWERS = new ArrayList<>() {{
+        add(new FlowerConfig("rose_bush", 0xffff4540, true));
+        add(new FlowerConfig("lilac", 0xffde93f1, true));
+        add(new FlowerConfig("peony", 0xffde93f1, true));
+        add(new FlowerConfig("poppy", 0xffff4540, false));
+        add(new FlowerConfig("cornflower", 0xff728ff1, false));
+        add(new FlowerConfig("alium", 0xffe8cffe, false));
+        add(new FlowerConfig("azure_bluet", 0xfff7f7f7, false));
+        add(new FlowerConfig("blue_orchid", 0xff2fcefd, false));
+        add(new FlowerConfig("dandelion", 0xffffec4f, false));
+        add(new FlowerConfig("lily_of_the_valley", 0xffffffff, false));
+        add(new FlowerConfig("oxeye_daisy", 0xffffffff, false));
+        add(new FlowerConfig("tulip", 0xffffffff, false));
+        add(new FlowerConfig("torchflower", 0xfffce257, false));
+        add(new FlowerConfig("wither_rose", 0xff42352e, false));
 
-    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<FencedLeafBlockEntity>> FENCED_VERTICAL_CROP_BLOCK_ENTITY;
-    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<FencedVerticalCropBlockEntity>> FENCED_LEAVES_BLOCK_ENTITY;
+        // sunflower, spore blossom, pitcher crop
+    }};
+
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<FencedVerticalCropBlockEntity>> FENCED_VERTICAL_CROP_BLOCK_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<FencedLeafBlockEntity>> FENCED_LEAVES_BLOCK_ENTITY;
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<FencedStemBlockEntity>> FENCED_STEM_BLOCK_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<SimpleCropBlockEntity>> CROP_BLOCK_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<ColorfulFlowerBlockEntity>> FLOWER_BLOCK_ENTITY;
 
     static Map<String, DeferredHolder<Block, Block>> registeredBlocks = new HashMap<>();
     public static void init() {
+        VANILLA_CROPS.forEach(crop -> {
+            var cropBlock = registerBlock(crop.name(), () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT)), false);
+            registeredBlocks.put(crop.name(), cropBlock);
+            if (crop.food() != null) {
+                CRATED_CROPS.add(ResourceLocation.withDefaultNamespace(crop.name()));
+            }
+            if (crop.hasSeed()) {
+                SEED_BAGS.add(ResourceLocation.withDefaultNamespace(crop.name() + "_seeds"));
+            }
+        });
         CROPS.forEach(crop -> {
             registeredBlocks.put(crop.name(), registerPlantableCrop(crop, () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT))));
             if (crop.food() != null) {
@@ -303,17 +372,17 @@ public class FarmingRegistrator
         });
         STEMS.forEach(crop -> {
             registerItem(crop.name() + "_slice", crop.food());
-            registerItem(crop.name() + "_seeds", () -> new ItemNameBlockItem(registeredBlocks.get(crop.name() + "_stem").get(), new Item.Properties()));
+            registerItem(crop.name() + "_seeds", () -> new CropBlockItem(registeredBlocks.get(crop.name() + "_stem").get(), new Item.Properties()));
             registeredBlocks.put(crop.name(), registerBlock(crop.name(), () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.MELON)), true));
             registeredBlocks.put(crop.name() + "_stem", registerBlock(crop.name() + "_stem", () -> new StemBlock(
                     ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
                     ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")),
-                    ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seed")),
+                    ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")),
                     BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM)), false));
             registeredBlocks.put("attached_" + crop.name() + "_stem", registerBlock("attached_" + crop.name() + "_stem", () -> new AttachedStemBlock(
                     ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem")),
                     ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
-                    ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seed")),
+                    ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")),
                     BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM)), false));
             CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
         });
@@ -349,19 +418,41 @@ public class FarmingRegistrator
         SEED_BAGS.forEach(seedName -> {
             registerItem(seedName.getPath() + "_bag", () -> new SeedBagItem(seedName, new Item.Properties()));
         });
-
-        FENCED_VERTICAL_CROP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_crop", () -> BlockEntityType.Builder.of(FencedLeafBlockEntity::new,
+        FLOWERS.forEach(crop -> {
+            registeredBlocks.put(crop.name(), registerBlock(crop.name(), () -> crop.isDouble() ? new ColorfulTallFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ROSE_BUSH), crop.baseColor()) : new ColorfulFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY), crop.baseColor()), true));
+        });
+        FENCED_VERTICAL_CROP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_crop", () -> BlockEntityType.Builder.of(FencedVerticalCropBlockEntity::new,
                 VERTICAL_TRELLIS.stream().map(cropConfig -> registeredBlocks.get(cropConfig.name()).get()).toList().toArray(new Block[0])
         ).build(null));
-        FENCED_LEAVES_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_leaves", () -> BlockEntityType.Builder.of(FencedVerticalCropBlockEntity::new,
+        FENCED_LEAVES_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_leaves", () -> BlockEntityType.Builder.of(FencedLeafBlockEntity::new,
                 Stream.concat(TRELLIS.stream(), VINES.stream()).map(cropConfig -> registeredBlocks.get(cropConfig.name() + "_leaves").get()).toList().toArray(new Block[0])
         ).build(null));
         FENCED_STEM_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_stem", () -> BlockEntityType.Builder.of(FencedStemBlockEntity::new,
                 Stream.concat(TRELLIS.stream(), VINES.stream()).map(cropConfig -> List.of(registeredBlocks.get("attached_" + cropConfig.name() + "_stem").get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0])
         ).build(null));
+
+        CROP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("crop", () -> BlockEntityType.Builder.of(SimpleCropBlockEntity::new,
+               Stream.concat(CROPS.stream(), Stream.concat(VANILLA_CROPS.stream(), Stream.concat(HERBS.stream(), BERRIES.stream()))).map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0])
+        ).build(null));
+        FLOWER_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("flower", () -> BlockEntityType.Builder.of(ColorfulFlowerBlockEntity::new,
+                FLOWERS.stream().map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0])
+        ).build(null));
     }
-    
+
+    public static Block[] getAllCrops() {
+        return Stream.concat(VINES.stream(), Stream.concat(VERTICAL_TRELLIS.stream(), Stream.concat(TRELLIS.stream(), Stream.concat(BERRIES.stream(), Stream.concat(CROPS.stream(), Stream.concat(VANILLA_CROPS.stream(), HERBS.stream()))))))
+                .map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0]);
+    }
+
+    public static Block[] getFlowers() {
+        return FLOWERS.stream()
+                .map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0]);
+    }
+
+    public static final DataMapType<Item, CropTrait> CROP_TRAITS = DataMapType.builder(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "crop_traits"), Registries.ITEM, CropTrait.CODEC).synced(CropTrait.CODEC, false).build();
+
     // Non-crop items
+    public static final DeferredHolder<Item, Item> POLLEN = registerItem("pollen", () -> new PollenItem(new Item.Properties()));
     public static final DeferredHolder<Item, Item> DRIED_LUFFA = registerItem("dried_luffa");
     public static final DeferredHolder<Item, Item> DRIED_TOBACCO = registerItem("dried_tobacco");
     public static final DeferredHolder<Item, Item> BLACK_TEA = registerItem("black_tea");
@@ -372,6 +463,9 @@ public class FarmingRegistrator
     public static final DeferredHolder<Block, Block> RED_MUSHROOM_GROWTH = registerBlock("red_mushroom_growth", () -> new MushroomGrowthBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM).replaceable().dynamicShape(), ResourceLocation.withDefaultNamespace("red_mushroom")), false);
     public static final DeferredHolder<Block, Block> CRIMSON_FUNGUS_GROWTH = registerBlock("crimson_fungus_growth", () -> new MushroomGrowthBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS).replaceable().dynamicShape(), ResourceLocation.withDefaultNamespace("crimson_fungus")), false);
     public static final DeferredHolder<Block, Block> WARPED_FUNGUS_GROWTH = registerBlock("warped_fungus_growth", () -> new MushroomGrowthBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS).replaceable().dynamicShape(), ResourceLocation.withDefaultNamespace("warped_fungus")), false);
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<MushroomGrowthCropBlockEntity>> MUSHROOM_GROWTH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("mushroom_growth", () -> BlockEntityType.Builder.of(MushroomGrowthCropBlockEntity::new,
+            BROWN_MUSHROOM_GROWTH.get(), RED_MUSHROOM_GROWTH.get(), CRIMSON_FUNGUS_GROWTH.get(), WARPED_FUNGUS_GROWTH.get()
+    ).build(null));
 
     // Machines
     public static final DeferredHolder<Block, Block> FISH_TRAP = registerBlock("fish_trap", () -> new FishTrapBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL)), true);
@@ -379,7 +473,7 @@ public class FarmingRegistrator
     public static final DeferredHolder<Block, Block> FARM_BLOCK = registerBlock("farm_block", () -> new FarmBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)), false);
     public static final DeferredHolder<Block, Block> FARM_HATCH = registerBlock("farm_hatch", () -> new FarmHatch(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)), true);
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FarmHatchBlockEntity>> FARM_HATCH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("farm_hatch", () -> BlockEntityType.Builder.of(FarmHatchBlockEntity::new, FARM_HATCH.get()).build(null));
-    public static final DeferredHolder<Block, Block> FARM_CONTROLLER = registerBlock("farm_controller", () -> new FarmController(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).noOcclusion()), true);
+    public static final DeferredHolder<Block, Block> FARM_CONTROLLER = registerBlock("farm_controller", () -> new FarmControllerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).noOcclusion()), true);
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FarmControllerBlockEntity>> FARM_CONTROLLER_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("farm_controller", () -> BlockEntityType.Builder.of(FarmControllerBlockEntity::new, FARM_CONTROLLER.get()).build(null));
     public static final DeferredHolder<Block, Block> FEEDING_TROUGH = registerBlock("feeding_trough", () -> new FeedingTroughBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).noOcclusion()), true);
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FeedingTroughBlockEntity>> FEEDING_TROUGH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("feeding_trough", () -> BlockEntityType.Builder.of(FeedingTroughBlockEntity::new, FEEDING_TROUGH.get()).build(null));
@@ -408,13 +502,13 @@ public class FarmingRegistrator
     // Recipes
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CROP_FRUITING = ProductiveFarming.RECIPE_SERIALIZERS.register("crop_fruiting", CropFruitingRecipe.Serializer::new);
     public static final DeferredHolder<RecipeType<?>, RecipeType<CropFruitingRecipe>> CROP_FRUITING_TYPE = ProductiveFarming.RECIPE_TYPES.register("crop_fruiting", () -> new RecipeType<>() {});
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CROP_POLLINATION = ProductiveFarming.RECIPE_SERIALIZERS.register("crop_pollination", CropPollinationRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CropPollinationRecipe>> CROP_POLLINATION_TYPE = ProductiveFarming.RECIPE_TYPES.register("crop_pollination", () -> new RecipeType<>() {});
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> FLOWER_DYE_CRAFTING = ProductiveFarming.RECIPE_SERIALIZERS.register("flower_dye_crafting", FlowerDyeCraftingRecipe.Serializer::new);
+//    public static final DeferredHolder<RecipeType<?>, RecipeType<FlowerDyeCraftingRecipe>> FLOWER_DYE_CRAFTING_TYPE = ProductiveFarming.RECIPE_TYPES.register("flower_dye_crafting", () -> new RecipeType<>() {});
 
     // Fluids
-    public static final DeferredHolder<FluidType, FluidType> NUTRIENT_WATER_TYPE = ProductiveFarming.FLUID_TYPES.register("nutrient_water", NutrientWaterType::new);
-    public static final DeferredHolder<Fluid, BaseFlowingFluid> NUTRIENT_WATER = ProductiveFarming.FLUIDS.register("nutrient_water", NutrientWater.Source::new);
-    public static final DeferredHolder<Fluid, BaseFlowingFluid> NUTRIENT_WATER_FLOWING = ProductiveFarming.FLUIDS.register("flowing_nutrient_water", NutrientWater.Flowing::new);
-    public static final DeferredHolder<Item, Item> NUTRIENT_WATER_BUCKET = registerItem("nutrient_water_bucket", () -> new BucketItem(NUTRIENT_WATER.get(), new Item.Properties().craftRemainder(Items.BUCKET)));
-
+    public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> NUTRIENT_WATER = registerFluid("nutrient_water");
 
     // Features
     public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> CLAM_FEATURE = ProductiveFarming.FEATURES.register("clam", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "clam"))));
@@ -430,7 +524,7 @@ public class FarmingRegistrator
     });
 
     public static DeferredHolder<Block, Block> registerPlantableCrop(CropConfig crop, Supplier<Block> supplier) {
-        return registerPlantableCrop(crop, supplier, ItemNameBlockItem::new);
+        return registerPlantableCrop(crop, supplier, CropBlockItem::new);
     }
 
     public static DeferredHolder<Block, Block> registerPlantableCrop(CropConfig crop, Supplier<Block> supplier, CropItemSupplier<BlockItem> item) {
@@ -457,7 +551,7 @@ public class FarmingRegistrator
     }
 
     public static DeferredHolder<Item, Item> registerItem(String name, FoodProperties food) {
-        return registerItem(name, () -> new Item(new Item.Properties().food(food)));
+        return registerItem(name, () -> new CropItem(new Item.Properties().food(food)));
     }
 
     public static DeferredHolder<Item, Item> registerItem(String name, Supplier<Item> supplier) {
@@ -483,6 +577,51 @@ public class FarmingRegistrator
         registerItem(name + "_spawn_egg", () -> new DeferredSpawnEggItem(entity, 1510515, 1214544, new Item.Properties()));
         registerItem(name + "_bucket", () -> new MobBucketItem(entity.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties()));
         return entity;
+    }
+
+    public static DeferredHolder<Fluid, BaseFlowingFluid.Source> registerFluid(String name) {
+        // fluid type
+        var TYPE = ProductiveFarming.FLUID_TYPES.register(name, () -> new FluidType(FluidType.Properties.create()
+                .descriptionId("block." + ProductiveFarming.MODID + "." + name)
+                .fallDistanceModifier(0F)
+                .canExtinguish(true)
+                .canConvertToSource(false)
+                .supportsBoating(true)
+                .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+                .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+                .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)
+                .canHydrate(true)));
+        // fluid
+        var FLUID = ProductiveFarming.FLUIDS.register(name, () -> new BaseFlowingFluid.Source(makeFluidProperties(TYPE, name)));
+        // flowing fluid
+        ProductiveFarming.FLUIDS.register(String.format("flowing_%s", name), () -> new BaseFlowingFluid.Flowing(makeFluidProperties(TYPE, name)));
+        // fluid bucket
+        registerItem(String.format("%s_bucket", name), () -> new BucketItem(FLUID.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+        // fluid block
+        registerBlock(name, () -> new LiquidBlock(FLUID.get(), Block.Properties.of()
+                .strength(100.0F)
+                .noCollission()
+                .liquid()
+                .replaceable()
+                .pushReaction(PushReaction.DESTROY)
+                .noLootTable()
+                .sound(SoundType.EMPTY)
+        ), false);
+
+        return FLUID;
+    }
+
+    static private BaseFlowingFluid.Properties makeFluidProperties(Supplier<? extends FluidType> fluidType, String name) {
+        return new BaseFlowingFluid.Properties(
+                fluidType,
+                DeferredHolder.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, name)),
+                DeferredHolder.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, String.format("flowing_%s", name)))
+        )
+                .bucket(DeferredHolder.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, String.format("%s_bucket", name))))
+                .block(DeferredHolder.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, name)))
+                .tickRate(30)
+                .slopeFindDistance(4)
+                .levelDecreasePerBlock(2);
     }
 
     @FunctionalInterface
