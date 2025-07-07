@@ -195,7 +195,7 @@ public class FarmingRegistrator
         add(new CropConfig("cucumber", false, Foods.MELON_SLICE, VerticalTrellisLeafBlock::new));
         add(new CropConfig("zucchini", false, Foods.MELON_SLICE, VerticalTrellisLeafBlock::new));
         add(new CropConfig("akebia", false, Foods.APPLE, VerticalTrellisLeafBlock::new));
-        add(new CropConfig("sarsaparilla_vine", true, null, VerticalTrellisLeafBlock::new)); // TODO seed is root
+        add(new CropConfig("sarsaparilla", true, null, VerticalTrellisLeafBlock::new));
     }};
     public static List<CropConfig> VINES = new ArrayList<>() {{
         add(new CropConfig("red_grape", true, Foods.SWEET_BERRIES, VineLeafBlock::new));
@@ -326,6 +326,7 @@ public class FarmingRegistrator
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<FencedStemBlockEntity>> FENCED_STEM_BLOCK_ENTITY;
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<SimpleCropBlockEntity>> CROP_BLOCK_ENTITY;
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<ColorfulFlowerBlockEntity>> FLOWER_BLOCK_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<ColorfulFlowerPotBlockEntity>> FLOWER_POT_BLOCK_ENTITY;
 
     static Map<String, DeferredHolder<Block, Block>> registeredBlocks = new HashMap<>();
     public static void init() {
@@ -419,7 +420,13 @@ public class FarmingRegistrator
             registerItem(seedName.getPath() + "_bag", () -> new SeedBagItem(seedName, new Item.Properties()));
         });
         FLOWERS.forEach(crop -> {
-            registeredBlocks.put(crop.name(), registerBlock(crop.name(), () -> crop.isDouble() ? new ColorfulTallFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ROSE_BUSH), crop.baseColor()) : new ColorfulFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY), crop.baseColor()), true));
+            var flower = registerBlock(crop.name(), () -> crop.isDouble() ? new ColorfulTallFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ROSE_BUSH), crop.baseColor()) : new ColorfulFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY), crop.baseColor()), true);
+            registeredBlocks.put(crop.name(), flower);
+            if (!crop.isDouble()) {
+                var pottedFlower = registerBlock("potted_" + crop.name(), () -> new ColorfulFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_OAK_SAPLING)), false);
+                registeredBlocks.put("potted_" + crop.name(), pottedFlower);
+                ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()), pottedFlower);
+            }
         });
         FENCED_VERTICAL_CROP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_crop", () -> BlockEntityType.Builder.of(FencedVerticalCropBlockEntity::new,
                 VERTICAL_TRELLIS.stream().map(cropConfig -> registeredBlocks.get(cropConfig.name()).get()).toList().toArray(new Block[0])
@@ -435,7 +442,10 @@ public class FarmingRegistrator
                Stream.concat(CROPS.stream(), Stream.concat(VANILLA_CROPS.stream(), Stream.concat(HERBS.stream(), BERRIES.stream()))).map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0])
         ).build(null));
         FLOWER_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("flower", () -> BlockEntityType.Builder.of(ColorfulFlowerBlockEntity::new,
-                FLOWERS.stream().map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0])
+                getFlowers()
+        ).build(null));
+        FLOWER_POT_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("potted_flower", () -> BlockEntityType.Builder.of(ColorfulFlowerPotBlockEntity::new,
+                getFlowerPots()
         ).build(null));
     }
 
@@ -446,7 +456,12 @@ public class FarmingRegistrator
 
     public static Block[] getFlowers() {
         return FLOWERS.stream()
-                .map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0]);
+                .map(cropConfig -> registeredBlocks.get(cropConfig.name()).get()).toList().toArray(new Block[0]);
+    }
+
+    public static Block[] getFlowerPots() {
+        return FLOWERS.stream().filter(flowerConfig -> !flowerConfig.isDouble())
+                .map(cropConfig -> registeredBlocks.get("potted_" + cropConfig.name()).get()).toList().toArray(new Block[0]);
     }
 
     public static final DataMapType<Item, CropTrait> CROP_TRAITS = DataMapType.builder(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "crop_traits"), Registries.ITEM, CropTrait.CODEC).synced(CropTrait.CODEC, false).build();
@@ -457,6 +472,9 @@ public class FarmingRegistrator
     public static final DeferredHolder<Item, Item> DRIED_TOBACCO = registerItem("dried_tobacco");
     public static final DeferredHolder<Item, Item> BLACK_TEA = registerItem("black_tea");
     public static final DeferredHolder<Item, Item> CORN_COB_PIPE = registerItem("corn_cob_pipe", () -> new CornPipeItem(new Item.Properties().stacksTo(1).durability(200)));
+    public static final DeferredHolder<Item, Item> HOTDOG_ARMOR = registerItem("hotdog_armor", () -> new AnimalArmorItem(
+            ArmorMaterials.ARMADILLO, AnimalArmorItem.BodyType.CANINE, true, new Item.Properties().durability(ArmorItem.Type.BODY.getDurability(4))
+    ));
 
     // Composter mushroom growth
     public static final DeferredHolder<Block, Block> BROWN_MUSHROOM_GROWTH = registerBlock("brown_mushroom_growth", () -> new MushroomGrowthBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape(), ResourceLocation.withDefaultNamespace("brown_mushroom")), false);

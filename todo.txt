@@ -1,8 +1,5 @@
 - Mutation recipes
 
-- Colored flowers, flower to dye recipes
-- Flower pot support
-
 - Implement ways to increase stats through random mutation
 
 - Implement growth speed trait
@@ -20,4 +17,8 @@
 
 - Patchouli guide book "Big Book of Agronomy"
 
+- Bunny taming
 
+- Hotdog armor
+
+- Possible compat https://www.curseforge.com/minecraft/mc-mods/flower-pots-plus

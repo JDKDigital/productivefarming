@@ -1,6 +1,5 @@
 package cy.jdkdigital.productivefarming.common.block.entity;
 
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivelib.common.block.entity.AbstractBlockEntity;
@@ -8,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class ColorfulFlowerBlockEntity extends AbstractBlockEntity
@@ -21,7 +19,7 @@ public class ColorfulFlowerBlockEntity extends AbstractBlockEntity
 
     public ColorfulFlowerBlockEntity(BlockPos pos, BlockState state, int defaultColor) {
         super(FarmingRegistrator.FLOWER_BLOCK_ENTITY.get(), pos, state);
-        this.color = defaultColor;
+        setColor(defaultColor);
     }
 
     public int getColor() {
@@ -36,7 +34,7 @@ public class ColorfulFlowerBlockEntity extends AbstractBlockEntity
     public void loadPacketNBT(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadPacketNBT(tag, provider);
         if (tag.contains("color")) {
-            this.color = tag.getInt("color");
+            setColor(tag.getInt("color"));
         }
     }
 
@@ -47,9 +45,9 @@ public class ColorfulFlowerBlockEntity extends AbstractBlockEntity
     }
 
     @Override
-    protected void applyImplicitComponents(BlockEntity.DataComponentInput componentInput) {
+    protected void applyImplicitComponents(DataComponentInput componentInput) {
         super.applyImplicitComponents(componentInput);
-        this.color = componentInput.getOrDefault(FarmingDataComponents.COLOR, this.color);
+        setColor(componentInput.getOrDefault(FarmingDataComponents.COLOR, this.color));
     }
 
     @Override

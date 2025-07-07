@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/tinted_flower_pot_cross",
+  "textures": {
+    "plant": "productivefarming:block/flowers/lily_of_the_valley/lily_of_the_valley",
+    "stem": "productivefarming:block/flowers/lily_of_the_valley/lily_of_the_valley_flower"
+  }
+}

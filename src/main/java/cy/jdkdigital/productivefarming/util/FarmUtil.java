@@ -1,6 +1,7 @@
 package cy.jdkdigital.productivefarming.util;
 
 import com.mojang.datafixers.util.Pair;
+import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.ColorfulFlowerBlockEntity;
 import cy.jdkdigital.productivefarming.common.block.entity.CropBlockEntity;
@@ -114,7 +115,7 @@ public class FarmUtil
 
         if (!uniqueCrops.isEmpty()) {
             // Propagate flowers
-            if (level.getRandom().nextFloat() < 1.2f && flowerMap.size() > 1) {
+            if (level.getRandom().nextFloat() < Config.SERVER.flowerPropagationChance.get() && flowerMap.size() > 1) {
                 // Grab two random flowers
                 ArrayList<ResourceLocation> keys = new ArrayList<>(flowerMap.keySet());
                 Collections.shuffle(keys);

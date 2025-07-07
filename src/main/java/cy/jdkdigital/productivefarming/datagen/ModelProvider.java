@@ -19,8 +19,6 @@ import net.minecraft.data.models.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -77,6 +75,9 @@ public class ModelProvider implements DataProvider
 
         for (CropConfig crop : FarmingRegistrator.HERBS) {
             generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crops/", modelOutput);
+            if (crop.hasSeed()) {
+                generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")), "item/seeds/", modelOutput);
+            }
         }
 
         for (CropConfig crop : FarmingRegistrator.CROPS) {
@@ -88,14 +89,23 @@ public class ModelProvider implements DataProvider
 
         for (CropConfig crop : FarmingRegistrator.TRELLIS) {
             generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crops/", modelOutput);
+            if (crop.hasSeed()) {
+                generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")), "item/seeds/", modelOutput);
+            }
         }
 
         for (CropConfig crop : FarmingRegistrator.VERTICAL_TRELLIS) {
             generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crops/", modelOutput);
+            if (crop.hasSeed()) {
+                generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")), "item/seeds/", modelOutput);
+            }
         }
 
         for (CropConfig crop : FarmingRegistrator.VINES) {
             generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/crops/", modelOutput);
+            if (crop.hasSeed()) {
+                generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")), "item/seeds/", modelOutput);
+            }
         }
 
         for (CropConfig crop : FarmingRegistrator.STEMS) {
@@ -129,12 +139,13 @@ public class ModelProvider implements DataProvider
         for (FlowerConfig flower : FarmingRegistrator.FLOWERS) {
             var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flower.name()));
             if (block instanceof ColorfulTallFlowerBlock) {
-                generateFlowerItem(block.asItem(), "block/flowers/", "/upper", modelOutput);
+                generateTwoLayerFlatItem(block.asItem(), "block/flowers/", "/upper", "_flower", modelOutput);
             } else {
-                generateFlowerItem(block.asItem(), "block/flowers/", "/" + flower.name(), modelOutput);
+                generateTwoLayerFlatItem(block.asItem(), "block/flowers/", "/" + flower.name(), "_flower", modelOutput);
             }
         }
 
+        generateTwoLayerFlatItem(FarmingRegistrator.HOTDOG_ARMOR.get(), "item/", "", "_overlay", modelOutput);
         generateFlatItem(FarmingRegistrator.POLLEN.get(), "item/", modelOutput);
 
         generateFlatItem(FarmingRegistrator.DRIED_LUFFA.get(), "item/materials/", modelOutput);
@@ -155,8 +166,8 @@ public class ModelProvider implements DataProvider
         return CompletableFuture.allOf(output.toArray(CompletableFuture[]::new));
     }
 
-    private void generateFlowerItem(Item item, String prefix, String suffix, BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput) {
-        ModelTemplates.TWO_LAYERED_ITEM.create(ModelLocationUtils.getModelLocation(item), getDoubleFlatItemTextureMap(item, prefix, suffix), modelOutput);
+    private void generateTwoLayerFlatItem(Item item, String prefix, String suffix, String append, BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput) {
+        ModelTemplates.TWO_LAYERED_ITEM.create(ModelLocationUtils.getModelLocation(item), getDoubleFlatItemTextureMap(item, prefix, suffix, append), modelOutput);
     }
 
     private void generateFlatItem(Item item, String prefix, BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput) {
@@ -175,14 +186,14 @@ public class ModelProvider implements DataProvider
         return (new TextureMapping()).put(TextureSlot.LAYER0, resourceLocation.withPrefix(prefix).withSuffix(suffix));
     }
 
-    private static TextureMapping getDoubleFlatItemTextureMap(Item item, String prefix, String suffix) {
-        return getDoubleFlatItemTextureMap(BuiltInRegistries.ITEM.getKey(item), prefix, suffix);
+    private static TextureMapping getDoubleFlatItemTextureMap(Item item, String prefix, String suffix, String append) {
+        return getDoubleFlatItemTextureMap(BuiltInRegistries.ITEM.getKey(item), prefix, suffix, append);
     }
 
-    private static TextureMapping getDoubleFlatItemTextureMap(ResourceLocation resourceLocation, String prefix, String suffix) {
+    private static TextureMapping getDoubleFlatItemTextureMap(ResourceLocation resourceLocation, String prefix, String suffix, String append) {
         return (new TextureMapping())
                 .put(TextureSlot.LAYER0, resourceLocation.withPrefix(prefix).withSuffix(suffix))
-                .put(TextureSlot.LAYER1, resourceLocation.withPrefix(prefix).withSuffix(suffix + "_flower"));
+                .put(TextureSlot.LAYER1, resourceLocation.withPrefix(prefix).withSuffix(suffix + append));
     }
 
     private void addItemModel(Item item, Supplier<JsonElement> supplier, Map<ResourceLocation, Supplier<JsonElement>> itemModels) {
@@ -375,6 +386,7 @@ public class ModelProvider implements DataProvider
 
         static ModelTemplate cross = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/cross")), Optional.empty(), TextureSlot.CROSS);
         static ModelTemplate crossOverlay = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/cross_overlay")), Optional.empty(), TextureSlot.CROSS, TextureSlot.EDGE);
+        static ModelTemplate pottedBase = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/tinted_flower_pot_cross")), Optional.empty(), TextureSlot.PLANT, TextureSlot.STEM);
 
         private void createCrossPlant(Block block, String prefix) {
             IntegerProperty prop = block instanceof ProductiveCropBlock cropBlock ? cropBlock.getAgeProperty() : BlockStateProperties.AGE_3;
@@ -382,18 +394,25 @@ public class ModelProvider implements DataProvider
                 return Variant.variant().with(VariantProperties.MODEL, createSuffixedVariant(block, prefix, "/stage_" + age, cross, TextureMapping::cross));
             })));
         }
-        private void createDoubleCrossPlant(Block block, String prefix) {
+        private void createDoubleCrossPlant(Block block, String name) {
             IntegerProperty prop = block instanceof ProductiveCropBlock cropBlock ? cropBlock.getAgeProperty() : BlockStateProperties.AGE_3;
             this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(PropertyDispatch.properties(prop, BlockStateProperties.DOUBLE_BLOCK_HALF).generate((age, part) -> {
-                return Variant.variant().with(VariantProperties.MODEL, createSuffixedVariant(block, prefix, "/" + part.getSerializedName() + "/stage_" + age, cross, TextureMapping::cross));
+                return Variant.variant().with(VariantProperties.MODEL, createSuffixedVariant(block, name, "/" + part.getSerializedName() + "/stage_" + age, cross, TextureMapping::cross));
             })));
         }
 
-        private void createCrossFlower(Block block, String prefix, String suffix) {
-            this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, createSuffixedVariant(block, prefix, "/" + suffix, crossOverlay,
+        private void createCrossFlower(Block block, String prefix, String name) {
+            this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, createSuffixedVariant(block, prefix, "/" + name, crossOverlay,
                     (resourceLocation) -> (new TextureMapping())
                     .put(TextureSlot.CROSS, resourceLocation.withPath(p -> p))
                     .put(TextureSlot.EDGE, resourceLocation.withPath(p -> p + "_flower"))))));
+
+            // Potted
+            var pottedBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "potted_" + name));
+            this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(pottedBlock, Variant.variant().with(VariantProperties.MODEL, createSuffixedVariant(block, prefix, "/potted_" + name, pottedBase,
+                    (resourceLocation) -> (new TextureMapping())
+                            .put(TextureSlot.PLANT, resourceLocation.withPath(p -> p.replace("potted_", "")))
+                            .put(TextureSlot.STEM, resourceLocation.withPath(p -> p.replace("potted_", "") + "_flower"))))));
         }
         private void createTallCrossFlower(Block block, String prefix, String suffix) {
             this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(PropertyDispatch.property(BlockStateProperties.DOUBLE_BLOCK_HALF).generate((part) -> {

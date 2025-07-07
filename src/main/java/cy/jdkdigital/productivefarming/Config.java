@@ -21,10 +21,12 @@ public class Config
         public final ModConfigSpec.IntValue wateringTroughTickRate;
         public final ModConfigSpec.IntValue fishTrapTickRate;
         public final ModConfigSpec.IntValue childSeparatorTickRate;
-        public final ModConfigSpec.IntValue pollenChanceFromSieve;
-        public final ModConfigSpec.BooleanValue traitsOnVanillaCrops;
 
         public final ModConfigSpec.DoubleValue clamSpreadChance;
+        public final ModConfigSpec.DoubleValue flowerPropagationChance;
+        public final ModConfigSpec.IntValue pollenChanceFromSieve; // TODO 1.22 change to double
+
+        public final ModConfigSpec.BooleanValue traitsOnVanillaCrops;
 
         public Server(ModConfigSpec.Builder builder) {
             builder.push("General");
@@ -60,6 +62,10 @@ public class Config
             clamSpreadChance = builder
                     .comment("Chance for clams to propagate in a fish farm")
                     .defineInRange("clamSpreadChance", 0.1, 0, 1);
+
+            flowerPropagationChance = builder
+                    .comment("Chance for flowers to propagate near hives")
+                    .defineInRange("flowerPropagationChance", 0.05, 0, 1);
 
             pollenChanceFromSieve = builder
                     .comment("Chance to get a pollen when using sieve upgrades in hives")

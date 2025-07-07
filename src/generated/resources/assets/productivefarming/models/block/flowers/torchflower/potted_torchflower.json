@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/tinted_flower_pot_cross",
+  "textures": {
+    "plant": "productivefarming:block/flowers/torchflower/torchflower",
+    "stem": "productivefarming:block/flowers/torchflower/torchflower_flower"
+  }
+}

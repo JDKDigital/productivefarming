@@ -130,7 +130,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("raspberry", "Rubus idaeus");
             put("redcurrant", "Ribes rubrum");
             put("thimbleberry", "Rubus parviflorus");
+            put("agave", "Agave tequilana");
             put("basil", "Ocimum basilicum");
+            put("cardamon", "Elettaria cardamomum");
+            put("catnip", "Nepeta cataria");
+            put("caraway", "Carum carvi");
+            put("chamomile", "Matricaria chamomilla");
             put("chives", "Allium schoenoprasum");
             put("coriander", "Coriandrum sativum");
             put("cotton", "Gossypium arboreum");
@@ -144,6 +149,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("fat_hen", "Chenopodium album");
             put("ferula", "Ferula assa-foetida");
             put("fenugreek", "Trigonella foenum-graecum");
+            put("flax", "Linum usitatissimum");
             put("ostrich_fiddlehead", "Matteuccia struthiopteris");
             put("cantaloupe", "Cucumis melo var. Cantalupensis");
             put("honeydew_melon", "Cucumis melo var. Inodorus");
@@ -219,7 +225,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("spring_onion", "Allium fistulosum");
             put("saguaro", "Carnegiea gigantea");
             put("squash", "Cucurbita Pepo");
-            put("sarsaparilla_vine", "Smilax ornata");
+            put("sarsaparilla", "Smilax ornata");
             put("sweet_potato", "Ipomoea batatas");
             put("lentils", "Vicia lens");
             put("chickpeas", "Cicer arietinum");
@@ -250,6 +256,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("sungold_tomato", "Solanum lycopersicum");
             put("white_wonder_tomato", "Solanum lycopersicum");
             put("yellow_pear_tomato", "Solanum lycopersicum");
+            put("roma_tomato", "Solanum lycopersicum var. roma");
+            put("cherry_tomato", "Solanum lycopersicum var. cerasiforme");
             put("konjac", "Amorphophallus konjac");
             put("okra", "Abelmoschus esculentus");
             put("asparagus", "Asparagus officinalis");
@@ -259,6 +267,15 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("watercress", "Nasturtium officinale");
             put("water_caltrop", "Trapa natans");
             put("prickly_pear", "Opuntia ficus-indica");
+            put("sea_buckthorn", "Hippophae rhamnoides");
+            put("soy_bean", "Glycine max");
+            put("sweet_marjoram", "Origanum majorana");
+            put("sorghum", "Sorghum bicolor");
+            put("spearmint", "Mentha spicata");
+            put("peppermint", "Mentha × piperita");
+            put("watermint", "Mentha aquatica");
+            put("lemon_balm", "Melissa officinalis");
+            put("lemongrass", "Cymbopogon schoenanthus");
         }};
 
         return names.getOrDefault(name, "Missing taxonomy for " + name);

@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/tinted_flower_pot_cross",
+  "textures": {
+    "plant": "productivefarming:block/flowers/azure_bluet/azure_bluet",
+    "stem": "productivefarming:block/flowers/azure_bluet/azure_bluet_flower"
+  }
+}

@@ -17,14 +17,19 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.Blocks;
@@ -36,6 +41,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
@@ -63,6 +69,29 @@ public class EventHandler
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerInteract(PlayerInteractEvent.EntityInteract event) {
+        if (event.getTarget() instanceof Wolf wolf && !wolf.level().isClientSide) {
+            if (wolf.isOwnedBy(event.getEntity()) && wolf.getBodyArmorItem().isEmpty() && !wolf.isBaby()) {
+                wolf.setBodyArmorItem(event.getItemStack().copyWithCount(1));
+                event.getItemStack().consume(1, event.getEntity());
+                event.setCanceled(true);
+                event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
+            } else if (event.getItemStack().canPerformAction(net.neoforged.neoforge.common.ItemAbilities.SHEARS_REMOVE_ARMOR)
+                    && wolf.isOwnedBy(event.getEntity())
+                    && wolf.hasArmor()
+                    && (!EnchantmentHelper.has(wolf.getBodyArmorItem(), EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE) || event.getEntity().isCreative())) {
+                event.getItemStack().hurtAndBreak(1, event.getEntity(), event.getItemStack().getEquipmentSlot());
+                wolf.playSound(SoundEvents.ARMOR_UNEQUIP_WOLF);
+                ItemStack itemstack1 = wolf.getBodyArmorItem();
+                wolf.setBodyArmorItem(ItemStack.EMPTY);
+                wolf.spawnAtLocation(itemstack1);
+                event.setCanceled(true);
+                event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
             }
         }
     }

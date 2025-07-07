@@ -2,7 +2,9 @@ package cy.jdkdigital.productivefarming.event;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.client.render.block.FencedCropBlockEntityRenderer;
+import cy.jdkdigital.productivefarming.client.render.entity.layers.WolfHotdogLayer;
 import cy.jdkdigital.productivefarming.common.block.entity.ColorfulFlowerBlockEntity;
+import cy.jdkdigital.productivefarming.common.block.entity.ColorfulFlowerPotBlockEntity;
 import cy.jdkdigital.productivefarming.common.block.entity.CropBlockEntity;
 import cy.jdkdigital.productivefarming.common.item.PollenItem;
 import cy.jdkdigital.productivefarming.inventory.screen.FarmControllerScreen;
@@ -12,14 +14,20 @@ import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import cy.jdkdigital.productivelib.util.ColorUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.WolfModel;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.api.distmarker.Dist;
@@ -81,6 +89,10 @@ public class ClientSetupEvents
         event.register((blockState, lightReader, pos, tintIndex) -> {
             return lightReader != null && pos != null && lightReader.getBlockEntity(pos) instanceof ColorfulFlowerBlockEntity flowerBlockEntity ? flowerBlockEntity.getColor() : -1;
         }, FarmingRegistrator.getFlowers());
+
+        event.register((blockState, lightReader, pos, tintIndex) -> {
+            return lightReader != null && pos != null && lightReader.getBlockEntity(pos) instanceof ColorfulFlowerPotBlockEntity flowerBlockEntity ? flowerBlockEntity.getColor() : -1;
+        }, FarmingRegistrator.getFlowerPots());
     }
 
     @SubscribeEvent
@@ -154,5 +166,18 @@ public class ClientSetupEvents
                 }
             }
         });
+    }
+
+    @SubscribeEvent
+    public static void layerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(WolfHotdogLayer.HOTDOG_LAYER, () -> LayerDefinition.create(WolfHotdogLayer.createMeshDefinition(CubeDeformation.NONE), 64, 64));
+    }
+
+    @SubscribeEvent
+    public static void addLayers(EntityRenderersEvent.AddLayers event) {
+        var renderer = event.getRenderer(EntityType.WOLF);
+        if (renderer instanceof WolfRenderer wolfRenderer) {
+            wolfRenderer.addLayer(new WolfHotdogLayer((RenderLayerParent<Wolf, WolfModel<Wolf>>) renderer, event.getEntityModels()));
+        }
     }
 }
