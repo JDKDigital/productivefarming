@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/dahlia/dahlia",
+    "edge": "productivefarming:block/flowers/dahlia/dahlia_flower"
+  }
+}

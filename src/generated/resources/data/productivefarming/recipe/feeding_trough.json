@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "c:ingots/copper"
+    },
+    "C": {
+      "tag": "c:chests/wooden"
+    }
+  },
+  "pattern": [
+    "B B",
+    "BCB",
+    "BBB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "productivefarming:feeding_trough"
+  }
+}

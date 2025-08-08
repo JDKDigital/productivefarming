@@ -1,9 +1,9 @@
 {
   "parent": "productivefarming:block/base_crate",
   "textures": {
-    "bottom": "productivefarming:block/crate/bottom",
+    "bottom": "productivefarming:block/crate/ash/bottom",
     "crop": "productivefarming:block/crate/rhubarb_crate",
-    "side": "productivefarming:block/crate/side",
-    "top": "productivefarming:block/crate/top"
+    "side": "productivefarming:block/crate/ash/side",
+    "top": "productivefarming:block/crate/ash/top"
   }
 }

@@ -5,14 +5,6 @@
     "minecraft:tropical_fish",
     "minecraft:squid",
     "minecraft:glow_squid",
-    "minecraft:pufferfish",
-    "productivefarming:eel",
-    "productivefarming:crab",
-    "productivefarming:lobster",
-    "productivefarming:carp",
-    "productivefarming:koi",
-    "productivefarming:walleye",
-    "productivefarming:sturgeon",
-    "productivefarming:tuna"
+    "minecraft:pufferfish"
   ]
 }

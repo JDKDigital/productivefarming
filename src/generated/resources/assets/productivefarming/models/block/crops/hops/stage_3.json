@@ -1,6 +1,6 @@
 {
-  "parent": "productivefarming:block/crop",
+  "parent": "productivefarming:block/cross",
   "textures": {
-    "crop": "productivefarming:block/crops/hops/stage_3"
+    "cross": "productivefarming:block/crops/hops/stage_3"
   }
 }

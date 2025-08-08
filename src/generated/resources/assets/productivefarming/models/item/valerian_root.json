@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/valerian_root/upper",
+    "layer1": "productivefarming:block/flowers/valerian_root/upper_flower"
+  }
+}

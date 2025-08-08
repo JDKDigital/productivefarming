@@ -1,9 +1,9 @@
 {
   "parent": "productivefarming:block/base_crate",
   "textures": {
-    "bottom": "productivefarming:block/crate/bottom",
+    "bottom": "productivefarming:block/crate/pomegranate/bottom",
     "crop": "productivefarming:block/crate/broccoli_crate",
-    "side": "productivefarming:block/crate/side",
-    "top": "productivefarming:block/crate/top"
+    "side": "productivefarming:block/crate/pomegranate/side",
+    "top": "productivefarming:block/crate/pomegranate/top"
   }
 }

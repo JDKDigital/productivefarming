@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/morning_glory/morning_glory",
+    "layer1": "productivefarming:block/flowers/morning_glory/morning_glory_flower"
+  }
+}

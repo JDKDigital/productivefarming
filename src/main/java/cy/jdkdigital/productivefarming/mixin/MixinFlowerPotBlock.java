@@ -1,6 +1,5 @@
 package cy.jdkdigital.productivefarming.mixin;
 
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.ColorfulFlowerPotBlockEntity;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import net.minecraft.core.BlockPos;
@@ -12,13 +11,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Debug(export = true)
 @Mixin(value = FlowerPotBlock.class)
 public abstract class MixinFlowerPotBlock
 {

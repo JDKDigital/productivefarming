@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/great_lobelia/great_lobelia",
+    "layer1": "productivefarming:block/flowers/great_lobelia/great_lobelia_flower"
+  }
+}

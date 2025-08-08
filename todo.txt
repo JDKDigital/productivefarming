@@ -1,12 +1,7 @@
-- Mutation recipes
-
-- Implement ways to increase stats through random mutation
-
-- Implement growth speed trait
 - Implement growth resistance trait
 - Implement growth mutability trait
 
-- Make a way for a crop to have a better starting trait be default
+- Make a way for a crop to have a better starting trait by default
 - Seeds from creative should have default traits
 
 - Shear flowers for petals (Rose bush, Crocus)
@@ -19,6 +14,15 @@
 
 - Bunny taming
 
+- Corn cob pipe cosmetic curio
+
 - Hotdog armor
 
 - Possible compat https://www.curseforge.com/minecraft/mc-mods/flower-pots-plus
+
+- Guide book contents
+    - How to obtain seeds (from farm villager trades)
+    - Chapter on crop traits
+    - Crop mutations. Some crops can mutate with the help of bees.
+    - Chapter on farm multiblock with picture
+    - Chapter on flowers and dyes. Flowers near a working hive will propagate and combine into new colors. It's possible to breed your way to any color/dye from brown tulips to pink wither roses.

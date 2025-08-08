@@ -27,10 +27,6 @@ repositories {
         name = "JEI"
         url 'https://maven.blamejared.com'
     }
-    maven {
-        name = "EMI"
-        url = "https://maven.terraformersmc.com/"
-    }
     flatDir {
         dir 'libs'
     }
@@ -139,7 +135,7 @@ dependencies {
     implementation "curse.maven:productivebees-377897:6702701"
     implementation "curse.maven:jade-324717:6667790"
     implementation "curse.maven:dyenamics-509276:6620953"
-//    runtimeOnly "curse.maven:utilitarian-929559:5815028"
+    implementation "curse.maven:utilitarian-929559:6650737"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -163,7 +159,6 @@ tasks.withType(ProcessResources).configureEach {
             lib_version_range      : lib_version_range,
             pb_version             : pb_version,
             jei_version            : jei_version,
-            emi_version            : emi_version,
     ]
     inputs.properties replaceProperties
 

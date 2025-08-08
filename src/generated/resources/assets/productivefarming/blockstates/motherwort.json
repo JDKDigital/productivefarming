@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "productivefarming:block/flowers/motherwort/lower"
+    },
+    "half=upper": {
+      "model": "productivefarming:block/flowers/motherwort/upper"
+    }
+  }
+}

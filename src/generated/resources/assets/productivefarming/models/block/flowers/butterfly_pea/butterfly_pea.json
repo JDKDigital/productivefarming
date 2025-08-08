@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/vine_overlay",
+  "textures": {
+    "edge": "productivefarming:block/flowers/butterfly_pea/butterfly_pea_flower",
+    "plant": "productivefarming:block/flowers/butterfly_pea/butterfly_pea"
+  }
+}

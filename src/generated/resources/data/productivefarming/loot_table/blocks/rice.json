@@ -23,18 +23,6 @@
                   }
                 }
               ],
-              "functions": [
-                {
-                  "function": "minecraft:copy_components",
-                  "include": [
-                    "productivefarming:growth",
-                    "productivefarming:yield",
-                    "productivefarming:resistance",
-                    "productivefarming:mutability"
-                  ],
-                  "source": "block_entity"
-                }
-              ],
               "name": "productivefarming:rice"
             },
             {
@@ -51,7 +39,7 @@
                   "source": "block_entity"
                 }
               ],
-              "name": "productivefarming:rice"
+              "name": "productivefarming:rice_seeds"
             }
           ]
         }
@@ -93,7 +81,7 @@
               "source": "block_entity"
             }
           ],
-          "name": "productivefarming:rice"
+          "name": "productivefarming:rice_seeds"
         }
       ],
       "rolls": 1.0

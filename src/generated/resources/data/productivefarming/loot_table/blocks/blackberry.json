@@ -51,7 +51,7 @@
                   "source": "block_entity"
                 }
               ],
-              "name": "minecraft:air"
+              "name": "productivefarming:blackberry"
             }
           ]
         }
@@ -93,7 +93,7 @@
               "source": "block_entity"
             }
           ],
-          "name": "minecraft:air"
+          "name": "productivefarming:blackberry"
         }
       ],
       "rolls": 1.0

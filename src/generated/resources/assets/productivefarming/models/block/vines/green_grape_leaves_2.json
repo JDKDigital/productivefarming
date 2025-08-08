@@ -1,6 +1,0 @@
-{
-  "parent": "productivefarming:block/inset_leaves",
-  "textures": {
-    "all": "productivefarming:block/vines/green_grape/stage_2"
-  }
-}

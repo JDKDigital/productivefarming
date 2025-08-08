@@ -4,7 +4,6 @@ import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.ModTags;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -18,9 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 public class CornPipeItem extends Item

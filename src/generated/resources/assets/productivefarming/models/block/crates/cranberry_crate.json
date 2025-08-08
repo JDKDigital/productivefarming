@@ -1,9 +1,9 @@
 {
   "parent": "productivefarming:block/base_crate",
   "textures": {
-    "bottom": "productivefarming:block/crate/bottom",
+    "bottom": "productivefarming:block/crate/teak/bottom",
     "crop": "productivefarming:block/crate/cranberry_crate",
-    "side": "productivefarming:block/crate/side",
-    "top": "productivefarming:block/crate/top"
+    "side": "productivefarming:block/crate/teak/side",
+    "top": "productivefarming:block/crate/teak/top"
   }
 }

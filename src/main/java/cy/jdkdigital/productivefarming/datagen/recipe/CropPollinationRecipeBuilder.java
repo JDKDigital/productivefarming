@@ -1,6 +1,6 @@
 package cy.jdkdigital.productivefarming.datagen.recipe;
 
-import cy.jdkdigital.productivefarming.recipe.CropPollinationRecipe;
+import cy.jdkdigital.productivefarming.recipe.CropMutationRecipe;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -31,6 +31,6 @@ public record CropPollinationRecipeBuilder(ResourceLocation targetCrop, Resource
 
     @Override
     public void save(RecipeOutput consumer, ResourceLocation id) {
-        consumer.accept(id, new CropPollinationRecipe(targetCrop, pollenCrop, result, chance), null);
+        consumer.accept(id, new CropMutationRecipe(targetCrop, pollenCrop, result, chance), null);
     }
 }

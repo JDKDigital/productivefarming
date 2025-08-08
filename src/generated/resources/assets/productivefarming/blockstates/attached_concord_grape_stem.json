@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "productivefarming:block/crops/attached_concord_grape_stem"
+      "model": "productivefarming:block/crops/concord_grape/attached"
     }
   }
 }

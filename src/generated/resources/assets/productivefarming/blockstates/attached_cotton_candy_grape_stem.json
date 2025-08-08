@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "productivefarming:block/crops/attached_cotton_candy_grape_stem"
+      "model": "productivefarming:block/crops/cotton_candy_grape/attached"
     }
   }
 }

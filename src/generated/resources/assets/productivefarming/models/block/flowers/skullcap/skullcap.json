@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/skullcap/skullcap",
+    "edge": "productivefarming:block/flowers/skullcap/skullcap_flower"
+  }
+}

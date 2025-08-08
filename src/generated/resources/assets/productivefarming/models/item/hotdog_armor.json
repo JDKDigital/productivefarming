@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "productivefarming:item/hotdog_armor",
-    "layer1": "productivefarming:item/hotdog_armor_overlay"
-  }
-}

@@ -36,34 +36,61 @@ public class ItemTagProvider extends ItemTagsProvider
         tag(ModTags.Items.MUSHROOMS).add(Items.BROWN_MUSHROOM, Items.RED_MUSHROOM, Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS);
         tag(ModTags.Items.DRIED_TOBACCO).add(FarmingRegistrator.DRIED_TOBACCO.get());
         tag(ModTags.Items.TOBACCO).addTag(ModTags.Items.DRIED_TOBACCO);
+        tag(ModTags.Items.CORN)
+                .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "black_aztec_corn")))
+                .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "blue_jade_corn")))
+                .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "rainbow_corn")))
+                .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "sugar_pearl_corn")))
+                .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "yellow_dent_corn")));
 
         tag(ModTags.Items.VANILLA_SEEDS).add(Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS, Items.POTATO, Items.CARROT);
 
-        tag(ModTags.Items.CRAB_FOOD)
-                .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "shrimp")))
-                .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "mussel")))
-                .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "anchovy")));
+//        tag(ModTags.Items.CRAB_FOOD)
+//                .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "raw_shrimp")))
+//                .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "mussel")))
+//                .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "raw_anchovy")));
 
         for (CropConfig crop: FarmingRegistrator.HERBS) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "herbs/" + crop.name()));
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             tag(ModTags.Items.HERBS).addTag(tag);
-
+            addSeed(crop);
         }
         for (CropConfig crop: FarmingRegistrator.BERRIES) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "berries/" + crop.name()));
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             tag(ModTags.Items.BERRIES).addTag(tag);
+            addSeed(crop);
         }
         for (CropConfig crop: FarmingRegistrator.CROPS) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
-            if (crop.hasSeed()) {
-                var seedTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "seeds/" + crop.name()));
-                tag(seedTag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")));
-                tag(ItemTags.VILLAGER_PLANTABLE_SEEDS).addTag(seedTag);
-                tag(Tags.Items.SEEDS).addTag(seedTag);
-            }
+            addSeed(crop);
+        }
+        for (CropConfig crop: FarmingRegistrator.TRELLIS) {
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+            addSeed(crop);
+        }
+        for (CropConfig crop: FarmingRegistrator.VERTICAL_TRELLIS) {
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+            addSeed(crop);
+        }
+        for (CropConfig crop: FarmingRegistrator.GRAPES) {
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+            addSeed(crop);
+        }
+        for (CropConfig crop: FarmingRegistrator.HERBS) {
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+            addSeed(crop);
+        }
+        for (CropConfig crop: FarmingRegistrator.STEMS) {
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+            addSeed(crop);
         }
 
         for (FishConfig fish: FarmingRegistrator.FISHIES) {
@@ -88,6 +115,16 @@ public class ItemTagProvider extends ItemTagsProvider
             tag(tagKey).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, resourceLocation.withPath(p -> p + "_bag").getPath())));
             tag(Tags.Items.STORAGE_BLOCKS).addTag(tagKey);
         });
+    }
+
+    private void addSeed(CropConfig crop) {
+        if (crop.hasSeed()) {
+            var seedTag = tag((Tags.Items.SEEDS));
+            var cropSeedTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "seeds/" + crop.name()));
+            tag(cropSeedTag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")));
+            tag(ItemTags.VILLAGER_PLANTABLE_SEEDS).addTag(cropSeedTag);
+            seedTag.addTag(cropSeedTag);
+        }
     }
 
     @Override

@@ -26,7 +26,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -118,7 +117,7 @@ public class LootDataProvider implements DataProvider
                 dropSeedlessCrop(crop);
             }
             for (CropConfig crop : FarmingRegistrator.BERRIES) {
-                dropSeedlessCrop(crop, false);
+                dropSeedlessCrop(crop);
             }
             for (CropConfig crop : FarmingRegistrator.TRELLIS) {
                 if (crop.hasSeed()) {
@@ -130,7 +129,7 @@ public class LootDataProvider implements DataProvider
                 this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), block -> this.createStemDrops(block, seed));
                 this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedStemDrops(block, seed));
             }
-            for (CropConfig crop : FarmingRegistrator.VINES) {
+            for (CropConfig crop : FarmingRegistrator.GRAPES) {
                 dropSeedlessCrop(crop);
                 var seed = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + (crop.hasSeed() ? "_seeds" : "")));
                 this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), block -> this.createStemDrops(block, seed));
@@ -159,6 +158,9 @@ public class LootDataProvider implements DataProvider
                 }
             }
             for (FlowerConfig flower : FarmingRegistrator.FLOWERS) {
+                createFlowerDrops(flower);
+            }
+            for (FlowerConfig flower : FarmingRegistrator.VINES) {
                 createFlowerDrops(flower);
             }
         }
@@ -203,10 +205,6 @@ public class LootDataProvider implements DataProvider
         }
 
         protected void dropSeedlessCrop(CropConfig crop) {
-            dropSeedlessCrop(crop, true);
-        }
-
-        protected void dropSeedlessCrop(CropConfig crop, boolean dropSelf) {
             var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             if (block instanceof CropBlock cropBlock) {
                 var cropItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
@@ -223,7 +221,7 @@ public class LootDataProvider implements DataProvider
                             .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(cropBlock.getAgeProperty(), cropBlock.getMaxAge()).hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
                 }
 
-                this.add(cropBlock, this.createSeedlessCropDrops(cropBlock, cropItem, dropSelf ? cropItem : Items.AIR, builder));
+                this.add(cropBlock, this.createSeedlessCropDrops(cropBlock, cropItem, cropItem, builder));
             }
         }
 

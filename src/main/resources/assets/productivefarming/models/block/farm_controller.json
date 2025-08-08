@@ -1,8 +1,24 @@
 {
-  "parent": "minecraft:block/orientable",
+  "parent": "minecraft:block/block",
+  "render_type": "cutout",
   "textures": {
-    "front": "minecraft:block/furnace_front",
-    "side": "minecraft:block/furnace_side",
-    "top": "minecraft:block/furnace_top"
-  }
+    "front": "productivefarming:block/farm_controller_front",
+    "side": "minecraft:block/stone_bricks",
+    "top": "#side",
+    "particle": "#side"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "texture": "#top", "cullface": "down" },
+        "up":    { "texture": "#top", "cullface": "up" },
+        "north": { "texture": "#front", "cullface": "north" },
+        "south": { "texture": "#side", "cullface": "south" },
+        "west":  { "texture": "#side", "cullface": "west" },
+        "east":  { "texture": "#side", "cullface": "east" }
+      }
+    }
+  ]
 }

@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/anemone/anemone",
+    "edge": "productivefarming:block/flowers/anemone/anemone_flower"
+  }
+}

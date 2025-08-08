@@ -3,29 +3,24 @@ package cy.jdkdigital.productivefarming.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.ColorfulFlowerBlock;
 import cy.jdkdigital.productivefarming.common.block.ColorfulTallFlowerBlock;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.util.FarmUtil;
-import cy.jdkdigital.productivelib.util.ColorUtil;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.neoforged.fml.ModList;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
 
 public class FlowerDyeCraftingRecipe implements CraftingRecipe
 {
@@ -45,37 +40,11 @@ public class FlowerDyeCraftingRecipe implements CraftingRecipe
         return true;
     }
 
-    private static float colorDiff(int color1, int color2) {
-        var color1Parts = ColorUtil.getCacheColor(color1);
-        var color2Parts = ColorUtil.getCacheColor(color2);
-
-        float redDifference = color1Parts[0] - color2Parts[0];
-        float greenDifference = color1Parts[1] - color2Parts[1];
-        float blueDifference = color1Parts[2] - color2Parts[2];
-
-        return redDifference * redDifference + greenDifference * greenDifference + blueDifference * blueDifference;
-    }
-
     @Override
     public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
         var stack = input.getItem(0);
         if (stack.has(FarmingDataComponents.COLOR)) {
-            int color = stack.get(FarmingDataComponents.COLOR);
-//            ProductiveFarming.LOGGER.info("color: " + color);
-            float bestMatch = 0;
-            Map<Integer, ResourceLocation> COLOR_MAP = FarmUtil.DYE_COLORS;
-            if (ModList.get().isLoaded("dyenamics")) {
-                COLOR_MAP.putAll(FarmUtil.DYENAMICS_DYE_COLORS);
-            }
-
-            ResourceLocation matchedColor = null;
-            for (Map.Entry<Integer, ResourceLocation> entry : COLOR_MAP.entrySet()) {
-                if (bestMatch == 0 || colorDiff(entry.getKey(), color) < bestMatch) {
-                    bestMatch = colorDiff(entry.getKey(), color);
-                    matchedColor = entry.getValue();
-                }
-            }
-            var output = BuiltInRegistries.ITEM.get(matchedColor).getDefaultInstance();
+            var output = FarmUtil.getDyeFromColor(stack.get(FarmingDataComponents.COLOR));
             if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ColorfulTallFlowerBlock) {
                 output.setCount(2);
             }

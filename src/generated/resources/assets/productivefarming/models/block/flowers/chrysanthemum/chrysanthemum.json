@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/chrysanthemum/chrysanthemum",
+    "edge": "productivefarming:block/flowers/chrysanthemum/chrysanthemum_flower"
+  }
+}

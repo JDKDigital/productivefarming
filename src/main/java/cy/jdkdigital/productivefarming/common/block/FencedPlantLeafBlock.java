@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -64,16 +63,6 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock
     @Override
     public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return Shapes.block();
-    }
-
-    @Override
-    public IntegerProperty getAgeProperty() {
-        return AGE_6;
-    }
-
-    @Override
-    public int getMaxAge() {
-        return 6;
     }
 
     abstract Direction[] validGrowthDirections(Level level, BlockPos pos);

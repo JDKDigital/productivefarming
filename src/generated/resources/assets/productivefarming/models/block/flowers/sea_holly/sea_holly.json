@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/sea_holly/sea_holly",
+    "edge": "productivefarming:block/flowers/sea_holly/sea_holly_flower"
+  }
+}

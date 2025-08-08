@@ -1,6 +1,5 @@
 package cy.jdkdigital.productivefarming.common.block;
 
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.FencedVerticalCropBlockEntity;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
@@ -11,7 +10,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 public class VerticalTrellisLeafBlock extends FencedPlantLeafBlock

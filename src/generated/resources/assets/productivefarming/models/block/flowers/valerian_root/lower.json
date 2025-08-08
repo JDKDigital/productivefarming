@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/valerian_root/lower",
+    "edge": "productivefarming:block/flowers/valerian_root/lower_flower"
+  }
+}

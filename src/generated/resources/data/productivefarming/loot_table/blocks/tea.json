@@ -19,8 +19,7 @@
                   "block": "productivefarming:tea",
                   "condition": "minecraft:block_state_property",
                   "properties": {
-                    "age": "6",
-                    "half": "upper"
+                    "age": "6"
                   }
                 }
               ],
@@ -54,8 +53,7 @@
           "block": "productivefarming:tea",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "age": "6",
-            "half": "upper"
+            "age": "6"
           }
         }
       ],

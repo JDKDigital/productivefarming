@@ -1,22 +1,15 @@
 package cy.jdkdigital.productivefarming.common.item;
 
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.FencedCropBlockEntity;
-import cy.jdkdigital.productivefarming.common.block.entity.FencedStemBlockEntity;
 import cy.jdkdigital.productivefarming.registry.ModTags;
 import cy.jdkdigital.productivefarming.world.context.FenceCropBlockPlaceContext;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemNameBlockItem;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.common.Tags;
 
 public class StemGrowinSeedItem extends CropBlockItem

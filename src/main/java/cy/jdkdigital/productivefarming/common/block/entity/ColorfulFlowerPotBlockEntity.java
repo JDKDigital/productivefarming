@@ -1,6 +1,5 @@
 package cy.jdkdigital.productivefarming.common.block.entity;
 
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivelib.common.block.entity.AbstractBlockEntity;

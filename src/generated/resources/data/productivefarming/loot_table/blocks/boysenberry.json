@@ -51,7 +51,7 @@
                   "source": "block_entity"
                 }
               ],
-              "name": "minecraft:air"
+              "name": "productivefarming:boysenberry"
             }
           ]
         }
@@ -93,7 +93,7 @@
               "source": "block_entity"
             }
           ],
-          "name": "minecraft:air"
+          "name": "productivefarming:boysenberry"
         }
       ],
       "rolls": 1.0

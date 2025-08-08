@@ -51,7 +51,7 @@
                   "source": "block_entity"
                 }
               ],
-              "name": "minecraft:air"
+              "name": "productivefarming:miracle_berry"
             }
           ]
         }
@@ -93,7 +93,7 @@
               "source": "block_entity"
             }
           ],
-          "name": "minecraft:air"
+          "name": "productivefarming:miracle_berry"
         }
       ],
       "rolls": 1.0

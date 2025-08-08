@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/stinging_nettle/upper",
+    "layer1": "productivefarming:block/flowers/stinging_nettle/upper_flower"
+  }
+}

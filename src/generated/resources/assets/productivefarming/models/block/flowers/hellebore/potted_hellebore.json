@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/tinted_flower_pot_cross",
+  "textures": {
+    "plant": "productivefarming:block/flowers/hellebore/hellebore",
+    "stem": "productivefarming:block/flowers/hellebore/hellebore_flower"
+  }
+}

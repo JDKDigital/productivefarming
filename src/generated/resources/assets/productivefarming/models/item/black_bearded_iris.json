@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/black_bearded_iris/black_bearded_iris",
+    "layer1": "productivefarming:block/flowers/black_bearded_iris/black_bearded_iris_flower"
+  }
+}

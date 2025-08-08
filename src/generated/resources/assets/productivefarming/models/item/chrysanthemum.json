@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/chrysanthemum/chrysanthemum",
+    "layer1": "productivefarming:block/flowers/chrysanthemum/chrysanthemum_flower"
+  }
+}

@@ -54,7 +54,7 @@ public class CropFruitingRecipe implements Recipe<RecipeInput>
     {
         private static final MapCodec<CropFruitingRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 builder -> builder.group(
-                                Ingredient.CODEC.fieldOf("tree").forGetter(recipe -> recipe.crop),
+                                Ingredient.CODEC.fieldOf("crop").forGetter(recipe -> recipe.crop),
                                 ItemStack.CODEC.fieldOf("result").forGetter(recipe -> recipe.result)
                         )
                         .apply(builder, CropFruitingRecipe::new)

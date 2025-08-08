@@ -1,14 +1,16 @@
 package cy.jdkdigital.productivefarming.common.block;
 
+import com.mojang.serialization.Codec;
 import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.CropBlockEntity;
 import cy.jdkdigital.productivefarming.common.block.entity.SimpleCropBlockEntity;
+import cy.jdkdigital.productivefarming.common.datamap.CropTrait;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.util.CropConfig;
-import cy.jdkdigital.productivefarming.util.FarmUtil;
 import cy.jdkdigital.productivefarming.util.RecipeHelper;
+import cy.jdkdigital.productivefarming.util.TraitsHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +25,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -58,9 +60,26 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
         if (level.getRawBrightness(pos, 0) >= 9) {
             int i = this.getAge(state);
             if (i < this.getMaxAge()) {
-                float f = getGrowthSpeed(state, level, pos);
-                if (net.neoforged.neoforge.common.CommonHooks.canCropGrow(level, pos, state, random.nextInt((int)(25.0F / f) + 1) == 0)) {
-                    level.setBlock(pos, this.getStateForAge(state, level, pos, i + 1), 2);
+                if (net.neoforged.neoforge.common.CommonHooks.canCropGrow(level, pos, state, random.nextInt((int)(25.0F / getModifiedGrowthSpeed(state, level, pos)) + 1) == 0)) {
+                    ProductiveFarming.LOGGER.info("grow");
+                    BlockState growthState = this.getStateForAge(state, level, pos, i + 1);
+                    level.setBlock(pos, growthState, 2);
+                    // Random chance to increase stats when growing to max stage
+                    if (growthState.getValue(getAgeProperty()) == getMaxAge() && level.getRandom().nextFloat() < Config.SERVER.traitIncreaseChance.get()) {
+                        // pick a random stat to increase
+                        String trait = new String[]{TraitsHelper.GROWTH, TraitsHelper.YIELD, TraitsHelper.RESISTANCE, TraitsHelper.MUTABILITY}[level.random.nextInt(4)];
+                        ProductiveFarming.LOGGER.info("increase " + trait);
+                        // set state on crop block that stat has increased to it will give a new seed when harvested
+                        if (level.getBlockEntity(pos) instanceof SimpleCropBlockEntity cropBlockEntity) {
+                            switch (trait) {
+                                case TraitsHelper.GROWTH -> cropBlockEntity.setGrowth(cropBlockEntity.getGrowth() + 1);
+                                case TraitsHelper.YIELD -> cropBlockEntity.setYield(cropBlockEntity.getYield() + 1);
+                                case TraitsHelper.RESISTANCE -> cropBlockEntity.setResistance(cropBlockEntity.getResistance() + 1);
+                                case TraitsHelper.MUTABILITY -> cropBlockEntity.setMutability(cropBlockEntity.getMutability() + 1);
+                            }
+                        }
+                    }
+
                     net.neoforged.neoforge.common.CommonHooks.fireCropGrowPost(level, pos, state);
                 }
             }
@@ -181,6 +200,15 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
     @Override
     protected int getBonemealAgeIncrease(Level pLevel) {
         return Mth.nextInt(pLevel.random, getMaxAge() > 4 ? 2 : 1, getMaxAge() < 4 ? 2 : 5);
+    }
+
+    public static float getModifiedGrowthSpeed(BlockState blockState, BlockGetter level, BlockPos pos) {
+        float speed = getGrowthSpeed(blockState, level, pos) * 2;
+        if (level.getBlockEntity(pos) instanceof SimpleCropBlockEntity cropBlockEntity) {
+            ProductiveFarming.LOGGER.info("speed:" + speed + " growth:" + cropBlockEntity.getGrowth() + " max:" + ((ProductiveCropBlock) blockState.getBlock()).isMaxAge(blockState) + " state:"+ blockState);
+            speed /= (cropBlockEntity.getGrowth() + 1);
+        }
+        return Math.max(1, speed);
     }
 
     @Override

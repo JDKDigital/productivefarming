@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "productivefarming:item/fruit/cantaloupe_slice"
+    "layer0": "productivefarming:item/fruits/cantaloupe_slice"
   }
 }

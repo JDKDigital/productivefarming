@@ -51,7 +51,7 @@
                   "source": "block_entity"
                 }
               ],
-              "name": "minecraft:air"
+              "name": "productivefarming:redcurrant"
             }
           ]
         }
@@ -93,7 +93,7 @@
               "source": "block_entity"
             }
           ],
-          "name": "minecraft:air"
+          "name": "productivefarming:redcurrant"
         }
       ],
       "rolls": 1.0

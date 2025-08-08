@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay_thicc",
+  "textures": {
+    "cross": "productivefarming:block/flowers/hydrangea/lower",
+    "edge": "productivefarming:block/flowers/hydrangea/lower_flower"
+  }
+}

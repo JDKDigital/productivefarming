@@ -2,12 +2,17 @@ package cy.jdkdigital.productivefarming.common.block;
 
 import cy.jdkdigital.productivefarming.common.block.entity.ColorfulFlowerBlockEntity;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
+import cy.jdkdigital.productivefarming.util.FarmUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -19,7 +24,9 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class ColorfulTallFlowerBlock extends TallFlowerBlock implements EntityBlock
+import java.util.List;
+
+public class ColorfulTallFlowerBlock extends TallFlowerBlock implements EntityBlock, IColorfulFlowerBlock
 {
     private final int defaultColor;
 
@@ -31,6 +38,11 @@ public class ColorfulTallFlowerBlock extends TallFlowerBlock implements EntityBl
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new ColorfulFlowerBlockEntity(pos, state, this.defaultColor);
+    }
+
+    @Override
+    public int getDefaultColor() {
+        return this.defaultColor;
     }
 
     @Override
@@ -71,5 +83,11 @@ public class ColorfulTallFlowerBlock extends TallFlowerBlock implements EntityBl
             stack.set(FarmingDataComponents.COLOR, flowerBlockEntity.getColor());
         }
         return stack;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+        tooltipComponents.add(Component.translatable(FarmUtil.getDyeFromColor(stack.getOrDefault(FarmingDataComponents.COLOR, this.defaultColor)).getDescriptionId()).withColor(stack.getOrDefault(FarmingDataComponents.COLOR, this.defaultColor)).withStyle(ChatFormatting.ITALIC));
     }
 }

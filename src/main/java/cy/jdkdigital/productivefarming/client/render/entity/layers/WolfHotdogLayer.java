@@ -3,7 +3,6 @@ package cy.jdkdigital.productivefarming.client.render.entity.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
-import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import net.minecraft.client.model.WolfModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -47,13 +46,13 @@ public class WolfHotdogLayer extends RenderLayer<Wolf, WolfModel<Wolf>>
             float headPitch
     ) {
         if (livingEntity.hasArmor()) {
-            ItemStack stack = livingEntity.getBodyArmorItem();
-            if (stack.is(FarmingRegistrator.HOTDOG_ARMOR)) {
-                this.getParentModel().copyPropertiesTo(this.model);
-                this.model.prepareMobModel(livingEntity, limbSwing, limbSwingAmount, partialTick);
-                this.model.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-                this.maybeRenderHotdogLayer(poseStack, bufferSource, packedLight, stack);
-            }
+//            ItemStack stack = livingEntity.getBodyArmorItem();
+//            if (stack.is(FarmingRegistrator.HOTDOG_ARMOR)) {
+//                this.getParentModel().copyPropertiesTo(this.model);
+//                this.model.prepareMobModel(livingEntity, limbSwing, limbSwingAmount, partialTick);
+//                this.model.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+//                this.maybeRenderHotdogLayer(poseStack, bufferSource, packedLight, stack);
+//            }
         }
     }
 

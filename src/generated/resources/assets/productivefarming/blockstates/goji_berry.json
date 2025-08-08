@@ -1,28 +1,28 @@
 {
   "variants": {
     "age=0": {
-      "model": "productivefarming:block/crops/goji_berry_stage_0"
+      "model": "productivefarming:block/crops/goji_berry/stage_0"
     },
     "age=1": {
-      "model": "productivefarming:block/crops/goji_berry_stage_1"
+      "model": "productivefarming:block/crops/goji_berry/stage_1"
     },
     "age=2": {
-      "model": "productivefarming:block/crops/goji_berry_stage_2"
+      "model": "productivefarming:block/crops/goji_berry/stage_2"
     },
     "age=3": {
-      "model": "productivefarming:block/crops/goji_berry_stage_3"
+      "model": "productivefarming:block/crops/goji_berry/stage_3"
     },
     "age=4": {
-      "model": "productivefarming:block/crops/goji_berry_stage_4"
+      "model": "productivefarming:block/crops/goji_berry/stage_4"
     },
     "age=5": {
-      "model": "productivefarming:block/crops/goji_berry_stage_5"
+      "model": "productivefarming:block/crops/goji_berry/stage_5"
     },
     "age=6": {
-      "model": "productivefarming:block/crops/goji_berry_stage_6"
+      "model": "productivefarming:block/crops/goji_berry/stage_6"
     },
     "age=7": {
-      "model": "productivefarming:block/crops/goji_berry_stage_7"
+      "model": "productivefarming:block/crops/goji_berry/stage_7"
     }
   }
 }

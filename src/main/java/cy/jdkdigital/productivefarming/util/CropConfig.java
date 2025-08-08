@@ -1,6 +1,5 @@
 package cy.jdkdigital.productivefarming.util;
 
-import cy.jdkdigital.productivefarming.common.block.FastCropBlock;
 import cy.jdkdigital.productivefarming.common.block.ProductiveCropBlock;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import net.minecraft.world.food.FoodProperties;

@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/vine_overlay",
+  "textures": {
+    "edge": "productivefarming:block/flowers/morning_glory/morning_glory_flower",
+    "plant": "productivefarming:block/flowers/morning_glory/morning_glory"
+  }
+}

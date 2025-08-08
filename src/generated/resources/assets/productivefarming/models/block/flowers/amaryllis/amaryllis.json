@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/amaryllis/amaryllis",
+    "edge": "productivefarming:block/flowers/amaryllis/amaryllis_flower"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/cape_leadwort/upper",
+    "layer1": "productivefarming:block/flowers/cape_leadwort/upper_flower"
+  }
+}

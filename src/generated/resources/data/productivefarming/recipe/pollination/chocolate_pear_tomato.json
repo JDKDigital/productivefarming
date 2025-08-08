@@ -1,0 +1,7 @@
+{
+  "type": "productivefarming:crop_mutation",
+  "chance": 0.3,
+  "mutation": "productivefarming:chocolate_pear_tomato",
+  "pollen": "productivefarming:beetroot",
+  "target": "productivefarming:cherry_tomato"
+}

@@ -2,7 +2,6 @@ package cy.jdkdigital.productivefarming.integrations.productivebees;
 
 import cy.jdkdigital.productivebees.common.block.entity.AdvancedBeehiveBlockEntity;
 import cy.jdkdigital.productivebees.common.entity.bee.ProductiveBee;
-import cy.jdkdigital.productivebees.init.ModItems;
 import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.util.FarmUtil;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
@@ -27,7 +26,7 @@ public class CompatHandler
     public static void beeRelease(BeeReleaseEvent event) {
         if (event.getLevel() instanceof ServerLevel level && event.getBeeState().equals(BeehiveBlockEntity.BeeReleaseStatus.HONEY_DELIVERED) && event.getBlockEntity() instanceof BeehiveBlockEntity beehiveBlockEntity && event.getBee().getHivePos() != null) {
             // Scan for flower and crop blocks around the hive, 4 block radius + 2 per range upgrade
-            int distance = 4 + (beehiveBlockEntity instanceof AdvancedBeehiveBlockEntity advancedBeehiveBlockEntity ? (2 * advancedBeehiveBlockEntity.getUpgradeCount(ModItems.UPGRADE_RANGE.get())) : 0);
+            int distance = 4 + (beehiveBlockEntity instanceof AdvancedBeehiveBlockEntity advancedBeehiveBlockEntity ? (2 * advancedBeehiveBlockEntity.getUpgradeCount(LibItems.UPGRADE_RANGE.get())) : 0);
             boolean isSpecialPollinator = event.getBee() instanceof ProductiveBee pBee && pBee.getBeeName().equals("crop_duster");
             List<ResourceLocation> uniqueCrops = new ArrayList<>();
             FarmUtil.pollinateCrops(level, event.getBee().getHivePos(), distance, isSpecialPollinator, uniqueCrops);

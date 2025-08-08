@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay_thicc",
+  "textures": {
+    "cross": "productivefarming:block/flowers/cape_leadwort/lower",
+    "edge": "productivefarming:block/flowers/cape_leadwort/lower_flower"
+  }
+}

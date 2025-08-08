@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/butterfly_pea/butterfly_pea",
+    "layer1": "productivefarming:block/flowers/butterfly_pea/butterfly_pea_flower"
+  }
+}

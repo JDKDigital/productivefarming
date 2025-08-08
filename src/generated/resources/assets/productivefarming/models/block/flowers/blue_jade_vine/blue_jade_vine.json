@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/vine_overlay",
+  "textures": {
+    "edge": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine_flower",
+    "plant": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine"
+  }
+}

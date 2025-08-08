@@ -25,7 +25,13 @@ public class BlockTagProvider extends BlockTagsProvider
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         tag(ModTags.Blocks.FARMLAND).add(Blocks.FARMLAND);
-        tag(ModTags.Blocks.FARM_BLOCKS).add(Blocks.STONE_BRICKS, FarmingRegistrator.FARM_CONTROLLER.get(), FarmingRegistrator.FARM_BLOCK.get(), FarmingRegistrator.FARM_HATCH.get());
+        tag(ModTags.Blocks.FARM_BLOCKS)
+                .addTag(BlockTags.STONE_BRICKS)
+                .add(Blocks.BRICKS, Blocks.MUD_BRICKS, Blocks.QUARTZ_BRICKS, Blocks.PRISMARINE_BRICKS)
+                .add(Blocks.DEEPSLATE_BRICKS, Blocks.CRACKED_DEEPSLATE_BRICKS, Blocks.END_STONE_BRICKS)
+                .add(Blocks.NETHER_BRICKS, Blocks.CRACKED_NETHER_BRICKS, Blocks.CHISELED_NETHER_BRICKS, Blocks.RED_NETHER_BRICKS)
+                .add(Blocks.TUFF_BRICKS, Blocks.CHISELED_TUFF_BRICKS, Blocks.POLISHED_BLACKSTONE_BRICKS, Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)
+                .add(FarmingRegistrator.FARM_CONTROLLER.get(), FarmingRegistrator.FARM_HATCH.get());
 
         tag(BlockTags.MAINTAINS_FARMLAND).addTag(Tags.Blocks.FENCES).add(
                 BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cantaloupe")),
@@ -37,12 +43,78 @@ public class BlockTagProvider extends BlockTagsProvider
                 BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "honeydew_melon"))
         );
 
+        tag(ModTags.Blocks.PLAINS_VILLAGE_FARM_CROPS).add(
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "bok_choy")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "broccoli")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "green_bell_pepper")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "brussels_sprout")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "butterhead_lettuce")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cabbage")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cauliflower")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "celery")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "eggplant")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "kale")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "onion")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "radish")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "spinach")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "turnip")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "spring_onion"))
+        );
+        tag(ModTags.Blocks.SAVANNA_VILLAGE_FARM_CROPS).add(
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "kale")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "chard")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "leek")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "broccoli")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "spinach")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cabbage")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "butterhead_lettuce")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "turnip")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "brussels_sprout")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "rutabaga")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "collards"))
+        );
+        tag(ModTags.Blocks.SNOWY_VILLAGE_FARM_CROPS).add(
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "kale")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "chard")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "leek")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "broccoli")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "spinach")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cabbage")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "butterhead_lettuce")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "turnip")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "brussels_sprout")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "rutabaga")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "collards"))
+        );
+        tag(ModTags.Blocks.TAIGA_VILLAGE_FARM_CROPS).add(
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "kale")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "chard")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "leek")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "broccoli")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "spinach")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cabbage")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "butterhead_lettuce")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "turnip")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "brussels_sprout")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "rutabaga")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "collards"))
+        );
+        tag(ModTags.Blocks.DESERT_VILLAGE_FARM_CROPS).add(
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "eggplant")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "squash")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "lentils")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "mustard"))
+        );
+
         FarmingRegistrator.FLOWERS.forEach(flowerConfig -> {
             if (flowerConfig.isDouble()) {
                 tag(BlockTags.TALL_FLOWERS).add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flowerConfig.name())));
             } else {
                 tag(BlockTags.SMALL_FLOWERS).add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flowerConfig.name())));
             }
+        });
+        FarmingRegistrator.VINES.forEach(flowerConfig -> {
+            tag(BlockTags.FLOWERS).add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flowerConfig.name())));
         });
         tag(ModTags.Blocks.POLLINATABLE).addTag(BlockTags.FLOWERS).addTag(BlockTags.CROPS);
 

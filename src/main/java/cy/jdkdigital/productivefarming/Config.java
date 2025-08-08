@@ -24,9 +24,11 @@ public class Config
 
         public final ModConfigSpec.DoubleValue clamSpreadChance;
         public final ModConfigSpec.DoubleValue flowerPropagationChance;
+        public final ModConfigSpec.DoubleValue traitIncreaseChance;
         public final ModConfigSpec.IntValue pollenChanceFromSieve; // TODO 1.22 change to double
 
         public final ModConfigSpec.BooleanValue traitsOnVanillaCrops;
+        public final ModConfigSpec.BooleanValue spawnFlowersWithBonemeal;
 
         public Server(ModConfigSpec.Builder builder) {
             builder.push("General");
@@ -65,7 +67,11 @@ public class Config
 
             flowerPropagationChance = builder
                     .comment("Chance for flowers to propagate near hives")
-                    .defineInRange("flowerPropagationChance", 0.05, 0, 1);
+                    .defineInRange("flowerPropagationChance", 0.15, 0, 1);
+
+            traitIncreaseChance = builder
+                    .comment("Chance for crops to increase traits when growing")
+                    .defineInRange("traitIncreaseChance", 0.05, 0, 1);
 
             pollenChanceFromSieve = builder
                     .comment("Chance to get a pollen when using sieve upgrades in hives")
@@ -74,6 +80,10 @@ public class Config
             traitsOnVanillaCrops = builder
                     .comment("Add traits to vanilla crops. This will add components to vanilla crop items and the crop block will be overwritten.")
                     .define("traitsOnVanillaCrops", true);
+
+            spawnFlowersWithBonemeal = builder
+                    .comment("Spawn productive farming flowers when using bonemeal on grass blocks")
+                    .define("spawnFlowersWithBonemeal", false);
 
             builder.pop();
         }

@@ -1,8 +1,6 @@
 package cy.jdkdigital.productivefarming.datagen;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
-import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
-import cy.jdkdigital.productivefarming.registry.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.PoiTypeTagsProvider;
@@ -18,7 +16,7 @@ public class POITagProvider extends PoiTypeTagsProvider
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        tag(ModTags.SALT_LICK_POI_TAG).add(FarmingRegistrator.SALT_LICK_POI.getKey());
+//        tag(ModTags.SALT_LICK_POI_TAG).add(FarmingRegistrator.SALT_LICK_POI.getKey());
     }
 
     @Override

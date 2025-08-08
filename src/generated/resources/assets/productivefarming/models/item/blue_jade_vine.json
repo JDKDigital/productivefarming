@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine",
+    "layer1": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine_flower"
+  }
+}

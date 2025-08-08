@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/dahlia/dahlia",
+    "layer1": "productivefarming:block/flowers/dahlia/dahlia_flower"
+  }
+}

@@ -7,6 +7,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 
 public class ModTags
@@ -16,6 +17,11 @@ public class ModTags
         public static final TagKey<Block> POLLINATABLE = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "pollinatable"));
         public static final TagKey<Block> FARMABLE_FISH_BLOCKS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "farmable_fish_blocks"));
         public static final TagKey<Block> FARMLAND = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "farmland"));
+        public static final TagKey<Block> PLAINS_VILLAGE_FARM_CROPS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "plains_village_farm_crops"));
+        public static final TagKey<Block> SAVANNA_VILLAGE_FARM_CROPS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "savanna_village_farm_crops"));
+        public static final TagKey<Block> SNOWY_VILLAGE_FARM_CROPS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "snowy_village_farm_crops"));
+        public static final TagKey<Block> TAIGA_VILLAGE_FARM_CROPS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "taiga_village_farm_crops"));
+        public static final TagKey<Block> DESERT_VILLAGE_FARM_CROPS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "desert_village_farm_crops"));
     }
 
     public static class Items {
@@ -29,7 +35,11 @@ public class ModTags
         public static final TagKey<Item> MUSHROOMS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "mushrooms"));
         public static final TagKey<Item> DRIED_TOBACCO = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "tobacco/dried"));
         public static final TagKey<Item> TOBACCO = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "tobacco"));
+        public static final TagKey<Item> CORN = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "corn"));
+    }
 
+    public static class Biomes {
+        public static final TagKey<Biome> HAS_FLOWERS = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "has_flowers"));
     }
 
     public static final TagKey<EntityType<?>> FISH_FARM_ENTITIES = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "fish_farm_entities"));

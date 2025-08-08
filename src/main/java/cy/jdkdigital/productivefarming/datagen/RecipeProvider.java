@@ -12,6 +12,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
@@ -29,105 +31,170 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
 
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput) {
+        // TODO tmp recipe, use a drying rack
+        simpleCookingRecipe(recipeOutput, "smelting", RecipeSerializer.SMOKING_RECIPE, 100, BuiltInRegistries.ITEM.get(rL("tea")), FarmingRegistrator.BLACK_TEA.get(), 0.35F, SmokingRecipe::new);
+        simpleCookingRecipe(recipeOutput, "smelting", RecipeSerializer.SMOKING_RECIPE, 100, BuiltInRegistries.ITEM.get(rL("tobacco")), FarmingRegistrator.DRIED_TOBACCO.get(), 0.35F, SmokingRecipe::new);
+        simpleCookingRecipe(recipeOutput, "smelting", RecipeSerializer.SMOKING_RECIPE, 100, BuiltInRegistries.ITEM.get(rL("luffa")), FarmingRegistrator.DRIED_LUFFA.get(), 0.35F, SmokingRecipe::new);
+
         for (FishConfig fish: FarmingRegistrator.FISHIES) {
-            var raw = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "raw_" + fish.name()));
+            var raw = BuiltInRegistries.ITEM.get(rL("raw_" + fish.name()));
             if (fish.hasBlock()) {
-                raw = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, fish.name()));
+                raw = BuiltInRegistries.ITEM.get(rL(fish.name()));
             }
-            var cooked = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cooked_" + fish.name()));
+            var cooked = BuiltInRegistries.ITEM.get(rL("cooked_" + fish.name()));
             simpleCookingRecipe(recipeOutput, "smoking", RecipeSerializer.SMOKING_RECIPE, 100, raw, cooked, 0.35F, SmokingRecipe::new);
             simpleCookingRecipe(recipeOutput, "campfire_cooking", RecipeSerializer.CAMPFIRE_COOKING_RECIPE, 600, raw, cooked, 0.35F, CampfireCookingRecipe::new);
         }
 
         for (CropConfig crop : FarmingRegistrator.STEMS) {
-            var melonBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
-            var melonSlice = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_slice"));
-            var melonSeeds = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"));
+            var melonBlock = BuiltInRegistries.BLOCK.get(rL(crop.name()));
+            var melonSlice = BuiltInRegistries.ITEM.get(rL(crop.name() + "_slice"));
+            var melonSeeds = BuiltInRegistries.ITEM.get(rL(crop.name() + "_seeds"));
             ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, melonBlock, 1)
                     .unlockedBy(getHasName(melonSlice), has(melonSlice))
                     .requires(melonSlice, 9)
-                    .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                    .save(recipeOutput, rL(crop.name()));
             ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC,melonSeeds, 1)
                     .unlockedBy(getHasName(melonSlice), has(melonSlice))
                     .requires(melonSlice)
-                    .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"));
+                    .save(recipeOutput, rL(crop.name() + "_seeds"));
         }
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FarmingRegistrator.FARM_CONTROLLER.get())
+                .unlockedBy("has_bricks", has(ItemTags.STONE_BRICKS))
+                .pattern("BDB").pattern("BPB").pattern("BCB")
+                .define('D', Items.DAYLIGHT_DETECTOR)
+                .define('P', Items.COMPOSTER)
+                .define('C', Items.COMPARATOR)
+                .define('B', ItemTags.STONE_BRICKS)
+                .save(recipeOutput, rL("farm_controller"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FarmingRegistrator.FEEDING_TROUGH.get())
+                .unlockedBy("has_copper", has(Tags.Items.INGOTS_COPPER))
+                .pattern("B B").pattern("BCB").pattern("BBB")
+                .define('C', Tags.Items.CHESTS_WOODEN)
+                .define('B', Tags.Items.INGOTS_COPPER)
+                .save(recipeOutput, rL("feeding_trough"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FarmingRegistrator.WATERING_TROUGH.get())
+                .unlockedBy("has_iron", has(Tags.Items.INGOTS_IRON))
+                .pattern("B B").pattern("BCB").pattern("BBB")
+                .define('C', Tags.Items.BUCKETS_EMPTY)
+                .define('B', Tags.Items.INGOTS_IRON)
+                .save(recipeOutput, rL("watering_trough"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.SPONGE, 1)
                 .unlockedBy(getHasName(FarmingRegistrator.DRIED_LUFFA.get()), has(FarmingRegistrator.DRIED_LUFFA.get()))
                 .requires(FarmingRegistrator.DRIED_LUFFA.get(), 9)
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "sponge_from_dried_luffa"));
+                .save(recipeOutput, rL("sponge_from_dried_luffa"));
 
-        var cornTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "corn"));
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FarmingRegistrator.CORN_COB_PIPE.get())
-                .unlockedBy("has_corn", has(cornTag))
+                .unlockedBy("has_corn", has(ModTags.Items.CORN))
                 .pattern("CS")
-                .define('C', cornTag)
+                .define('C', ModTags.Items.CORN)
                 .define('S', Tags.Items.RODS_WOODEN)
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "corn_cob_pipe"));
+                .save(recipeOutput, rL("corn_cob_pipe"));
 
         buildCrateRecipes(recipeOutput);
         buildSeedBagRecipes(recipeOutput);
-        buildPollinationRecipes(recipeOutput);
+        buildMutationRecipes(recipeOutput);
     }
 
     protected static <T extends AbstractCookingRecipe> void simpleCookingRecipe(RecipeOutput pFinishedRecipeConsumer, String pCookingMethod, RecipeSerializer<T> pCookingSerializer, int pCookingTime, ItemLike pIngredient, ItemLike pResult, float pExperience, AbstractCookingRecipe.Factory<T> recipeFactory) {
-        SimpleCookingRecipeBuilder.generic(Ingredient.of(pIngredient), RecipeCategory.FOOD, pResult, pExperience, pCookingTime, pCookingSerializer, recipeFactory).unlockedBy(getHasName(pIngredient), has(pIngredient)).save(pFinishedRecipeConsumer, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cooking/" + getItemName(pResult) + "_from_" + pCookingMethod));
+        SimpleCookingRecipeBuilder.generic(Ingredient.of(pIngredient), RecipeCategory.FOOD, pResult, pExperience, pCookingTime, pCookingSerializer, recipeFactory).unlockedBy(getHasName(pIngredient), has(pIngredient)).save(pFinishedRecipeConsumer, rL("cooking/" + getItemName(pResult) + "_from_" + pCookingMethod));
     }
 
     private void buildCrateRecipes(RecipeOutput recipeOutput) {
         FarmingRegistrator.CRATED_CROPS.forEach(crate -> {
-            var crateItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crate.getPath() + "_crate"));
+            var crateItem = BuiltInRegistries.ITEM.get(rL(crate.getPath() + "_crate"));
             var cropItem = BuiltInRegistries.ITEM.get(crate);
 
             ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cropItem, 9)
                     .unlockedBy(getHasName(cropItem), has(cropItem))
                     .requires(crateItem)
-                    .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "crates/" + crate.getPath() + "_unpack"));
+                    .save(recipeOutput, rL("crates/" + crate.getPath() + "_unpack"));
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, crateItem)
                     .unlockedBy(getHasName(cropItem), has(cropItem))
                     .pattern("###")
                     .pattern("###")
                     .pattern("###")
                     .define('#', cropItem)
-                    .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "crates/" + crate.getPath()));
+                    .save(recipeOutput, rL("crates/" + crate.getPath()));
         });
     }
 
     private void buildSeedBagRecipes(RecipeOutput recipeOutput) {
         FarmingRegistrator.SEED_BAGS.forEach(seedName -> {
-            var bagItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, seedName.getPath() + "_bag"));
+            var bagItem = BuiltInRegistries.ITEM.get(rL(seedName.getPath() + "_bag"));
             var seedItem = BuiltInRegistries.ITEM.get(seedName);
 
             ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, seedItem, 9)
                     .unlockedBy(getHasName(seedItem), has(seedItem))
                     .requires(bagItem)
-                    .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "seed_bags/" + seedName.getPath() + "_unpack"));
+                    .save(recipeOutput, rL("seed_bags/" + seedName.getPath() + "_unpack"));
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, bagItem)
                     .unlockedBy(getHasName(seedItem), has(seedItem))
                     .pattern("###")
                     .pattern("###")
                     .pattern("###")
                     .define('#', seedItem)
-                    .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "seed_bags/" + seedName.getPath()));
+                    .save(recipeOutput, rL("seed_bags/" + seedName.getPath()));
         });
     }
 
-    private void buildPollinationRecipes(RecipeOutput recipeOutput) {
+    private void buildMutationRecipes(RecipeOutput recipeOutput) {
         // Corn mutations
-        CropPollinationRecipeBuilder.direct(getCropIngredient("yellow_dent_corn"), ResourceLocation.withDefaultNamespace("cornflower"), ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "blue_jade_corn"), 1.0f)
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "pollination/blue_jade_corn_from_yellow_dent_corn"));
+        CropPollinationRecipeBuilder.direct(rL("yellow_dent_corn"), ResourceLocation.withDefaultNamespace("cornflower"), rL("blue_jade_corn"), 1.0f)
+                .save(recipeOutput, rL("pollination/blue_jade_corn"));
+        CropPollinationRecipeBuilder.direct(rL("yellow_dent_corn"), rL("blue_jade_corn"), rL("black_aztec_corn"), 0.8f)
+                .save(recipeOutput, rL( "pollination/black_aztec_corn"));
+        CropPollinationRecipeBuilder.direct(rL("blue_jade_corn"), rL("black_aztec_corn"), rL("sugar_pearl_corn"), 0.8f)
+                .save(recipeOutput, rL( "pollination/sugar_pearl_corn"));
+        CropPollinationRecipeBuilder.direct(rL("black_aztec_corn"), rL("sugar_pearl_corn"), rL("rainbow_corn"), 0.8f)
+                .save(recipeOutput, rL( "pollination/rainbow_corn"));
 
         // Tomato mutations
+        CropPollinationRecipeBuilder.direct(rL("roma_tomato"), rL("potato"), rL("beefsteak_tomato"), 1.0f)
+                .save(recipeOutput, rL("pollination/beefsteak_tomato"));
+        CropPollinationRecipeBuilder.direct(rL("beefsteak_tomato"), rL("roma_tomato"), rL("black_beauty_tomato"), 0.3f)
+                .save(recipeOutput, rL("pollination/black_beauty_tomato"));
+        CropPollinationRecipeBuilder.direct(rL("beefsteak_tomato"), rL("roma_tomato"), rL("blue_beauty_tomato"), 0.3f)
+                .save(recipeOutput, rL("pollination/blue_beauty_tomato"));
+        CropPollinationRecipeBuilder.direct(rL("beefsteak_tomato"), rL("roma_tomato"), rL("white_wonder_tomato"), 0.3f)
+                .save(recipeOutput, rL("pollination/white_wonder_tomato"));
+
+        // Cherry tomato mutations
+        CropPollinationRecipeBuilder.direct(rL("cherry_tomato"), rL("beetroot"), rL("chocolate_pear_tomato"), 0.3f)
+                .save(recipeOutput, rL("pollination/chocolate_pear_tomato"));
+        CropPollinationRecipeBuilder.direct(rL("cherry_tomato"), rL("chocolate_pear_tomato"), rL("yellow_pear_tomato"), 0.3f)
+                .save(recipeOutput, rL("pollination/yellow_pear_tomato"));
+        CropPollinationRecipeBuilder.direct(rL("yellow_pear_tomato"), rL("chocolate_pear_tomato"), rL("sungold_tomato"), 0.3f)
+                .save(recipeOutput, rL("pollination/sungold_tomato"));
 
         // Bell Pepper mutations
+        CropPollinationRecipeBuilder.direct(rL("yellow_bell_pepper"), rL("red_bell_pepper"), rL("orange_bell_pepper"), 0.3f)
+                .save(recipeOutput, rL("pollination/orange_bell_pepper"));
+        CropPollinationRecipeBuilder.direct(rL("green_bell_pepper"), rL("orange_bell_pepper"), rL("black_bell_pepper"), 0.3f)
+                .save(recipeOutput, rL("pollination/black_bell_pepper"));
+        CropPollinationRecipeBuilder.direct(rL("black_bell_pepper"), rL("red_bell_pepper"), rL("purple_bell_pepper"), 0.3f)
+                .save(recipeOutput, rL("pollination/purple_bell_pepper"));
+        CropPollinationRecipeBuilder.direct(rL("yellow_bell_pepper"), rL("orange_bell_pepper"), rL("white_bell_pepper"), 0.3f)
+                .save(recipeOutput, rL("pollination/white_bell_pepper"));
 
         // Grape mutations
+        CropPollinationRecipeBuilder.direct(rL("red_grape"), rL("green_grape"), rL("concord_grape"), 0.3f)
+                .save(recipeOutput, rL("pollination/concord_grape"));
+        CropPollinationRecipeBuilder.direct(rL("concord_grape"), rL("green_grape"), rL("cotton_candy_grape"), 0.3f)
+                .save(recipeOutput, rL("pollination/cotton_candy_grape"));
 
         // Berry mutation (miracle berry, golden raspberry)
+        CropPollinationRecipeBuilder.direct(rL("raspberry"), rL("sungold_tomato"), rL("golden_raspberry"), 0.7f)
+                .save(recipeOutput, rL("pollination/golden_raspberry"));
+        CropPollinationRecipeBuilder.direct(rL("golden_raspberry"), rL("goji_berry"), rL("miracle_berry"), 0.5f)
+                .save(recipeOutput, rL("pollination/miracle_berry"));
     }
 
-    private static ResourceLocation getCropIngredient(String cropname) {
-        return ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, cropname);
+    private static ResourceLocation rL(String name) {
+        return ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, name);
     }
 }

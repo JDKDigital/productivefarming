@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/himalayan_poppy/upper",
+    "layer1": "productivefarming:block/flowers/himalayan_poppy/upper_flower"
+  }
+}

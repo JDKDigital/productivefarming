@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/crop",
+  "textures": {
+    "crop": "productivefarming:block/crops/teff/stage_1"
+  }
+}

@@ -1,28 +1,28 @@
 {
   "variants": {
     "age=0": {
-      "model": "productivefarming:block/crops/red_grape_stage_0"
+      "model": "productivefarming:block/crops/red_grape/stage_0"
     },
     "age=1": {
-      "model": "productivefarming:block/crops/red_grape_stage_1"
+      "model": "productivefarming:block/crops/red_grape/stage_1"
     },
     "age=2": {
-      "model": "productivefarming:block/crops/red_grape_stage_2"
+      "model": "productivefarming:block/crops/red_grape/stage_2"
     },
     "age=3": {
-      "model": "productivefarming:block/crops/red_grape_stage_3"
+      "model": "productivefarming:block/crops/red_grape/stage_3"
     },
     "age=4": {
-      "model": "productivefarming:block/crops/red_grape_stage_4"
+      "model": "productivefarming:block/crops/red_grape/stage_4"
     },
     "age=5": {
-      "model": "productivefarming:block/crops/red_grape_stage_5"
+      "model": "productivefarming:block/crops/red_grape/stage_5"
     },
     "age=6": {
-      "model": "productivefarming:block/crops/red_grape_stage_6"
+      "model": "productivefarming:block/crops/red_grape/stage_6"
     },
     "age=7": {
-      "model": "productivefarming:block/crops/red_grape_stage_7"
+      "model": "productivefarming:block/crops/red_grape/stage_7"
     }
   }
 }

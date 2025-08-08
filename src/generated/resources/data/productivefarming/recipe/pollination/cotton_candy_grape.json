@@ -1,0 +1,7 @@
+{
+  "type": "productivefarming:crop_mutation",
+  "chance": 0.3,
+  "mutation": "productivefarming:cotton_candy_grape",
+  "pollen": "productivefarming:green_grape",
+  "target": "productivefarming:concord_grape"
+}

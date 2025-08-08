@@ -1,0 +1,7 @@
+{
+  "type": "productivefarming:crop_mutation",
+  "chance": 1.0,
+  "mutation": "productivefarming:blue_jade_corn",
+  "pollen": "minecraft:cornflower",
+  "target": "productivefarming:yellow_dent_corn"
+}

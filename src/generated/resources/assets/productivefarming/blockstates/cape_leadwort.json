@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "productivefarming:block/flowers/cape_leadwort/lower"
+    },
+    "half=upper": {
+      "model": "productivefarming:block/flowers/cape_leadwort/upper"
+    }
+  }
+}

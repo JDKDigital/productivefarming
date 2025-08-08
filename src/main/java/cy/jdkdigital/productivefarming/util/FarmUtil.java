@@ -5,7 +5,7 @@ import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.ColorfulFlowerBlockEntity;
 import cy.jdkdigital.productivefarming.common.block.entity.CropBlockEntity;
-import cy.jdkdigital.productivefarming.recipe.CropPollinationRecipe;
+import cy.jdkdigital.productivefarming.recipe.CropMutationRecipe;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.registry.ModTags;
@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.neoforged.fml.ModList;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -93,11 +95,11 @@ public class FarmUtil
     }
 
     public static void pollinateCrops(Level level, BlockPos pos, int distance, boolean isSpecialPollinator, List<ResourceLocation> uniqueCrops) {
-        List<BlockPos> leaves = BlockPos.betweenClosedStream(pos.offset(-distance, -distance, -distance), pos.offset(distance, distance, distance)).map(BlockPos::immutable).toList();
+        List<BlockPos> crops = BlockPos.betweenClosedStream(pos.offset(-distance, -distance, -distance), pos.offset(distance, distance, distance)).map(BlockPos::immutable).toList();
         // Build permutation map
         Map<ResourceLocation, BlockPos> flowerMap = new HashMap<>();
         Map<ResourceLocation, BlockPos> cropMap = new HashMap<>();
-        leaves.forEach(blockPos -> {
+        crops.forEach(blockPos -> {
             var state = level.getBlockState(blockPos);
             if (state.is(ModTags.Blocks.POLLINATABLE)) {
                 if (!(state.getBlock() instanceof CropBlock cropBlock) || cropBlock.isMaxAge(state)) {
@@ -130,10 +132,10 @@ public class FarmUtil
                     colorB = flowerBlockEntity.getColor();
                 }
                 if (colorA == 0) {
-                    ProductiveFarming.LOGGER.warn("missing color for " + randomFlowers.getFirst());
+                    ProductiveFarming.LOGGER.debug("missing flower color for " + randomFlowers.getFirst());
                 }
                 if (colorB == 0) {
-                    ProductiveFarming.LOGGER.warn("missing color for " + randomFlowers.getLast());
+                    ProductiveFarming.LOGGER.debug("missing flower color for " + randomFlowers.getLast());
                 }
                 // If we have valid mixable flowers, grab PFarming equivalent of the first flower
                 if (colorA != 0 && colorB != 0) {
@@ -151,8 +153,8 @@ public class FarmUtil
                             if (level.getBlockState(blockPos).canBeReplaced() && newFlower.canSurvive(level, blockPos) && level.setBlock(blockPos, newFlower, CropBlock.UPDATE_ALL_IMMEDIATE)) {
                                 // Set color
                                 if (level.getBlockEntity(blockPos) instanceof ColorfulFlowerBlockEntity flowerBlockEntity) {
-                                    flowerBlockEntity.setColor(ColorUtil.blend(colorA, colorB, level.random.nextFloat()));
-                                    // fix double flower
+                                    flowerBlockEntity.setColor(ColorUtil.blend(colorA, colorB, Mth.lerp(level.random.nextFloat(), 0.3f, 0.7f)));
+                                    // for double flower
                                     if (newFlower.is(BlockTags.TALL_FLOWERS)) {
                                         level.setBlockAndUpdate(blockPos.above(), newFlower.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
                                         if (level.getBlockEntity(blockPos.above()) instanceof ColorfulFlowerBlockEntity flowerBlockEntityAbove) {
@@ -169,8 +171,8 @@ public class FarmUtil
 
 
             // Pollinate crops
-            Map<RecipeHolder<CropPollinationRecipe>, Pair<ResourceLocation, ResourceLocation>> matchedRecipes = new HashMap<>();
-            var allRecipes = level.getRecipeManager().getAllRecipesFor(FarmingRegistrator.CROP_POLLINATION_TYPE.get());
+            Map<RecipeHolder<CropMutationRecipe>, Pair<ResourceLocation, ResourceLocation>> matchedRecipes = new HashMap<>();
+            var allRecipes = level.getRecipeManager().getAllRecipesFor(FarmingRegistrator.CROP_MUTATION_TYPE.get());
             allRecipes.forEach(cropPollinationRecipe -> {
                 if (!matchedRecipes.containsKey(cropPollinationRecipe)) {
                     uniqueCrops.forEach(cropA -> {
@@ -184,7 +186,7 @@ public class FarmUtil
             });
 
             if (!matchedRecipes.isEmpty()) {
-                RecipeHolder<CropPollinationRecipe> pickedRecipe = (RecipeHolder<CropPollinationRecipe>) matchedRecipes.keySet().toArray()[level.random.nextInt(matchedRecipes.size())];
+                RecipeHolder<CropMutationRecipe> pickedRecipe = (RecipeHolder<CropMutationRecipe>) matchedRecipes.keySet().toArray()[level.random.nextInt(matchedRecipes.size())];
 
                 BlockPos targetPos = cropMap.get(pickedRecipe.value().targetCrop);
 
@@ -201,5 +203,34 @@ public class FarmUtil
         var pollenStack = new ItemStack(FarmingRegistrator.POLLEN.get());
         pollenStack.set(FarmingDataComponents.POLLEN_BLOCK_COMPONENT, crop);
         return pollenStack;
+    }
+
+    public static ItemStack getDyeFromColor(int color) {
+        float bestMatch = 0;
+        Map<Integer, ResourceLocation> COLOR_MAP = FarmUtil.DYE_COLORS;
+        if (ModList.get().isLoaded("dyenamics")) {
+            COLOR_MAP.putAll(FarmUtil.DYENAMICS_DYE_COLORS);
+        }
+
+        ResourceLocation matchedColor = null;
+        for (Map.Entry<Integer, ResourceLocation> entry : COLOR_MAP.entrySet()) {
+            if (bestMatch == 0 || colorDiff(entry.getKey(), color) < bestMatch) {
+                bestMatch = colorDiff(entry.getKey(), color);
+                matchedColor = entry.getValue();
+            }
+        }
+
+        return BuiltInRegistries.ITEM.get(matchedColor).getDefaultInstance();
+    }
+
+    private static float colorDiff(int color1, int color2) {
+        var color1Parts = ColorUtil.getCacheColor(color1);
+        var color2Parts = ColorUtil.getCacheColor(color2);
+
+        float redDifference = color1Parts[0] - color2Parts[0];
+        float greenDifference = color1Parts[1] - color2Parts[1];
+        float blueDifference = color1Parts[2] - color2Parts[2];
+
+        return redDifference * redDifference + greenDifference * greenDifference + blueDifference * blueDifference;
     }
 }

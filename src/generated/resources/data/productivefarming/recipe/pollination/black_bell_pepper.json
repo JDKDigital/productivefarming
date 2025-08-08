@@ -1,0 +1,7 @@
+{
+  "type": "productivefarming:crop_mutation",
+  "chance": 0.3,
+  "mutation": "productivefarming:black_bell_pepper",
+  "pollen": "productivefarming:orange_bell_pepper",
+  "target": "productivefarming:green_bell_pepper"
+}

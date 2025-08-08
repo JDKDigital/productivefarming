@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "productivefarming:block/crops/attached_goji_berry_stem"
+      "model": "productivefarming:block/crops/goji_berry/attached"
     }
   }
 }

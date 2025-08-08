@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/tinted_flower_pot_cross",
+  "textures": {
+    "plant": "productivefarming:block/flowers/sea_holly/sea_holly",
+    "stem": "productivefarming:block/flowers/sea_holly/sea_holly_flower"
+  }
+}

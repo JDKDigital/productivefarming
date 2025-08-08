@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "productivefarming:item/fruit/honeydew_melon_slice"
+    "layer0": "productivefarming:item/fruits/honeydew_melon_slice"
   }
 }

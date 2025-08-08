@@ -1,0 +1,7 @@
+{
+  "type": "productivefarming:crop_mutation",
+  "chance": 0.3,
+  "mutation": "productivefarming:black_beauty_tomato",
+  "pollen": "productivefarming:roma_tomato",
+  "target": "productivefarming:beefsteak_tomato"
+}

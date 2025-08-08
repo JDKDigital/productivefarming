@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/black_bearded_iris/black_bearded_iris",
+    "edge": "productivefarming:block/flowers/black_bearded_iris/black_bearded_iris_flower"
+  }
+}

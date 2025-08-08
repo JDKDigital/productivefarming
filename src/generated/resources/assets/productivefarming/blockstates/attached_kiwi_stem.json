@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "productivefarming:block/crops/attached_kiwi_stem"
+      "model": "productivefarming:block/crops/kiwi/attached"
     }
   }
 }

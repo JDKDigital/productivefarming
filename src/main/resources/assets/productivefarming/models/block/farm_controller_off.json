@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/farm_controller",
+  "textures": {
+    "front": "productivefarming:block/farm_controller_front_off"
+  }
+}

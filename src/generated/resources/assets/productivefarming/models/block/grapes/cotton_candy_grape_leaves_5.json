@@ -1,0 +1,6 @@
+{
+  "parent": "productivefarming:block/inset_leaves",
+  "textures": {
+    "all": "productivefarming:block/grapes/cotton_candy_grape/stage_5"
+  }
+}

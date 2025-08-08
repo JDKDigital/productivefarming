@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "productivefarming:block/flowers/cattail/lower"
+    },
+    "half=upper": {
+      "model": "productivefarming:block/flowers/cattail/upper"
+    }
+  }
+}

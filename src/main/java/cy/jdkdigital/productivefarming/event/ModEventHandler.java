@@ -1,30 +1,26 @@
 package cy.jdkdigital.productivefarming.event;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
+import cy.jdkdigital.productivefarming.common.block.IColorfulFlowerBlock;
+import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivelib.registry.LibItems;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cod;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.IBlockCapabilityProvider;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
-import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import org.jetbrains.annotations.Nullable;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = ProductiveFarming.MODID)
 public class ModEventHandler
@@ -33,7 +29,15 @@ public class ModEventHandler
     public static void buildContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey().equals(FarmingRegistrator.TAB_KEY)) {
             for (DeferredHolder<Item, ? extends Item> item : ProductiveFarming.ITEMS.getEntries()) {
-                event.accept(item.value());
+                if (item.is(FarmingRegistrator.FARM_HATCH.getId())) continue;
+
+                if (item.is(ItemTags.FLOWERS) && item.get() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IColorfulFlowerBlock colorfulFlowerBlock) {
+                    var stack = item.get().getDefaultInstance();
+                    stack.set(FarmingDataComponents.COLOR, colorfulFlowerBlock.getDefaultColor());
+                    event.accept(stack);
+                } else {
+                    event.accept(item.value());
+                }
             }
             if (ModList.get().isLoaded("productivebees")) {
                 event.accept(LibItems.UPGRADE_POLLEN_SIEVE.get());
@@ -75,10 +79,10 @@ public class ModEventHandler
 //                FarmingRegistrator.FARM_HATCH_BLOCK_ENTITY.get(),
 //                (myBlockEntity, side) -> myBlockEntity.inventoryHandler
 //        );
-        event.registerBlockEntity(
-                Capabilities.ItemHandler.BLOCK,
-                FarmingRegistrator.FISH_TRAP_BLOCK_ENTITY.get(),
-                (myBlockEntity, side) -> myBlockEntity.inventoryHandler
-        );
+//        event.registerBlockEntity(
+//                Capabilities.ItemHandler.BLOCK,
+//                FarmingRegistrator.FISH_TRAP_BLOCK_ENTITY.get(),
+//                (myBlockEntity, side) -> myBlockEntity.inventoryHandler
+//        );
     }
 }

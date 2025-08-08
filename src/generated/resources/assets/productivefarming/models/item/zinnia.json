@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "productivefarming:block/flowers/zinnia/upper",
+    "layer1": "productivefarming:block/flowers/zinnia/upper_flower"
+  }
+}

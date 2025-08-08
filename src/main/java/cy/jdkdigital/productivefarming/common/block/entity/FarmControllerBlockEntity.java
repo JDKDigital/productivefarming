@@ -1,7 +1,6 @@
 package cy.jdkdigital.productivefarming.common.block.entity;
 
 import cy.jdkdigital.productivefarming.Config;
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.inventory.FarmControllerContainer;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.registry.ModTags;

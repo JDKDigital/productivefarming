@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "productivefarming:block/crops/attached_green_grape_stem"
+      "model": "productivefarming:block/crops/green_grape/attached"
     }
   }
 }

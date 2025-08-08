@@ -2,14 +2,12 @@ package cy.jdkdigital.productivefarming.datagen;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
-import cy.jdkdigital.productivelib.loot.IngredientModifier;
 import cy.jdkdigital.productivelib.loot.ItemLootModifier;
 import cy.jdkdigital.productivelib.loot.WeightedIngredientModifier;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
@@ -31,14 +29,14 @@ public class LootModifierProvider extends GlobalLootModifierProvider
 
     @Override
     protected void start() {
-        Map<String, Integer> weights = new HashMap<>() {{
-            put("anchovy", 35);
-            put("sturgeon", 10);
-            put("tuna", 5);
-            put("koi", 0);
-        }};
-        List<WeightedIngredientModifier.WeightedIngredient> list = FarmingRegistrator.FISHIES.stream().filter(fishConfig -> !fishConfig.hasBlock()).map(fishConfig -> new WeightedIngredientModifier.WeightedIngredient(Ingredient.of(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "raw_" + fishConfig.name()))), weights.getOrDefault(fishConfig.name(), 25))).toList();
-        add("fishing", new WeightedIngredientModifier(anyOfConditions( "gameplay/fishing/fish", "gameplay/fishing"), list, 0.6f, true));
+//        Map<String, Integer> weights = new HashMap<>() {{
+//            put("anchovy", 35);
+//            put("sturgeon", 10);
+//            put("tuna", 5);
+//            put("koi", 0);
+//        }};
+//        List<WeightedIngredientModifier.WeightedIngredient> list = FarmingRegistrator.FISHIES.stream().filter(fishConfig -> !fishConfig.hasBlock()).map(fishConfig -> new WeightedIngredientModifier.WeightedIngredient(Ingredient.of(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "raw_" + fishConfig.name()))), weights.getOrDefault(fishConfig.name(), 25))).toList();
+//        add("fishing", new WeightedIngredientModifier(anyOfConditions( "gameplay/fishing/fish", "gameplay/fishing"), list, 0.6f, true));
 
         add("pipe", new ItemLootModifier(anyOfConditions( "chests/village/village_cartographer", "chests/village/village_shepherd"), new ItemStack(FarmingRegistrator.CORN_COB_PIPE.get()), 0.05f));
     }

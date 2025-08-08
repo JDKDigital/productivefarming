@@ -1,24 +1,18 @@
 package cy.jdkdigital.productivefarming.registry;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
-import cy.jdkdigital.productivefarming.client.render.entity.WalleyeRenderer;
 import cy.jdkdigital.productivefarming.common.block.*;
-import cy.jdkdigital.productivefarming.common.block.FarmBlock;
 import cy.jdkdigital.productivefarming.common.block.entity.*;
 import cy.jdkdigital.productivefarming.common.datamap.CropTrait;
-import cy.jdkdigital.productivefarming.common.entity.*;
-import cy.jdkdigital.productivefarming.common.feature.SeaFloorFeature;
 import cy.jdkdigital.productivefarming.common.item.*;
 import cy.jdkdigital.productivefarming.inventory.FarmControllerContainer;
 import cy.jdkdigital.productivefarming.inventory.FeedingTroughContainer;
 import cy.jdkdigital.productivefarming.recipe.CropFruitingRecipe;
-import cy.jdkdigital.productivefarming.recipe.CropPollinationRecipe;
+import cy.jdkdigital.productivefarming.recipe.CropMutationRecipe;
 import cy.jdkdigital.productivefarming.recipe.FlowerDyeCraftingRecipe;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import cy.jdkdigital.productivefarming.util.FishConfig;
 import cy.jdkdigital.productivefarming.util.FlowerConfig;
-import net.minecraft.client.renderer.entity.CodRenderer;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -27,7 +21,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.inventory.MenuType;
@@ -37,9 +30,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.CountConfiguration;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
@@ -51,7 +41,10 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -70,9 +63,9 @@ public class FarmingRegistrator
         add(new CropConfig("arrowroot", false, Foods.POTATO));
         add(new CropConfig("arugula", true, LEAFY)); // salad
         add(new CropConfig("green_bell_pepper", false, Foods.BEETROOT));
+        add(new CropConfig("yellow_bell_pepper", false, Foods.BEETROOT));
         add(new CropConfig("orange_bell_pepper", false, Foods.BEETROOT));
         add(new CropConfig("red_bell_pepper", false, Foods.BEETROOT));
-        add(new CropConfig("yellow_bell_pepper", false, Foods.BEETROOT));
         add(new CropConfig("black_bell_pepper", false, Foods.BEETROOT));
         add(new CropConfig("purple_bell_pepper", false, Foods.BEETROOT));
         add(new CropConfig("white_bell_pepper", false, Foods.BEETROOT));
@@ -108,6 +101,7 @@ public class FarmingRegistrator
         add(new CropConfig("parsnip", true, Foods.BEETROOT));
         add(new CropConfig("peas", false, Foods.BEETROOT));
         add(new CropConfig("pinto_beans", false, null));
+        add(new CropConfig("pineapple", false, Foods.BEETROOT)); // plant the top?
         add(new CropConfig("radish", true, Foods.BEETROOT));
         add(new CropConfig("rhubarb", false, Foods.BEETROOT));
         add(new CropConfig("romain_lettuce", true, LEAFY));
@@ -121,24 +115,29 @@ public class FarmingRegistrator
         add(new CropConfig("turnip", true, Foods.BEETROOT));
         add(new CropConfig("ulluco", false, Foods.POTATO));
         add(new CropConfig("wasabi", true, null));
+        add(new CropConfig("blue_borage", true, null));
 
         add(new CropConfig("peanuts", false, Foods.BEETROOT));
         add(new CropConfig("ginger", false, Foods.BEETROOT));
         add(new CropConfig("green_bean", false, Foods.BEETROOT));
         add(new CropConfig("spring_onion", true, LEAFY));
-        add(new CropConfig("saguaro", false, Foods.BEETROOT)); // it's a cactus
+//        add(new CropConfig("saguaro", false, Foods.BEETROOT)); // it's a cactus
         add(new CropConfig("sweet_potato", false, Foods.BEETROOT));
         add(new CropConfig("lentils", false, null));
         add(new CropConfig("chickpeas", false, null));
         add(new CropConfig("mustard", false, null));
-
-        add(new CropConfig("rice", false, null, GrainCropBlock::new));
+        add(new CropConfig("tea", true, null));
+        add(new CropConfig("wintergreen", false, BERRY_FOOD));
+        add(new CropConfig("hops", false, null));
+        // Grains
+        add(new CropConfig("rice", true, null, GrainCropBlock::new));
         add(new CropConfig("oats", true, null, GrainCropBlock::new));
         add(new CropConfig("barley", true, null, GrainCropBlock::new));
         add(new CropConfig("rye", true, null, GrainCropBlock::new));
-        add(new CropConfig("hops", false, null, GrainCropBlock::new));
+        add(new CropConfig("teff", true, null, GrainCropBlock::new));
         add(new CropConfig("amaranth", true, null, DoubleCropBlock::new));
         add(new CropConfig("sorghum", true, null, DoubleCropBlock::new));
+        add(new CropConfig("quinoa", true, null, DoubleCropBlock::new));
         // Double block crops
         add(new CropConfig("agave", false, Foods.SWEET_BERRIES, DoubleCropBlock::new));
         add(new CropConfig("ferula", true, Foods.SWEET_BERRIES, DoubleCropBlock::new)); // Asafoetida
@@ -147,18 +146,16 @@ public class FarmingRegistrator
         add(new CropConfig("pitaya", false, Foods.SWEET_BERRIES, DoubleCropBlock::new)); // dragonfruit
         add(new CropConfig("monstera_deliciosa", false, Foods.SWEET_BERRIES, DoubleCropBlock::new));
         add(new CropConfig("tobacco", true, null, DoubleCropBlock::new));
-        add(new CropConfig("tea", true, null, DoubleCropBlock::new));
         add(new CropConfig("black_pepper", false, null, DoubleCropBlock::new));
         add(new CropConfig("jute", true, Foods.BEETROOT, DoubleCropBlock::new)); // molokhia
         add(new CropConfig("cotton", true, null, DoubleCropBlock::new));
         add(new CropConfig("turmeric", false, null, DoubleCropBlock::new));
-        add(new CropConfig("pineapple", false, Foods.BEETROOT, DoubleCropBlock::new)); // plant the top?
         add(new CropConfig("black_aztec_corn", false, Foods.BEETROOT, DoubleCropBlock::new, 0xff191929));
         add(new CropConfig("blue_jade_corn", false, Foods.BEETROOT, DoubleCropBlock::new, 0xff91ace4));
         add(new CropConfig("rainbow_corn", false, Foods.BEETROOT, DoubleCropBlock::new, 0xffae4145));
         add(new CropConfig("sugar_pearl_corn", false, Foods.BEETROOT, DoubleCropBlock::new, 0xffecece6));
         add(new CropConfig("yellow_dent_corn", false, Foods.BEETROOT, DoubleCropBlock::new, 0xffeac237));
-        add(new CropConfig("tomatillo", false, Foods.BEETROOT));
+        add(new CropConfig("tomatillo", false, Foods.BEETROOT, DoubleCropBlock::new));
         add(new CropConfig("huckleberry", false, BERRY_FOOD, DoubleCropBlock::new));
         add(new CropConfig("roma_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
         add(new CropConfig("beefsteak_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
@@ -167,8 +164,8 @@ public class FarmingRegistrator
         add(new CropConfig("white_wonder_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
         add(new CropConfig("cherry_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
         add(new CropConfig("chocolate_pear_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
-        add(new CropConfig("sungold_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
         add(new CropConfig("yellow_pear_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
+        add(new CropConfig("sungold_tomato", false, Foods.BEETROOT, DoubleCropBlock::new));
         add(new CropConfig("sea_buckthorn", false, Foods.BEETROOT, DoubleCropBlock::new));
         add(new CropConfig("konjac", false, Foods.BEETROOT, DoubleCropBlock::new));
         add(new CropConfig("okra", false, Foods.BEETROOT, DoubleCropBlock::new));
@@ -181,7 +178,7 @@ public class FarmingRegistrator
         add(new CropConfig("watercress", false, null, WaterCropBlock::new)); // spawns in rivers
         add(new CropConfig("water_caltrop", false, null, WaterCropBlock::new));
 
-        add(new CropConfig("prickly_pear", false, Foods.BEETROOT)); // TODO it's a cactus fruit
+//        add(new CropConfig("prickly_pear", false, Foods.BEETROOT)); // TODO it's a cactus fruit, remove from crop list
     }};
     public static List<CropConfig> TRELLIS = new ArrayList<>() {{
         add(new CropConfig("kiwi", false, Foods.BEETROOT, TrellisLeafBlock::new));
@@ -197,21 +194,21 @@ public class FarmingRegistrator
         add(new CropConfig("akebia", false, Foods.APPLE, VerticalTrellisLeafBlock::new));
         add(new CropConfig("sarsaparilla", true, null, VerticalTrellisLeafBlock::new));
     }};
-    public static List<CropConfig> VINES = new ArrayList<>() {{
+    public static List<CropConfig> GRAPES = new ArrayList<>() {{
         add(new CropConfig("red_grape", true, Foods.SWEET_BERRIES, VineLeafBlock::new));
-        add(new CropConfig("concord_grape", true, Foods.SWEET_BERRIES, VineLeafBlock::new)); // TODO breedable variants
-        add(new CropConfig("cotton_candy_grape", true, Foods.SWEET_BERRIES, VineLeafBlock::new)); // TODO breedable variants
         add(new CropConfig("green_grape", true, Foods.SWEET_BERRIES, VineLeafBlock::new));
+        add(new CropConfig("concord_grape", true, Foods.SWEET_BERRIES, VineLeafBlock::new));
+        add(new CropConfig("cotton_candy_grape", true, Foods.SWEET_BERRIES, VineLeafBlock::new));
     }};
     public static List<CropConfig> STEMS = new ArrayList<>() {{
-        add(new CropConfig("cantaloupe", true, Foods.MELON_SLICE)); // TODO melon slice
-        add(new CropConfig("honeydew_melon", true, Foods.MELON_SLICE)); // TODO melon slice
+        add(new CropConfig("cantaloupe", true, Foods.MELON_SLICE));
+        add(new CropConfig("honeydew_melon", true, Foods.MELON_SLICE));
     }};
     public static List<CropConfig> HERBS = new ArrayList<>()
     {{
         add(new CropConfig("basil", true, null, HerbBlock::new)); // missing texture
         add(new CropConfig("chives", true, null, HerbBlock::new));
-        add(new CropConfig("coriander", true, null, HerbBlock::new));
+        add(new CropConfig("coriander", false, null, HerbBlock::new));
         add(new CropConfig("cumin", false, null, HerbBlock::new));
         add(new CropConfig("dill", true, null, HerbBlock::new));
         add(new CropConfig("fat_hen", true, null, HerbBlock::new));
@@ -237,7 +234,6 @@ public class FarmingRegistrator
         add(new CropConfig("blueberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("boysenberry", false, BERRY_FOOD, BerryBushBlock::new)); // breed between raspberry and blackberry
         add(new CropConfig("cloudberry", false, BERRY_FOOD, BerryBushBlock::new));
-        add(new CropConfig("checkerberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("cranberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("golden_raspberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("gooseberry", false, BERRY_FOOD, BerryBushBlock::new));
@@ -248,52 +244,52 @@ public class FarmingRegistrator
     }};
     public static List<FishConfig> FISHIES = new ArrayList<>()
     {{
-        add(new FishConfig("anchovy", null, null, false, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("eel", Eel::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("crab", Crab::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("lobster", Lobster::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("oyster", null, null, true, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("clam", null, null, true, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("mussel", null, null, true, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("sea_urchin", null, null, true, Foods.SALMON, null));
-        add(new FishConfig("carp", Carp::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("koi", Koi::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("shrimp", null, null, false, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("walleye", Walleye::new, WalleyeRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("sturgeon", Tuna::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
-        add(new FishConfig("tuna", Tuna::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("anchovy", null, null, false, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("eel", Eel::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("crab", Crab::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("lobster", Lobster::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("oyster", null, null, true, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("clam", null, null, true, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("mussel", null, null, true, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("sea_urchin", null, null, true, Foods.SALMON, null));
+//        add(new FishConfig("carp", Carp::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("koi", Koi::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("shrimp", null, null, false, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("walleye", Walleye::new, WalleyeRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("sturgeon", Tuna::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
+//        add(new FishConfig("tuna", Tuna::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
     }};
 
     public static List<ResourceLocation> CRATED_CROPS = new ArrayList<>()
     {{
-        add(ResourceLocation.withDefaultNamespace("baked_potato"));
-        add(ResourceLocation.withDefaultNamespace("apple"));
-        add(ResourceLocation.withDefaultNamespace("chorus_fruit"));
-        add(ResourceLocation.withDefaultNamespace("sweet_berries"));
-        add(ResourceLocation.withDefaultNamespace("glow_berries"));
-        add(ResourceLocation.withDefaultNamespace("beef"));
-        add(ResourceLocation.withDefaultNamespace("cooked_beef"));
-        add(ResourceLocation.withDefaultNamespace("chicken"));
-        add(ResourceLocation.withDefaultNamespace("cooked_chicken"));
-        add(ResourceLocation.withDefaultNamespace("mutton"));
-        add(ResourceLocation.withDefaultNamespace("cooked_mutton"));
-        add(ResourceLocation.withDefaultNamespace("porkchop"));
-        add(ResourceLocation.withDefaultNamespace("cooked_porkchop"));
-        add(ResourceLocation.withDefaultNamespace("rabbit"));
-        add(ResourceLocation.withDefaultNamespace("cooked_rabbit"));
-        add(ResourceLocation.withDefaultNamespace("salmon"));
-        add(ResourceLocation.withDefaultNamespace("cooked_salmon"));
-        add(ResourceLocation.withDefaultNamespace("cod"));
-        add(ResourceLocation.withDefaultNamespace("cooked_cod"));
-        add(ResourceLocation.withDefaultNamespace("tropical_fish"));
-        add(ResourceLocation.withDefaultNamespace("pufferfish"));
-        add(ResourceLocation.withDefaultNamespace("cocoa_beans"));
-        add(ResourceLocation.withDefaultNamespace("egg"));
-        add(ResourceLocation.withDefaultNamespace("turtle_egg"));
-        add(ResourceLocation.withDefaultNamespace("sniffer_egg"));
-        add(ResourceLocation.withDefaultNamespace("golden_apple"));
-        add(ResourceLocation.withDefaultNamespace("golden_carrot"));
-        add(ResourceLocation.withDefaultNamespace("ink_sac"));
+//        add(ResourceLocation.withDefaultNamespace("baked_potato"));
+//        add(ResourceLocation.withDefaultNamespace("apple"));
+//        add(ResourceLocation.withDefaultNamespace("chorus_fruit"));
+//        add(ResourceLocation.withDefaultNamespace("sweet_berries"));
+//        add(ResourceLocation.withDefaultNamespace("glow_berries"));
+//        add(ResourceLocation.withDefaultNamespace("beef"));
+//        add(ResourceLocation.withDefaultNamespace("cooked_beef"));
+//        add(ResourceLocation.withDefaultNamespace("chicken"));
+//        add(ResourceLocation.withDefaultNamespace("cooked_chicken"));
+//        add(ResourceLocation.withDefaultNamespace("mutton"));
+//        add(ResourceLocation.withDefaultNamespace("cooked_mutton"));
+//        add(ResourceLocation.withDefaultNamespace("porkchop"));
+//        add(ResourceLocation.withDefaultNamespace("cooked_porkchop"));
+//        add(ResourceLocation.withDefaultNamespace("rabbit"));
+//        add(ResourceLocation.withDefaultNamespace("cooked_rabbit"));
+//        add(ResourceLocation.withDefaultNamespace("salmon"));
+//        add(ResourceLocation.withDefaultNamespace("cooked_salmon"));
+//        add(ResourceLocation.withDefaultNamespace("cod"));
+//        add(ResourceLocation.withDefaultNamespace("cooked_cod"));
+//        add(ResourceLocation.withDefaultNamespace("tropical_fish"));
+//        add(ResourceLocation.withDefaultNamespace("pufferfish"));
+//        add(ResourceLocation.withDefaultNamespace("cocoa_beans"));
+//        add(ResourceLocation.withDefaultNamespace("egg"));
+//        add(ResourceLocation.withDefaultNamespace("turtle_egg"));
+//        add(ResourceLocation.withDefaultNamespace("sniffer_egg"));
+//        add(ResourceLocation.withDefaultNamespace("golden_apple"));
+//        add(ResourceLocation.withDefaultNamespace("golden_carrot"));
+//        add(ResourceLocation.withDefaultNamespace("ink_sac"));
     }};
     public static List<ResourceLocation> SEED_BAGS = new ArrayList<>()
     {{
@@ -303,22 +299,50 @@ public class FarmingRegistrator
         add(ResourceLocation.withDefaultNamespace("pitcher_pod"));
     }};
     public static List<FlowerConfig> FLOWERS = new ArrayList<>() {{
-        add(new FlowerConfig("rose_bush", 0xffff4540, true));
-        add(new FlowerConfig("lilac", 0xffde93f1, true));
-        add(new FlowerConfig("peony", 0xffde93f1, true));
-        add(new FlowerConfig("poppy", 0xffff4540, false));
-        add(new FlowerConfig("cornflower", 0xff728ff1, false));
-        add(new FlowerConfig("alium", 0xffe8cffe, false));
-        add(new FlowerConfig("azure_bluet", 0xfff7f7f7, false));
-        add(new FlowerConfig("blue_orchid", 0xff2fcefd, false));
-        add(new FlowerConfig("dandelion", 0xffffec4f, false));
-        add(new FlowerConfig("lily_of_the_valley", 0xffffffff, false));
-        add(new FlowerConfig("oxeye_daisy", 0xffffffff, false));
-        add(new FlowerConfig("tulip", 0xffffffff, false));
-        add(new FlowerConfig("torchflower", 0xfffce257, false));
-        add(new FlowerConfig("wither_rose", 0xff42352e, false));
-
+        // vanilla copies
+        add(new FlowerConfig("rose_bush", 0xffff4540, true, false));
+        add(new FlowerConfig("lilac", 0xffde93f1, true, false));
+        add(new FlowerConfig("peony", 0xffde93f1, true, false));
+        add(new FlowerConfig("poppy", 0xffff4540, false, false));
+        add(new FlowerConfig("cornflower", 0xff728ff1, false, false));
+        add(new FlowerConfig("alium", 0xffe8cffe, false, false));
+        add(new FlowerConfig("azure_bluet", 0xfff7f7f7, false, false));
+        add(new FlowerConfig("blue_orchid", 0xff2fcefd, false, false));
+        add(new FlowerConfig("dandelion", 0xffffec4f, false, false));
+        add(new FlowerConfig("lily_of_the_valley", 0xffffffff, false, false));
+        add(new FlowerConfig("oxeye_daisy", 0xffffffff, false, false));
+        add(new FlowerConfig("tulip", 0xffffffff, false, false));
+        add(new FlowerConfig("torchflower", 0xfffce257, false, false));
+        add(new FlowerConfig("wither_rose", 0xff42352e, false, false));
         // sunflower, spore blossom, pitcher crop
+
+        // new flowers
+        add(new FlowerConfig("amaryllis", 0xffa02c1a, false, false));
+        add(new FlowerConfig("anemone", 0xfff0f0ea, false, false));
+        add(new FlowerConfig("balloon_flower", 0xff6a5fc4, false, false));
+        add(new FlowerConfig("black_bearded_iris", 0xff3c4246, false, false));
+        add(new FlowerConfig("cattail", 0xff765c3d, true, false));
+        add(new FlowerConfig("cape_leadwort", 0xff9ec9e3, true, true));
+        add(new FlowerConfig("chrysanthemum", 0xffdf42a0, false, false));
+
+        add(new FlowerConfig("dahlia", 0xff2e2e2e, false, false));
+        add(new FlowerConfig("great_lobelia", 0xff566ddb, false, false));
+        add(new FlowerConfig("hellebore", 0xff3e5252, false, false));
+        add(new FlowerConfig("himalayan_poppy", 0xff5cd4ee, true, false));
+        add(new FlowerConfig("hydrangea", 0xfffd9db6, true, true));
+        add(new FlowerConfig("motherwort", 0xffbd6c79, true, false));
+
+        add(new FlowerConfig("sea_holly", 0xff4055c5, false, false));
+        add(new FlowerConfig("skullcap", 0xff7c4a9f, false, false));
+        add(new FlowerConfig("stinging_nettle", 0xff4d752f, true, false));
+        add(new FlowerConfig("valerian_root", 0xfffbecf5, true, false));
+
+        add(new FlowerConfig("zinnia", 0xffcaa000, true, false));
+    }};
+    public static List<FlowerConfig> VINES = new ArrayList<>() {{
+        add(new FlowerConfig("blue_jade_vine", 0xff75dbd0, false, false));
+        add(new FlowerConfig("butterfly_pea", 0xff4259ce, false, false));
+        add(new FlowerConfig("morning_glory", 0xff7a3493, false, false));
     }};
 
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<FencedVerticalCropBlockEntity>> FENCED_VERTICAL_CROP_BLOCK_ENTITY;
@@ -363,7 +387,7 @@ public class FarmingRegistrator
                 CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             }
         });
-        VINES.forEach(crop -> {
+        GRAPES.forEach(crop -> {
             registeredBlocks.put(crop.name() + "_leaves", registerBlock(crop.name() + "_leaves", () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LEAVES).offsetType(BlockBehaviour.OffsetType.XYZ).dynamicShape()), false));
             registeredBlocks.put(crop.name(), registerPlantableCrop(crop, () -> new FencedStemBlock(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM)), StemGrowinSeedItem::new));
             registeredBlocks.put("attached_" + crop.name() + "_stem", registerBlock("attached_" + crop.name() + "_stem", () -> new AttachedFencedStemBlock(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.ATTACHED_MELON_STEM)), false));
@@ -419,23 +443,27 @@ public class FarmingRegistrator
         SEED_BAGS.forEach(seedName -> {
             registerItem(seedName.getPath() + "_bag", () -> new SeedBagItem(seedName, new Item.Properties()));
         });
-        FLOWERS.forEach(crop -> {
-            var flower = registerBlock(crop.name(), () -> crop.isDouble() ? new ColorfulTallFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ROSE_BUSH), crop.baseColor()) : new ColorfulFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY), crop.baseColor()), true);
-            registeredBlocks.put(crop.name(), flower);
-            if (!crop.isDouble()) {
-                var pottedFlower = registerBlock("potted_" + crop.name(), () -> new ColorfulFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_OAK_SAPLING)), false);
-                registeredBlocks.put("potted_" + crop.name(), pottedFlower);
-                ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()), pottedFlower);
+        FLOWERS.forEach(flowerConfig -> {
+            var flower = registerBlock(flowerConfig.name(), () -> flowerConfig.isDouble() ? new ColorfulTallFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ROSE_BUSH), flowerConfig.baseColor()) : new ColorfulFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY), flowerConfig.baseColor()), true);
+            registeredBlocks.put(flowerConfig.name(), flower);
+            if (!flowerConfig.isDouble()) {
+                var pottedFlower = registerBlock("potted_" + flowerConfig.name(), () -> new ColorfulFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_OAK_SAPLING)), false);
+                registeredBlocks.put("potted_" + flowerConfig.name(), pottedFlower);
+                ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flowerConfig.name()), pottedFlower);
             }
+        });
+        VINES.forEach(flowerConfig -> {
+            var flower = registerBlock(flowerConfig.name(), () -> new ColorfulVineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.VINE), flowerConfig.baseColor()), true);
+            registeredBlocks.put(flowerConfig.name(), flower);
         });
         FENCED_VERTICAL_CROP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_crop", () -> BlockEntityType.Builder.of(FencedVerticalCropBlockEntity::new,
                 VERTICAL_TRELLIS.stream().map(cropConfig -> registeredBlocks.get(cropConfig.name()).get()).toList().toArray(new Block[0])
         ).build(null));
         FENCED_LEAVES_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_leaves", () -> BlockEntityType.Builder.of(FencedLeafBlockEntity::new,
-                Stream.concat(TRELLIS.stream(), VINES.stream()).map(cropConfig -> registeredBlocks.get(cropConfig.name() + "_leaves").get()).toList().toArray(new Block[0])
+                Stream.concat(TRELLIS.stream(), GRAPES.stream()).map(cropConfig -> registeredBlocks.get(cropConfig.name() + "_leaves").get()).toList().toArray(new Block[0])
         ).build(null));
         FENCED_STEM_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_stem", () -> BlockEntityType.Builder.of(FencedStemBlockEntity::new,
-                Stream.concat(TRELLIS.stream(), VINES.stream()).map(cropConfig -> List.of(registeredBlocks.get("attached_" + cropConfig.name() + "_stem").get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0])
+                Stream.concat(TRELLIS.stream(), GRAPES.stream()).map(cropConfig -> List.of(registeredBlocks.get("attached_" + cropConfig.name() + "_stem").get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0])
         ).build(null));
 
         CROP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("crop", () -> BlockEntityType.Builder.of(SimpleCropBlockEntity::new,
@@ -450,12 +478,12 @@ public class FarmingRegistrator
     }
 
     public static Block[] getAllCrops() {
-        return Stream.concat(VINES.stream(), Stream.concat(VERTICAL_TRELLIS.stream(), Stream.concat(TRELLIS.stream(), Stream.concat(BERRIES.stream(), Stream.concat(CROPS.stream(), Stream.concat(VANILLA_CROPS.stream(), HERBS.stream()))))))
+        return Stream.concat(GRAPES.stream(), Stream.concat(VERTICAL_TRELLIS.stream(), Stream.concat(TRELLIS.stream(), Stream.concat(BERRIES.stream(), Stream.concat(CROPS.stream(), Stream.concat(VANILLA_CROPS.stream(), HERBS.stream()))))))
                 .map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0]);
     }
 
     public static Block[] getFlowers() {
-        return FLOWERS.stream()
+        return Stream.concat(FLOWERS.stream(), VINES.stream())
                 .map(cropConfig -> registeredBlocks.get(cropConfig.name()).get()).toList().toArray(new Block[0]);
     }
 
@@ -472,9 +500,9 @@ public class FarmingRegistrator
     public static final DeferredHolder<Item, Item> DRIED_TOBACCO = registerItem("dried_tobacco");
     public static final DeferredHolder<Item, Item> BLACK_TEA = registerItem("black_tea");
     public static final DeferredHolder<Item, Item> CORN_COB_PIPE = registerItem("corn_cob_pipe", () -> new CornPipeItem(new Item.Properties().stacksTo(1).durability(200)));
-    public static final DeferredHolder<Item, Item> HOTDOG_ARMOR = registerItem("hotdog_armor", () -> new AnimalArmorItem(
-            ArmorMaterials.ARMADILLO, AnimalArmorItem.BodyType.CANINE, true, new Item.Properties().durability(ArmorItem.Type.BODY.getDurability(4))
-    ));
+//    public static final DeferredHolder<Item, Item> HOTDOG_ARMOR = registerItem("hotdog_armor", () -> new AnimalArmorItem(
+//            ArmorMaterials.ARMADILLO, AnimalArmorItem.BodyType.CANINE, true, new Item.Properties().durability(ArmorItem.Type.BODY.getDurability(4))
+//    ));
 
     // Composter mushroom growth
     public static final DeferredHolder<Block, Block> BROWN_MUSHROOM_GROWTH = registerBlock("brown_mushroom_growth", () -> new MushroomGrowthBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape(), ResourceLocation.withDefaultNamespace("brown_mushroom")), false);
@@ -486,9 +514,8 @@ public class FarmingRegistrator
     ).build(null));
 
     // Machines
-    public static final DeferredHolder<Block, Block> FISH_TRAP = registerBlock("fish_trap", () -> new FishTrapBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL)), true);
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FishTrapBlockEntity>> FISH_TRAP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fish_trap", () -> BlockEntityType.Builder.of(FishTrapBlockEntity::new, FISH_TRAP.get()).build(null));
-    public static final DeferredHolder<Block, Block> FARM_BLOCK = registerBlock("farm_block", () -> new FarmBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)), false);
+//    public static final DeferredHolder<Block, Block> FISH_TRAP = registerBlock("fish_trap", () -> new FishTrapBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL)), true);
+//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FishTrapBlockEntity>> FISH_TRAP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fish_trap", () -> BlockEntityType.Builder.of(FishTrapBlockEntity::new, FISH_TRAP.get()).build(null));
     public static final DeferredHolder<Block, Block> FARM_HATCH = registerBlock("farm_hatch", () -> new FarmHatch(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)), true);
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FarmHatchBlockEntity>> FARM_HATCH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("farm_hatch", () -> BlockEntityType.Builder.of(FarmHatchBlockEntity::new, FARM_HATCH.get()).build(null));
     public static final DeferredHolder<Block, Block> FARM_CONTROLLER = registerBlock("farm_controller", () -> new FarmControllerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).noOcclusion()), true);
@@ -497,11 +524,11 @@ public class FarmingRegistrator
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FeedingTroughBlockEntity>> FEEDING_TROUGH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("feeding_trough", () -> BlockEntityType.Builder.of(FeedingTroughBlockEntity::new, FEEDING_TROUGH.get()).build(null));
     public static final DeferredHolder<Block, Block> WATERING_TROUGH = registerBlock("watering_trough", () -> new WateringTroughBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).noOcclusion()), true);
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WateringTroughBlockEntity>> WATERING_TROUGH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("watering_trough", () -> BlockEntityType.Builder.of(WateringTroughBlockEntity::new, WATERING_TROUGH.get()).build(null));
-    public static final DeferredHolder<Block, Block> SALT_LICK = registerBlock("salt_lick", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()), true);
-    public static final DeferredHolder<Block, Block> CHILD_SEPARATOR = registerBlock("child_separator", () -> new ChildSeparatorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()), true);
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ChildSeparatorBlockEntity>> CHILD_SEPARATOR_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("child_separator", () -> BlockEntityType.Builder.of(ChildSeparatorBlockEntity::new, CHILD_SEPARATOR.get()).build(null));
-    public static final DeferredHolder<Block, Block> SLAUGHTER_STATION = registerBlock("slaughter_station", () -> new SlaughterStationBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()), true);
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SlaughterStationBlockEntity>> SLAUGHTER_STATION_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("slaughter_station", () -> BlockEntityType.Builder.of(SlaughterStationBlockEntity::new, SLAUGHTER_STATION.get()).build(null));
+//    public static final DeferredHolder<Block, Block> SALT_LICK = registerBlock("salt_lick", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()), true);
+//    public static final DeferredHolder<Block, Block> CHILD_SEPARATOR = registerBlock("child_separator", () -> new ChildSeparatorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()), true);
+//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ChildSeparatorBlockEntity>> CHILD_SEPARATOR_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("child_separator", () -> BlockEntityType.Builder.of(ChildSeparatorBlockEntity::new, CHILD_SEPARATOR.get()).build(null));
+//    public static final DeferredHolder<Block, Block> SLAUGHTER_STATION = registerBlock("slaughter_station", () -> new SlaughterStationBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()), true);
+//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SlaughterStationBlockEntity>> SLAUGHTER_STATION_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("slaughter_station", () -> BlockEntityType.Builder.of(SlaughterStationBlockEntity::new, SLAUGHTER_STATION.get()).build(null));
     // TODO drying rack with drying recipe
 
     public static final DeferredHolder<MenuType<?>, MenuType<FarmControllerContainer>> FARM_CONTROLLER_MENU = ProductiveFarming.CONTAINER_TYPES.register("farm_controller", () ->
@@ -512,26 +539,25 @@ public class FarmingRegistrator
     );
 
     // POIs
-    public static DeferredHolder<PoiType, PoiType> SALT_LICK_POI = ProductiveFarming.POI_TYPES.register("salt_lick", () -> {
-        Set<BlockState> blockStates = new HashSet<>(SALT_LICK.get().getStateDefinition().getPossibleStates());
-        return new PoiType(blockStates, 1, 1);
-    });
+//    public static DeferredHolder<PoiType, PoiType> SALT_LICK_POI = ProductiveFarming.POI_TYPES.register("salt_lick", () -> {
+//        Set<BlockState> blockStates = new HashSet<>(SALT_LICK.get().getStateDefinition().getPossibleStates());
+//        return new PoiType(blockStates, 1, 1);
+//    });
 
     // Recipes
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CROP_FRUITING = ProductiveFarming.RECIPE_SERIALIZERS.register("crop_fruiting", CropFruitingRecipe.Serializer::new);
     public static final DeferredHolder<RecipeType<?>, RecipeType<CropFruitingRecipe>> CROP_FRUITING_TYPE = ProductiveFarming.RECIPE_TYPES.register("crop_fruiting", () -> new RecipeType<>() {});
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CROP_POLLINATION = ProductiveFarming.RECIPE_SERIALIZERS.register("crop_pollination", CropPollinationRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeType<?>, RecipeType<CropPollinationRecipe>> CROP_POLLINATION_TYPE = ProductiveFarming.RECIPE_TYPES.register("crop_pollination", () -> new RecipeType<>() {});
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CROP_MUTATION = ProductiveFarming.RECIPE_SERIALIZERS.register("crop_mutation", CropMutationRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CropMutationRecipe>> CROP_MUTATION_TYPE = ProductiveFarming.RECIPE_TYPES.register("crop_mutation", () -> new RecipeType<>() {});
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> FLOWER_DYE_CRAFTING = ProductiveFarming.RECIPE_SERIALIZERS.register("flower_dye_crafting", FlowerDyeCraftingRecipe.Serializer::new);
-//    public static final DeferredHolder<RecipeType<?>, RecipeType<FlowerDyeCraftingRecipe>> FLOWER_DYE_CRAFTING_TYPE = ProductiveFarming.RECIPE_TYPES.register("flower_dye_crafting", () -> new RecipeType<>() {});
 
     // Fluids
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> NUTRIENT_WATER = registerFluid("nutrient_water");
 
     // Features
-    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> CLAM_FEATURE = ProductiveFarming.FEATURES.register("clam", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "clam"))));
-    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> OYSTER_FEATURE = ProductiveFarming.FEATURES.register("oyster", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "oyster"))));
-    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> MUSSEL_FEATURE = ProductiveFarming.FEATURES.register("mussel", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "mussel"))));
+//    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> CLAM_FEATURE = ProductiveFarming.FEATURES.register("clam", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "clam"))));
+//    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> OYSTER_FEATURE = ProductiveFarming.FEATURES.register("oyster", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "oyster"))));
+//    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> MUSSEL_FEATURE = ProductiveFarming.FEATURES.register("mussel", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "mussel"))));
 
     public static final ResourceKey<CreativeModeTab> TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, ProductiveFarming.MODID));
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = ProductiveFarming.CREATIVE_MODE_TABS.register(ProductiveFarming.MODID, () -> {
@@ -550,7 +576,7 @@ public class FarmingRegistrator
         if (crop.hasSeed()) {
             registerItem(crop.name() + "_seeds", () -> item.create(cropBlock.get(), new Item.Properties()));
             if (crop.food() != null) {
-                registerItem(crop.name(), crop.food());
+                registerCropItem(crop.name(), crop.food());
             } else {
                 registerItem(crop.name());
             }
@@ -569,6 +595,10 @@ public class FarmingRegistrator
     }
 
     public static DeferredHolder<Item, Item> registerItem(String name, FoodProperties food) {
+        return registerItem(name, () -> new Item(new Item.Properties().food(food)));
+    }
+
+    public static DeferredHolder<Item, Item> registerCropItem(String name, FoodProperties food) {
         return registerItem(name, () -> new CropItem(new Item.Properties().food(food)));
     }
 

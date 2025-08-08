@@ -1,6 +1,5 @@
 package cy.jdkdigital.productivefarming.common.block.entity;
 
-import cy.jdkdigital.productivelib.common.block.entity.AbstractBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;

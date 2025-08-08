@@ -2,9 +2,7 @@ package cy.jdkdigital.productivefarming.datagen;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
-import cy.jdkdigital.productivefarming.util.FarmUtil;
 import cy.jdkdigital.productivefarming.util.TraitsHelper;
-import cy.jdkdigital.productivelib.util.ColorUtil;
 import cy.jdkdigital.productivelib.util.LangUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -13,7 +11,6 @@ import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.MobBucketItem;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LanguageProvider extends net.neoforged.neoforge.common.data.LanguageProvider
@@ -26,6 +23,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
     protected void addTranslations() {
         add("itemGroup." + ProductiveFarming.MODID, "Productive Farming");
         add("jei." + ProductiveFarming.MODID + ".crop_fruiting", "Crop Fruiting");
+        add("jei." + ProductiveFarming.MODID + ".crop_mutation", "Crop Mutation");
         add("jade." + ProductiveFarming.MODID + ".mutation", "Mutation: %s");
         add("config.jade.plugin_" + ProductiveFarming.MODID + ".crop", "Crops");
         add(ProductiveFarming.MODID + ".screen.progress", "Progress: %s");
@@ -45,20 +43,27 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ProductiveFarming.MODID + ".trait_value.high", "High");
         add(ProductiveFarming.MODID + ".trait_value.very_high", "Very High");
 
-        ProductiveFarming.BLOCKS.getEntries().forEach(itemRegistryObject -> {
-            add(itemRegistryObject.get(), LangUtil.capName(BuiltInRegistries.BLOCK.getKey(itemRegistryObject.get()).getPath()));
+        ProductiveFarming.BLOCKS.getEntries().forEach(holder -> {
+            var regName = BuiltInRegistries.BLOCK.getKey(holder.get()).getPath();
+            if (regName.equals("ferula_crate")) {
+                add(holder.get(), "Asafoetida Crate");
+            } else {
+                add(holder.get(), LangUtil.capName(BuiltInRegistries.BLOCK.getKey(holder.get()).getPath()));
+            }
         });
-        ProductiveFarming.ITEMS.getEntries().forEach(itemRegistryObject -> {
-            if (itemRegistryObject.get() instanceof MobBucketItem) {
-                add(itemRegistryObject.get(), "Bucket of " + capName(BuiltInRegistries.ITEM.getKey(itemRegistryObject.get()).getPath().replace("_bucket", "")));
-            } else if (!(itemRegistryObject.get() instanceof BlockItem) || itemRegistryObject.get() instanceof ItemNameBlockItem) {
-                var regName = BuiltInRegistries.ITEM.getKey(itemRegistryObject.get()).getPath();
+        ProductiveFarming.ITEMS.getEntries().forEach(holder -> {
+            if (holder.get() instanceof MobBucketItem) {
+                add(holder.get(), "Bucket of " + capName(BuiltInRegistries.ITEM.getKey(holder.get()).getPath().replace("_bucket", "")));
+            } else if (!(holder.get() instanceof BlockItem) || holder.get() instanceof ItemNameBlockItem) {
+                var regName = BuiltInRegistries.ITEM.getKey(holder.get()).getPath();
                 if (regName.contains("grape_seeds")) {
-                    add(itemRegistryObject.get(), LangUtil.capName(regName.replace("seeds", "propagule")));
+                    add(holder.get(), LangUtil.capName(regName.replace("seeds", "propagule")));
                 } else if (regName.contains("sarsaparilla_vine_seeds")) {
-                    add(itemRegistryObject.get(), LangUtil.capName(regName.replace("seeds", "roots")));
-                } else {
-                    add(itemRegistryObject.get(), LangUtil.capName(regName));
+                    add(holder.get(), LangUtil.capName(regName.replace("seeds", "roots")));
+                } else if (regName.equals("ferula")) {
+                    add(holder.get(), "Asafoetida");
+                }  else {
+                    add(holder.get(), LangUtil.capName(regName));
                 }
             }
         });
@@ -72,7 +77,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         FarmingRegistrator.VANILLA_CROPS.forEach(crop -> {
             add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
         });
-        FarmingRegistrator.VINES.forEach(crop -> {
+        FarmingRegistrator.GRAPES.forEach(crop -> {
             add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
         });
         FarmingRegistrator.BERRIES.forEach(crop -> {
@@ -132,6 +137,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("thimbleberry", "Rubus parviflorus");
             put("agave", "Agave tequilana");
             put("basil", "Ocimum basilicum");
+            put("blue_borage", "Borago officinalis");
             put("cardamon", "Elettaria cardamomum");
             put("catnip", "Nepeta cataria");
             put("caraway", "Carum carvi");
@@ -237,6 +243,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("barley", "Hordeum vulgare");
             put("rye", "Secale cereale");
             put("amaranth", "Amaranthus blitum");
+            put("teff", "Eragrostis tef");
             put("pitaya", "Selenicereus undatus");
             put("monstera_deliciosa", "Monstera deliciosa");
             put("tobacco", "Nicotiana tabacum");
@@ -276,6 +283,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("watermint", "Mentha aquatica");
             put("lemon_balm", "Melissa officinalis");
             put("lemongrass", "Cymbopogon schoenanthus");
+            put("wintergreen", "Gaultheria procumbens");
         }};
 
         return names.getOrDefault(name, "Missing taxonomy for " + name);

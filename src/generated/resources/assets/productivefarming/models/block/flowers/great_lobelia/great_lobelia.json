@@ -1,0 +1,7 @@
+{
+  "parent": "productivefarming:block/cross_overlay",
+  "textures": {
+    "cross": "productivefarming:block/flowers/great_lobelia/great_lobelia",
+    "edge": "productivefarming:block/flowers/great_lobelia/great_lobelia_flower"
+  }
+}
