@@ -54,11 +54,18 @@ public class TraitsHelper
         return 0;
     }
 
-    public static void setDefaultsOnItem(ItemStack stack) {
+    public static void setDefaultsOnStack(ItemStack stack) {
         stack.set(FarmingDataComponents.GROWTH, getDefaultTrait(stack.getItemHolder(), FarmingDataComponents.GROWTH));
         stack.set(FarmingDataComponents.YIELD, getDefaultTrait(stack.getItemHolder(), FarmingDataComponents.YIELD));
         stack.set(FarmingDataComponents.RESISTANCE, getDefaultTrait(stack.getItemHolder(), FarmingDataComponents.RESISTANCE));
         stack.set(FarmingDataComponents.MUTABILITY, getDefaultTrait(stack.getItemHolder(), FarmingDataComponents.MUTABILITY));
+    }
+
+    public static void copyTraitsToStack(ItemStack in, ItemStack stack) {
+        stack.set(FarmingDataComponents.GROWTH, in.getOrDefault(FarmingDataComponents.GROWTH, 0));
+        stack.set(FarmingDataComponents.YIELD, in.getOrDefault(FarmingDataComponents.YIELD, 0));
+        stack.set(FarmingDataComponents.RESISTANCE, in.getOrDefault(FarmingDataComponents.RESISTANCE, 0));
+        stack.set(FarmingDataComponents.MUTABILITY, in.getOrDefault(FarmingDataComponents.MUTABILITY, 0));
     }
 
     public static int getDefaultTrait(Holder<Item> item, Supplier<DataComponentType<Integer>> trait) {

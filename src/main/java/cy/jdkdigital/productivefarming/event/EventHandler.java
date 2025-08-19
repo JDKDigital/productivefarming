@@ -46,7 +46,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -278,7 +277,7 @@ public class EventHandler
         if (Config.SERVER.traitsOnVanillaCrops.get() && event.getEntity() instanceof ItemEntity itemEntity) {
             var stack = itemEntity.getItem();
             if (stack.is(ModTags.Items.VANILLA_SEEDS) && !stack.has(FarmingDataComponents.GROWTH)) {
-                TraitsHelper.setDefaultsOnItem(stack);
+                TraitsHelper.setDefaultsOnStack(stack);
             }
         }
     }
