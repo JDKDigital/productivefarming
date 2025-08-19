@@ -3,7 +3,7 @@
   "package": "cy.jdkdigital.productivefarming.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MixinBlockItem",
+    "MixinBlock",
     "MixinFarmBlock",
     "MixinFlowerPotBlock"
   ],

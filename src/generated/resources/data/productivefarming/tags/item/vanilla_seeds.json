@@ -3,6 +3,10 @@
     "minecraft:wheat_seeds",
     "minecraft:beetroot_seeds",
     "minecraft:potato",
-    "minecraft:carrot"
+    "minecraft:carrot",
+    "minecraft:red_mushroom",
+    "minecraft:brown_mushroom",
+    "minecraft:crimson_fungus",
+    "minecraft:warped_fungus"
   ]
 }

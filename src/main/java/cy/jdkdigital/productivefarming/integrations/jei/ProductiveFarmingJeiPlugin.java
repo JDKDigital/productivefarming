@@ -80,6 +80,5 @@ public class ProductiveFarmingJeiPlugin implements IModPlugin
         registration.addRecipes(CROP_FRUITING_TYPE, fruitingRecipeList);
         registration.addRecipes(CROP_FRUITING_TYPE, recipeManager.getAllRecipesFor(FarmingRegistrator.CROP_FRUITING_TYPE.get()));
         registration.addRecipes(CROP_MUTATION_TYPE, recipeManager.getAllRecipesFor(FarmingRegistrator.CROP_MUTATION_TYPE.get()));
-
     }
 }

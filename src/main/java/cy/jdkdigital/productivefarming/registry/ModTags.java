@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 public class ModTags
 {
     public static class Blocks {
+        public static final TagKey<Block> FARM_WALL_BLOCKS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "farm_wall_blocks"));
         public static final TagKey<Block> FARM_BLOCKS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "farm_blocks"));
         public static final TagKey<Block> POLLINATABLE = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "pollinatable"));
         public static final TagKey<Block> FARMABLE_FISH_BLOCKS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "farmable_fish_blocks"));
@@ -22,9 +23,11 @@ public class ModTags
         public static final TagKey<Block> SNOWY_VILLAGE_FARM_CROPS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "snowy_village_farm_crops"));
         public static final TagKey<Block> TAIGA_VILLAGE_FARM_CROPS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "taiga_village_farm_crops"));
         public static final TagKey<Block> DESERT_VILLAGE_FARM_CROPS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "desert_village_farm_crops"));
+        public static final TagKey<Block> CAN_SPAWN_FROM_BONEMEAL = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "can_spawn_from_bonemeal"));
     }
 
     public static class Items {
+        public static final TagKey<Item> FARM_WALL_BLOCKS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "farm_wall_blocks"));
         public static final TagKey<Item> VANILLA_SEEDS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "vanilla_seeds"));
         public static final TagKey<Item> CRAB_FOOD = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "crab_food"));
         public static final TagKey<Item> FERTILIZERS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "fertilizers"));

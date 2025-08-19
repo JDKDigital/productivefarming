@@ -24,14 +24,17 @@ public class BlockTagProvider extends BlockTagsProvider
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(FarmingRegistrator.FARM_CONTROLLER.get(), FarmingRegistrator.FEEDING_TROUGH.get(), FarmingRegistrator.WATERING_TROUGH.get());
         tag(ModTags.Blocks.FARMLAND).add(Blocks.FARMLAND);
-        tag(ModTags.Blocks.FARM_BLOCKS)
+        tag(ModTags.Blocks.FARM_WALL_BLOCKS)
                 .addTag(BlockTags.STONE_BRICKS)
+                .addTag(Tags.Blocks.GLASS_BLOCKS)
+                .add(Blocks.HOPPER)
                 .add(Blocks.BRICKS, Blocks.MUD_BRICKS, Blocks.QUARTZ_BRICKS, Blocks.PRISMARINE_BRICKS)
                 .add(Blocks.DEEPSLATE_BRICKS, Blocks.CRACKED_DEEPSLATE_BRICKS, Blocks.END_STONE_BRICKS)
                 .add(Blocks.NETHER_BRICKS, Blocks.CRACKED_NETHER_BRICKS, Blocks.CHISELED_NETHER_BRICKS, Blocks.RED_NETHER_BRICKS)
-                .add(Blocks.TUFF_BRICKS, Blocks.CHISELED_TUFF_BRICKS, Blocks.POLISHED_BLACKSTONE_BRICKS, Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS)
-                .add(FarmingRegistrator.FARM_CONTROLLER.get(), FarmingRegistrator.FARM_HATCH.get());
+                .add(Blocks.TUFF_BRICKS, Blocks.CHISELED_TUFF_BRICKS, Blocks.POLISHED_BLACKSTONE_BRICKS, Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS);
+        tag(ModTags.Blocks.FARM_BLOCKS).addTag(ModTags.Blocks.FARM_WALL_BLOCKS).add(FarmingRegistrator.FARM_CONTROLLER.get(), FarmingRegistrator.FARM_HATCH.get());
 
         tag(BlockTags.MAINTAINS_FARMLAND).addTag(Tags.Blocks.FENCES).add(
                 BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cantaloupe")),
@@ -41,6 +44,28 @@ public class BlockTagProvider extends BlockTagsProvider
         tag(BlockTags.create(ResourceLocation.parse("utilitarian:farmland_cansurvive"))).addTag(Tags.Blocks.FENCES).add(
                 BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cantaloupe")),
                 BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "honeydew_melon"))
+        );
+
+        // Flowers from bonemeal
+        tag(ModTags.Blocks.CAN_SPAWN_FROM_BONEMEAL).add(
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "amaryllis")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "anemone")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "balloon_flower")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "black_bearded_iris")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cattail")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cape_leadwort")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "chrysanthemum")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "dahlia")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "great_lobelia")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "hellebore")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "himalayan_poppy")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "hydrangea")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "motherwort")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "sea_holly")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "skullcap")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "stinging_nettle")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "valerian_root")),
+                BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "zinnia"))
         );
 
         tag(ModTags.Blocks.PLAINS_VILLAGE_FARM_CROPS).add(

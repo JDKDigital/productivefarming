@@ -1,6 +1,5 @@
 package cy.jdkdigital.productivefarming.common.block.entity;
 
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.DoubleCropBlock;
 import cy.jdkdigital.productivefarming.common.item.PollenItem;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
@@ -41,6 +40,7 @@ public abstract class CropBlockEntity extends AbstractBlockEntity
     public void setMutation(ResourceLocation mutation) {
         setMutation(mutation, false);
     }
+
     public void setMutation(ResourceLocation mutation, boolean recursive) {
         this.mutation = mutation;
         this.setChanged();

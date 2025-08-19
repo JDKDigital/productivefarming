@@ -8,10 +8,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Nullable;
 
-public record CropPollinationRecipeBuilder(ResourceLocation targetCrop, ResourceLocation pollenCrop, ResourceLocation result, float chance) implements RecipeBuilder
+public record CropMutationRecipeBuilder(ResourceLocation targetCrop, ResourceLocation pollenCrop, ResourceLocation result, float chance) implements RecipeBuilder
 {
-    public static CropPollinationRecipeBuilder direct(ResourceLocation targetCrop, ResourceLocation pollenCrop, ResourceLocation result, float chance) {
-        return new CropPollinationRecipeBuilder(targetCrop, pollenCrop, result, chance);
+    public static CropMutationRecipeBuilder direct(ResourceLocation targetCrop, ResourceLocation pollenCrop, ResourceLocation result, float chance) {
+        return new CropMutationRecipeBuilder(targetCrop, pollenCrop, result, chance);
     }
 
     @Override

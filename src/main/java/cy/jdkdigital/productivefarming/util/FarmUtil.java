@@ -188,11 +188,11 @@ public class FarmUtil
             if (!matchedRecipes.isEmpty()) {
                 RecipeHolder<CropMutationRecipe> pickedRecipe = (RecipeHolder<CropMutationRecipe>) matchedRecipes.keySet().toArray()[level.random.nextInt(matchedRecipes.size())];
 
-                BlockPos targetPos = cropMap.get(pickedRecipe.value().targetCrop);
+                BlockPos targetPos = cropMap.get(pickedRecipe.value().targetCrop());
 
-                if (level.random.nextFloat() <= (pickedRecipe.value().chance * (isSpecialPollinator ? 5 : 1))) {
+                if (level.random.nextFloat() <= (pickedRecipe.value().chance() * (isSpecialPollinator ? 5 : 1))) {
                     if (level.getBlockEntity(targetPos) instanceof CropBlockEntity cropBlockEntity) {
-                        cropBlockEntity.setMutation(pickedRecipe.value().mutation);
+                        cropBlockEntity.setMutation(pickedRecipe.value().mutation());
                     }
                 }
             }

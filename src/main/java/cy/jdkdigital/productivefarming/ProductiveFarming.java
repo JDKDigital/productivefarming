@@ -1,8 +1,10 @@
 package cy.jdkdigital.productivefarming;
 
 import com.mojang.logging.LogUtils;
+import cy.jdkdigital.productivefarming.integrations.ponder.FarmingPonderPlugin;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,6 +27,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -82,6 +85,7 @@ public class ProductiveFarming
         // TODO
         // multiblock farm: controller, siding, in/output, RF?
         // different soil?
+        // mob farming machines to be as high as a fence and show a fence top based on the fence on one side
 
         // Tamable lobster that brings you fishing loot in the morning
 
@@ -102,5 +106,9 @@ public class ProductiveFarming
         // play-ball for doggos with squeaky toy sound
 
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
+
+        if(FMLEnvironment.dist.isClient()) {
+            PonderIndex.addPlugin(new FarmingPonderPlugin());
+        }
     }
 }

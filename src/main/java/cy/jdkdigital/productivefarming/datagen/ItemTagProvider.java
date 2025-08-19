@@ -31,6 +31,7 @@ public class ItemTagProvider extends ItemTagsProvider
     protected void addTags(HolderLookup.Provider provider) {
         copy(BlockTags.SMALL_FLOWERS, ItemTags.SMALL_FLOWERS);
         copy(BlockTags.TALL_FLOWERS, ItemTags.TALL_FLOWERS);
+        copy(ModTags.Blocks.FARM_WALL_BLOCKS, ModTags.Items.FARM_WALL_BLOCKS);
         tag(ItemTags.DURABILITY_ENCHANTABLE).add(FarmingRegistrator.CORN_COB_PIPE.get());
         tag(ModTags.Items.FERTILIZERS).add(Items.BONE_MEAL);
         tag(ModTags.Items.MUSHROOMS).add(Items.BROWN_MUSHROOM, Items.RED_MUSHROOM, Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS);
@@ -43,7 +44,7 @@ public class ItemTagProvider extends ItemTagsProvider
                 .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "sugar_pearl_corn")))
                 .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "yellow_dent_corn")));
 
-        tag(ModTags.Items.VANILLA_SEEDS).add(Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS, Items.POTATO, Items.CARROT);
+        tag(ModTags.Items.VANILLA_SEEDS).add(Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS, Items.POTATO, Items.CARROT, Items.RED_MUSHROOM, Items.BROWN_MUSHROOM, Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS);
 
 //        tag(ModTags.Items.CRAB_FOOD)
 //                .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "raw_shrimp")))

@@ -1,0 +1,13 @@
+1.21.1-0.2.0-pre
+
+- Increased farm controller inventory
+- Display crop stats and latin name on shrooms
+- Shroom growths on composters can now be harvested
+- Limit flowers gained from bonemealing to modded flowers only
+- Fish farms have increased entity limit and increased nutrient rich water production
+- Allowed glass blocks in farm multiblock structure
+
+
+1.21.1-0.1.1
+
+- Removed some debug out

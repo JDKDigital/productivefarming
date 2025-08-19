@@ -338,6 +338,8 @@ public class FarmingRegistrator
         add(new FlowerConfig("valerian_root", 0xfffbecf5, true, false));
 
         add(new FlowerConfig("zinnia", 0xffcaa000, true, false));
+
+        // when adding new flowers add to ModTags.Blocks.CAN_SPAWN_FROM_BONEMEAL
     }};
     public static List<FlowerConfig> VINES = new ArrayList<>() {{
         add(new FlowerConfig("blue_jade_vine", 0xff75dbd0, false, false));

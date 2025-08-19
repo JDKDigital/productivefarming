@@ -1,3 +1,13 @@
+- blacklist some flowers from natural and bonemeal spawns
+- fish fish farming
+- balance nutrient water production
+- make it easy to disable a crop (tags for trades)
+- tags to support farmers delight foods
+- botany pots compat
+- farming for blockheads market recipes
+- chance for seed drop on harvest for crops that have seeds
+
+
 - Implement growth resistance trait
 - Implement growth mutability trait
 

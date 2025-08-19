@@ -4,6 +4,7 @@ import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.DoubleCropBlock;
 import cy.jdkdigital.productivefarming.common.block.entity.ColorfulFlowerBlockEntity;
+import cy.jdkdigital.productivefarming.common.block.entity.MushroomGrowthCropBlockEntity;
 import cy.jdkdigital.productivefarming.integrations.productivebees.CompatHandler;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
@@ -198,6 +199,9 @@ public class EventHandler
                     for (Direction direction : Direction.Plane.HORIZONTAL.shuffledCopy(serverLevel.random)) {
                         if (serverLevel.getBlockState(event.getPos().relative(direction)).isAir()) {
                             serverLevel.setBlockAndUpdate(event.getPos().relative(direction), growth.setValue(BlockStateProperties.HORIZONTAL_FACING, direction));
+                            if (serverLevel.getBlockEntity(event.getPos().relative(direction)) instanceof MushroomGrowthCropBlockEntity growthCropBlockEntity) {
+                                growthCropBlockEntity.applyComponentsFromItemStack(event.getItemStack());
+                            }
                             break;
                         }
                     }
@@ -309,15 +313,17 @@ public class EventHandler
                 if (event.getLevel().random.nextInt(8) == 0) {
                     FlowerConfig flower = FarmingRegistrator.FLOWERS.get(event.getLevel().random.nextInt(FarmingRegistrator.FLOWERS.size()));
                     BlockState newFlower = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flower.name())).defaultBlockState();
-                    event.getLevel().setBlockAndUpdate(position, newFlower);
-                    // for double flower
-                    if (newFlower.is(BlockTags.TALL_FLOWERS) && event.getLevel().getBlockEntity(position) instanceof ColorfulFlowerBlockEntity flowerBlockEntity) {
-                        event.getLevel().setBlockAndUpdate(position.above(), newFlower.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
-                        if (event.getLevel().getBlockEntity(position.above()) instanceof ColorfulFlowerBlockEntity flowerBlockEntityAbove) {
-                            flowerBlockEntityAbove.setColor(flowerBlockEntity.getColor());
+                    if (newFlower.is(ModTags.Blocks.CAN_SPAWN_FROM_BONEMEAL)) {
+                        event.getLevel().setBlockAndUpdate(position, newFlower);
+                        // for double flower
+                        if (newFlower.is(BlockTags.TALL_FLOWERS) && event.getLevel().getBlockEntity(position) instanceof ColorfulFlowerBlockEntity flowerBlockEntity) {
+                            event.getLevel().setBlockAndUpdate(position.above(), newFlower.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
+                            if (event.getLevel().getBlockEntity(position.above()) instanceof ColorfulFlowerBlockEntity flowerBlockEntityAbove) {
+                                flowerBlockEntityAbove.setColor(flowerBlockEntity.getColor());
+                            }
                         }
+                        break;
                     }
-                    break;
                 }
             }
         }
@@ -325,7 +331,7 @@ public class EventHandler
 
     @SubscribeEvent
     public static void onVillagerTradesEvent(VillagerTradesEvent event) {
-        if (event.getType().equals(VillagerProfession.FARMER)) {
+        if (Config.SERVER_CONFIG.isLoaded() && Config.SERVER.villagersTradeSeeds.get() && event.getType().equals(VillagerProfession.FARMER)) {
             FarmingRegistrator.CROPS.forEach(cropConfig -> {
                 if (!RecipeHelper.isMutatedCrop(cropConfig)) {
                     var seed = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, cropConfig.name() + (cropConfig.hasSeed() ? "_seeds" : "")));

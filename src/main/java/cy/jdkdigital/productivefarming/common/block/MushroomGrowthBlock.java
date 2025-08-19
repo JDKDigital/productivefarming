@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
@@ -104,6 +105,11 @@ public class MushroomGrowthBlock extends ProductiveCropBlock
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return !level.getBlockState(pos.relative(state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite())).isAir();
+    }
+
+    @Override
+    public ItemStack getHarvestItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        return BuiltInRegistries.ITEM.get(shroom).getDefaultInstance();
     }
 
     @Override

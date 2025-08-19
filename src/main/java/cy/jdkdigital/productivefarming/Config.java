@@ -29,6 +29,7 @@ public class Config
 
         public final ModConfigSpec.BooleanValue traitsOnVanillaCrops;
         public final ModConfigSpec.BooleanValue spawnFlowersWithBonemeal;
+        public final ModConfigSpec.BooleanValue villagersTradeSeeds;
 
         public Server(ModConfigSpec.Builder builder) {
             builder.push("General");
@@ -84,6 +85,10 @@ public class Config
             spawnFlowersWithBonemeal = builder
                     .comment("Spawn productive farming flowers when using bonemeal on grass blocks")
                     .define("spawnFlowersWithBonemeal", false);
+
+            villagersTradeSeeds = builder
+                    .comment("Seeds can be obtained from farmer villager trades")
+                    .define("villagersTradeSeeds", true);
 
             builder.pop();
         }

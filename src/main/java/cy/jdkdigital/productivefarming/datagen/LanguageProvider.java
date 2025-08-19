@@ -95,6 +95,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         FarmingRegistrator.VERTICAL_TRELLIS.forEach(crop -> {
             add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
         });
+
+        add("tooltip." + ProductiveFarming.MODID + ".red_mushroom.latin", getLatinName("red_mushroom"));
+        add("tooltip." + ProductiveFarming.MODID + ".brown_mushroom.latin", getLatinName("brown_mushroom"));
+        add("tooltip." + ProductiveFarming.MODID + ".warped_fungus.latin", getLatinName("warped_fungus"));
+        add("tooltip." + ProductiveFarming.MODID + ".crimson_fungus.latin", getLatinName("crimson_fungus"));
     }
 
     @Override
@@ -118,6 +123,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("potato", "Solanum tuberosum");
             put("carrot", "Daucus carota");
             put("beetroot", "Beta vulgaris");
+            put("red_mushroom", "Amanita muscaria");
+            put("brown_mushroom", "Boletus edulis");
+            put("warped_fungus", "Fungus contortus");
+            put("crimson_fungus", "Fungus coccinus");
 
             put("kadsura", "Kadsura japonica");
             put("blackberry", "Rubus fruticosus");

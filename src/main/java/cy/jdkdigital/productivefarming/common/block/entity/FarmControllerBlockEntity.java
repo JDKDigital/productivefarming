@@ -1,6 +1,7 @@
 package cy.jdkdigital.productivefarming.common.block.entity;
 
 import cy.jdkdigital.productivefarming.Config;
+import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.inventory.FarmControllerContainer;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.registry.ModTags;
@@ -49,7 +50,7 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
 {
     private MultiBlockDetector.MultiBlockData farmConfig;
 
-    public final IItemHandlerModifiable inventoryHandler = new InventoryHandlerHelper.BlockEntityItemStackHandler(9, this)
+    public final IItemHandlerModifiable inventoryHandler = new InventoryHandlerHelper.BlockEntityItemStackHandler(27, this)
     {
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
@@ -68,7 +69,7 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
 
         @Override
         public int[] getOutputSlots() {
-            return new int[]{0,1,2,3,4,5,6,7,8};
+            return new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26};
         }
     };
     private final IFluidHandler fluidHandler = new FluidTank(10000, fluidStack -> fluidStack.getFluid().isSame(FarmingRegistrator.NUTRIENT_WATER.get()));
@@ -117,7 +118,7 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
                 processCropFarm(cropPositions);
 
                 // collect items, void excess
-                List<ItemEntity> lootStacks = level.getEntitiesOfClass(ItemEntity.class, (new AABB(farmConfig.topCorners().getFirst().above(2).getBottomCenter(), farmConfig.topCorners().getSecond().below().getBottomCenter()))).stream().toList();
+                List<ItemEntity> lootStacks = level.getEntitiesOfClass(ItemEntity.class, (new AABB(farmConfig.topCorners().getFirst().above(3).getCenter(), farmConfig.topCorners().getSecond().below(farmConfig.height() + 1).getBottomCenter()))).stream().toList();
                 lootStacks.forEach(itemEntity -> {
                     if (inventoryHandler instanceof InventoryHandlerHelper.BlockEntityItemStackHandler handler && handler.addOutput(itemEntity.getItem()).isEmpty()) {
                         itemEntity.kill();
@@ -165,7 +166,8 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
 
     private void processFishFarm(List<BlockPos> cropPositions) {
         if (level instanceof ServerLevel serverLevel) {
-            List<LivingEntity> entities = serverLevel.getEntitiesOfClass(LivingEntity.class, (new AABB(farmConfig.topCorners().getFirst().getCenter(), farmConfig.topCorners().getSecond().getCenter()))).stream().filter(e -> e.getType().is(ModTags.FISH_FARM_ENTITIES) || e instanceof AbstractFish).toList();
+            List<LivingEntity> entities = serverLevel.getEntitiesOfClass(LivingEntity.class, (new AABB(farmConfig.topCorners().getFirst().below(farmConfig.height()).getCenter(), farmConfig.topCorners().getSecond().getCenter()))).stream().filter(e -> e.getType().is(ModTags.FISH_FARM_ENTITIES) || e instanceof AbstractFish).toList();
+            ProductiveFarming.LOGGER.info("entities " + entities.size());
             if (entities.size() > 1) {
                 // Entity count map
                 Map<EntityType<?>, Integer> entityCount = new HashMap<>();
@@ -180,7 +182,7 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
                 List<Map.Entry<EntityType<?>, Integer>> list = new LinkedList<>(entityCount.entrySet());
                 list.sort(Comparator.comparingInt(Map.Entry::getValue));
 
-                int maxAllowedEntities = cropPositions.size() / 8;
+                int maxAllowedEntities = cropPositions.size() / 2;
                 if (maxAllowedEntities < entities.size()) {
                     // kill excess
                     AtomicInteger toKill = new AtomicInteger(entities.size() - maxAllowedEntities);
@@ -250,7 +252,7 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
             }
 
             // Calculate nutrient water production
-            int sludge = Math.max(entities.size() * 2 - clamMap.size() * 5, 0);
+            int sludge = Math.max(entities.size() * 50 - clamMap.size() * 5, 0);
             fluidHandler.fill(new FluidStack(FarmingRegistrator.NUTRIENT_WATER.get(), sludge), IFluidHandler.FluidAction.EXECUTE);
         }
     }

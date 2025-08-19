@@ -99,6 +99,10 @@ public class LootDataProvider implements DataProvider
         protected void generate() {
             HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 
+            dropSelf(FarmingRegistrator.FARM_CONTROLLER.get());
+            dropSelf(FarmingRegistrator.FEEDING_TROUGH.get());
+            dropSelf(FarmingRegistrator.WATERING_TROUGH.get());
+
             for (CropConfig crop : FarmingRegistrator.VANILLA_CROPS) {
                 if (crop.hasSeed()) {
                     dropSeedCrop(crop);

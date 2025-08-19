@@ -30,6 +30,15 @@ repositories {
     flatDir {
         dir 'libs'
     }
+    maven {
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+    }
+    maven {
+        url = "https://maven.createmod.net"
+    }
+    maven {
+        url = "https://mvn.devos.one/snapshots" // Registrate
+    }
 }
 
 base {
@@ -128,14 +137,30 @@ dependencies {
     jarJar(group: 'cy.jdkdigital.productivelib', name: 'productivelib', version: "${lib_version_range}") {
         transitive(false)
     }
+    jarJar(group: 'net.createmod.ponder', name: 'Ponder-NeoForge-1.21.1', version: "${ponder_version}") {
+        transitive(false)
+    }
+    jarJar(group: 'dev.engine-room.flywheel', name: 'flywheel-neoforge-1.21.1', version: "${flywheel_version}") {
+        transitive(false)
+    }
 
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
+    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    implementation "net.createmod.ponder:Ponder-NeoForge-1.21.1:${ponder_version}"
+    implementation "com.tterrag.registrate:Registrate:${registrate_version}"
 
     implementation "curse.maven:productivebees-377897:6702701"
     implementation "curse.maven:jade-324717:6667790"
     implementation "curse.maven:dyenamics-509276:6620953"
     implementation "curse.maven:utilitarian-929559:6650737"
+    implementation "curse.maven:farming-for-blockheads-261924:6409932"
+    implementation "curse.maven:balm-531761:6841890"
+    implementation "curse.maven:botany-pots-353928:6895762"
+    implementation "curse.maven:prickle-1023259:6546240"
+    implementation "curse.maven:bookshelf-228525:6717571"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

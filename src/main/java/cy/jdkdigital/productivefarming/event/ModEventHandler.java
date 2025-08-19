@@ -21,6 +21,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = ProductiveFarming.MODID)
 public class ModEventHandler
@@ -84,5 +85,10 @@ public class ModEventHandler
 //                FarmingRegistrator.FISH_TRAP_BLOCK_ENTITY.get(),
 //                (myBlockEntity, side) -> myBlockEntity.inventoryHandler
 //        );
+    }
+
+    @SubscribeEvent
+    private static void registerDataMap(final RegisterDataMapTypesEvent event) {
+        event.register(FarmingRegistrator.CROP_TRAITS);
     }
 }

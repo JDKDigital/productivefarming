@@ -1,11 +1,8 @@
 package cy.jdkdigital.productivefarming.common.block;
 
-import com.mojang.serialization.Codec;
 import cy.jdkdigital.productivefarming.Config;
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.CropBlockEntity;
 import cy.jdkdigital.productivefarming.common.block.entity.SimpleCropBlockEntity;
-import cy.jdkdigital.productivefarming.common.datamap.CropTrait;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.util.CropConfig;
@@ -61,24 +58,10 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
             int i = this.getAge(state);
             if (i < this.getMaxAge()) {
                 if (net.neoforged.neoforge.common.CommonHooks.canCropGrow(level, pos, state, random.nextInt((int)(25.0F / getModifiedGrowthSpeed(state, level, pos)) + 1) == 0)) {
-                    ProductiveFarming.LOGGER.info("grow");
                     BlockState growthState = this.getStateForAge(state, level, pos, i + 1);
                     level.setBlock(pos, growthState, 2);
                     // Random chance to increase stats when growing to max stage
-                    if (growthState.getValue(getAgeProperty()) == getMaxAge() && level.getRandom().nextFloat() < Config.SERVER.traitIncreaseChance.get()) {
-                        // pick a random stat to increase
-                        String trait = new String[]{TraitsHelper.GROWTH, TraitsHelper.YIELD, TraitsHelper.RESISTANCE, TraitsHelper.MUTABILITY}[level.random.nextInt(4)];
-                        ProductiveFarming.LOGGER.info("increase " + trait);
-                        // set state on crop block that stat has increased to it will give a new seed when harvested
-                        if (level.getBlockEntity(pos) instanceof SimpleCropBlockEntity cropBlockEntity) {
-                            switch (trait) {
-                                case TraitsHelper.GROWTH -> cropBlockEntity.setGrowth(cropBlockEntity.getGrowth() + 1);
-                                case TraitsHelper.YIELD -> cropBlockEntity.setYield(cropBlockEntity.getYield() + 1);
-                                case TraitsHelper.RESISTANCE -> cropBlockEntity.setResistance(cropBlockEntity.getResistance() + 1);
-                                case TraitsHelper.MUTABILITY -> cropBlockEntity.setMutability(cropBlockEntity.getMutability() + 1);
-                            }
-                        }
-                    }
+                    increaseStatOnGrowth(level, growthState, pos);
 
                     net.neoforged.neoforge.common.CommonHooks.fireCropGrowPost(level, pos, state);
                 }
@@ -95,7 +78,7 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
                         var recipe = RecipeHelper.getPollinationRecipe(level, BuiltInRegistries.BLOCK.getKey(state.getBlock()), stack.get(FarmingDataComponents.POLLEN_BLOCK_COMPONENT));
                         if (recipe != null) {
                             if (!level.isClientSide) {
-                                cropBlockEntity.setMutation(recipe.value().mutation);
+                                cropBlockEntity.setMutation(recipe.value().mutation());
 
                                 if (!player.isCreative()) {
                                     stack.shrink(1);
@@ -154,6 +137,9 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
             // Modded vanilla crops gives vanilla items
             seedStack = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(BuiltInRegistries.BLOCK.getKey(this).getPath() + (this.cropConfig.hasSeed() ? "_seeds" : ""))).getDefaultInstance();
         }
+        if (!seedStack.isEmpty() && level.getBlockEntity(pos) instanceof CropBlockEntity cropBlockEntity) {
+            cropBlockEntity.applyComponentsToItemStack(seedStack);
+        }
         return seedStack;
     }
 
@@ -195,6 +181,9 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
         }
 
         level.setBlock(pos, this.getStateForAge(state, level, pos, i), 2);
+
+        // Increase stats even when grown by bonemeal
+        increaseStatOnGrowth(level, state, pos);
     }
 
     @Override
@@ -205,7 +194,6 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
     public static float getModifiedGrowthSpeed(BlockState blockState, BlockGetter level, BlockPos pos) {
         float speed = getGrowthSpeed(blockState, level, pos) * 2;
         if (level.getBlockEntity(pos) instanceof SimpleCropBlockEntity cropBlockEntity) {
-            ProductiveFarming.LOGGER.info("speed:" + speed + " growth:" + cropBlockEntity.getGrowth() + " max:" + ((ProductiveCropBlock) blockState.getBlock()).isMaxAge(blockState) + " state:"+ blockState);
             speed /= (cropBlockEntity.getGrowth() + 1);
         }
         return Math.max(1, speed);
@@ -218,5 +206,21 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
 
     public CropConfig getCropConfig() {
         return cropConfig;
+    }
+
+    private void increaseStatOnGrowth(Level level, BlockState growthState, BlockPos pos) {
+        if (growthState.getValue(getAgeProperty()) == getMaxAge() && level.getRandom().nextFloat() < Config.SERVER.traitIncreaseChance.get()) {
+            // pick a random stat to increase
+            String trait = new String[]{TraitsHelper.GROWTH, TraitsHelper.YIELD, TraitsHelper.RESISTANCE, TraitsHelper.MUTABILITY}[level.random.nextInt(4)];
+            // set state on crop block that stat has increased to it will give a new seed when harvested
+            if (level.getBlockEntity(pos) instanceof CropBlockEntity cropBlockEntity) {
+                switch (trait) {
+                    case TraitsHelper.GROWTH -> cropBlockEntity.setGrowth(cropBlockEntity.getGrowth() + 1);
+                    case TraitsHelper.YIELD -> cropBlockEntity.setYield(cropBlockEntity.getYield() + 1);
+                    case TraitsHelper.RESISTANCE -> cropBlockEntity.setResistance(cropBlockEntity.getResistance() + 1);
+                    case TraitsHelper.MUTABILITY -> cropBlockEntity.setMutability(cropBlockEntity.getMutability() + 1);
+                }
+            }
+        }
     }
 }
