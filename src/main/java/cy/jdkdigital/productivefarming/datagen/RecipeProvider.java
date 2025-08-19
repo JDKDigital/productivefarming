@@ -2,11 +2,16 @@ package cy.jdkdigital.productivefarming.datagen;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.DoubleCropBlock;
+import cy.jdkdigital.productivefarming.datagen.recipe.BotanyPotBlockDerivedCropRecipeBuilder;
 import cy.jdkdigital.productivefarming.datagen.recipe.CropMutationRecipeBuilder;
+import cy.jdkdigital.productivefarming.integrations.botanypots.itemdrops.ProductiveDropProvider;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.registry.ModTags;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import cy.jdkdigital.productivefarming.util.FishConfig;
+import net.darkhax.botanypots.common.impl.data.display.types.BasicOptions;
+import net.darkhax.botanypots.common.impl.data.display.types.SimpleDisplayState;
+import net.darkhax.botanypots.common.impl.data.recipe.crop.BasicCrop;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -196,9 +201,49 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
                 .save(recipeOutput, rL("pollination/golden_raspberry"));
         CropMutationRecipeBuilder.direct(rL("golden_raspberry"), rL("goji_berry"), rL("miracle_berry"), 0.5f)
                 .save(recipeOutput, rL("pollination/miracle_berry"));
+
+        if (ModList.get().isLoaded("botanypots")) {
+            BotanyPotsCompat.buildRecipes(recipeOutput);
+        }
     }
 
     private static ResourceLocation rL(String name) {
         return ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, name);
+    }
+
+    static class BotanyPotsCompat {
+        protected static void buildRecipes(RecipeOutput recipeOutput) {
+            for (CropConfig crop: FarmingRegistrator.HERBS) {
+            }
+            for (CropConfig crop: FarmingRegistrator.BERRIES) {
+            }
+            for (CropConfig crop: FarmingRegistrator.CROPS) {
+                var seed = BuiltInRegistries.ITEM.get(rL(crop.hasSeed() ? crop.name() + "_seeds" : crop.name()));
+                var cropBlock = BuiltInRegistries.BLOCK.get(rL(crop.name()));
+                List<ProductiveDropProvider.ProductiveDrop> drops = new ArrayList<>(){{
+                    add(new ProductiveDropProvider.ProductiveDrop(BuiltInRegistries.ITEM.get(rL(crop.name())).getDefaultInstance(), 1f));
+                }};
+                if (crop.hasSeed()) {
+                    drops.add(new ProductiveDropProvider.ProductiveDrop(seed.getDefaultInstance(), 0.1f));
+                }
+                if (cropBlock instanceof DoubleCropBlock) {
+                    BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), BasicCrop.DIRT, List.of(new ProductiveDropProvider(drops)), List.of(new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER), BasicOptions.ofDefault()), new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER), BasicOptions.ofDefault())))
+                            .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
+                } else {
+                    BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), List.of(new ProductiveDropProvider(drops)))
+                            .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
+                }
+            }
+            for (CropConfig crop: FarmingRegistrator.TRELLIS) {
+            }
+            for (CropConfig crop: FarmingRegistrator.VERTICAL_TRELLIS) {
+            }
+            for (CropConfig crop: FarmingRegistrator.GRAPES) {
+            }
+            for (CropConfig crop: FarmingRegistrator.HERBS) {
+            }
+            for (CropConfig crop: FarmingRegistrator.STEMS) {
+            }
+        }
     }
 }
