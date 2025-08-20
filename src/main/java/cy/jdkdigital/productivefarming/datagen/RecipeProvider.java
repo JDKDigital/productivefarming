@@ -11,6 +11,7 @@ import cy.jdkdigital.productivefarming.util.CropConfig;
 import cy.jdkdigital.productivefarming.util.FishConfig;
 import net.darkhax.botanypots.common.impl.data.display.types.BasicOptions;
 import net.darkhax.botanypots.common.impl.data.display.types.SimpleDisplayState;
+import net.darkhax.botanypots.common.impl.data.itemdrops.SimpleDropProvider;
 import net.darkhax.botanypots.common.impl.data.recipe.crop.BasicCrop;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -214,36 +215,68 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
     static class BotanyPotsCompat {
         protected static void buildRecipes(RecipeOutput recipeOutput) {
             for (CropConfig crop: FarmingRegistrator.HERBS) {
+                cropRecipe(crop, recipeOutput);
             }
             for (CropConfig crop: FarmingRegistrator.BERRIES) {
+                cropRecipe(crop, recipeOutput);
             }
             for (CropConfig crop: FarmingRegistrator.CROPS) {
-                var seed = BuiltInRegistries.ITEM.get(rL(crop.hasSeed() ? crop.name() + "_seeds" : crop.name()));
-                var cropBlock = BuiltInRegistries.BLOCK.get(rL(crop.name()));
-                List<ProductiveDropProvider.ProductiveDrop> drops = new ArrayList<>(){{
-                    add(new ProductiveDropProvider.ProductiveDrop(BuiltInRegistries.ITEM.get(rL(crop.name())).getDefaultInstance(), 1f));
-                }};
-                if (crop.hasSeed()) {
-                    drops.add(new ProductiveDropProvider.ProductiveDrop(seed.getDefaultInstance(), 0.1f));
-                }
-                if (cropBlock instanceof DoubleCropBlock) {
-                    BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), BasicCrop.DIRT, List.of(new ProductiveDropProvider(drops)), List.of(new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER), BasicOptions.ofDefault()), new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER), BasicOptions.ofDefault())))
-                            .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
-                } else {
-                    BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), List.of(new ProductiveDropProvider(drops)))
-                            .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
-                }
+                cropRecipe(crop, recipeOutput);
             }
             for (CropConfig crop: FarmingRegistrator.TRELLIS) {
+                cropRecipe(crop, recipeOutput);
             }
             for (CropConfig crop: FarmingRegistrator.VERTICAL_TRELLIS) {
+                cropRecipe(crop, recipeOutput);
             }
             for (CropConfig crop: FarmingRegistrator.GRAPES) {
-            }
-            for (CropConfig crop: FarmingRegistrator.HERBS) {
+                cropRecipe(crop, recipeOutput);
             }
             for (CropConfig crop: FarmingRegistrator.STEMS) {
+                cropRecipe(crop, recipeOutput);
             }
         }
+
+        private static void cropRecipe(CropConfig crop, RecipeOutput recipeOutput) {
+            var seed = BuiltInRegistries.ITEM.get(rL(crop.hasSeed() ? crop.name() + "_seeds" : crop.name()));
+            var cropBlock = BuiltInRegistries.BLOCK.get(rL(crop.name()));
+            List<SimpleDropProvider.SimpleDrop> drops = new ArrayList<>(){{
+                add(new SimpleDropProvider.SimpleDrop(BuiltInRegistries.ITEM.get(rL(crop.name())).getDefaultInstance(), 1f));
+            }};
+            if (crop.hasSeed()) {
+                drops.add(new SimpleDropProvider.SimpleDrop(seed.getDefaultInstance(), 0.1f));
+            }
+            if (cropBlock instanceof DoubleCropBlock) {
+                BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), BasicCrop.DIRT, List.of(new SimpleDropProvider(drops)), List.of(
+                                new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER).setValue(((DoubleCropBlock) cropBlock).getAgeProperty(), ((DoubleCropBlock) cropBlock).getMaxAge()), BasicOptions.ofDefault()),
+                                new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER).setValue(((DoubleCropBlock) cropBlock).getAgeProperty(), ((DoubleCropBlock) cropBlock).getMaxAge()), BasicOptions.ofDefault())
+                        ))
+                        .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
+            } else {
+                BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), List.of(new SimpleDropProvider(drops)))
+                        .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
+            }
+        }
+
+//        private static void cropRecipe(CropConfig crop, RecipeOutput recipeOutput) {
+//            var seed = BuiltInRegistries.ITEM.get(rL(crop.hasSeed() ? crop.name() + "_seeds" : crop.name()));
+//            var cropBlock = BuiltInRegistries.BLOCK.get(rL(crop.name()));
+//            List<ProductiveDropProvider.ProductiveDrop> drops = new ArrayList<>(){{
+//                add(new ProductiveDropProvider.ProductiveDrop(BuiltInRegistries.ITEM.get(rL(crop.name())).getDefaultInstance(), 1f));
+//            }};
+//            if (crop.hasSeed()) {
+//                drops.add(new ProductiveDropProvider.ProductiveDrop(seed.getDefaultInstance(), 0.1f));
+//            }
+//            if (cropBlock instanceof DoubleCropBlock) {
+//                BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), BasicCrop.DIRT, List.of(new ProductiveDropProvider(drops)), List.of(
+//                                new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER).setValue(((DoubleCropBlock) cropBlock).getAgeProperty(), ((DoubleCropBlock) cropBlock).getMaxAge()), BasicOptions.ofDefault()),
+//                                new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER).setValue(((DoubleCropBlock) cropBlock).getAgeProperty(), ((DoubleCropBlock) cropBlock).getMaxAge()), BasicOptions.ofDefault())
+//                        ))
+//                        .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
+//            } else {
+//                BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), List.of(new ProductiveDropProvider(drops)))
+//                        .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
+//            }
+//        }
     }
 }

@@ -1,0 +1,35 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
+  "type": "botanypots:crop",
+  "display": {
+    "type": "botanypots:aging",
+    "block": "productivefarming:endive",
+    "options": {}
+  },
+  "drops": {
+    "type": "botanypots:items",
+    "items": [
+      {
+        "result": {
+          "count": 1,
+          "id": "productivefarming:endive"
+        }
+      },
+      {
+        "chance": 0.1,
+        "result": {
+          "count": 1,
+          "id": "productivefarming:endive_seeds"
+        }
+      }
+    ]
+  },
+  "input": {
+    "item": "productivefarming:endive_seeds"
+  }
+}

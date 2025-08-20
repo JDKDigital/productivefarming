@@ -10,7 +10,6 @@ public class BotanyPotsCompat implements BotanyPotsPlugin
 {
     @Override
     public void registerDropProviders() {
-        ProductiveFarming.LOGGER.info("registerDropProviders was called");
         ItemDropProviderType.register(
                 ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "productive_drop"),
                 ProductiveDropProvider.CODEC, ProductiveDropProvider.STREAM

@@ -1,0 +1,35 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
+  "type": "botanypots:crop",
+  "display": {
+    "type": "botanypots:aging",
+    "block": "productivefarming:watermint",
+    "options": {}
+  },
+  "drops": {
+    "type": "botanypots:items",
+    "items": [
+      {
+        "result": {
+          "count": 1,
+          "id": "productivefarming:watermint"
+        }
+      },
+      {
+        "chance": 0.1,
+        "result": {
+          "count": 1,
+          "id": "productivefarming:watermint_seeds"
+        }
+      }
+    ]
+  },
+  "input": {
+    "item": "productivefarming:watermint_seeds"
+  }
+}

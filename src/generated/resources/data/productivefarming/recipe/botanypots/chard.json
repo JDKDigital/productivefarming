@@ -1,0 +1,35 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
+  "type": "botanypots:crop",
+  "display": {
+    "type": "botanypots:aging",
+    "block": "productivefarming:chard",
+    "options": {}
+  },
+  "drops": {
+    "type": "botanypots:items",
+    "items": [
+      {
+        "result": {
+          "count": 1,
+          "id": "productivefarming:chard"
+        }
+      },
+      {
+        "chance": 0.1,
+        "result": {
+          "count": 1,
+          "id": "productivefarming:chard_seeds"
+        }
+      }
+    ]
+  },
+  "input": {
+    "item": "productivefarming:chard_seeds"
+  }
+}

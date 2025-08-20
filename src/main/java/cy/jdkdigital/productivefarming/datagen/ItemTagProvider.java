@@ -52,10 +52,12 @@ public class ItemTagProvider extends ItemTagsProvider
 //                .add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "raw_anchovy")));
 
         for (CropConfig crop: FarmingRegistrator.HERBS) {
-            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "herbs/" + crop.name()));
-            tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
-            tag(ModTags.Items.HERBS).addTag(tag);
+            var herbTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "herbs/" + crop.name()));
+            tag(herbTag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+            tag(ModTags.Items.HERBS).addTag(herbTag);
             addSeed(crop);
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
         }
         for (CropConfig crop: FarmingRegistrator.BERRIES) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "berries/" + crop.name()));
@@ -79,11 +81,6 @@ public class ItemTagProvider extends ItemTagsProvider
             addSeed(crop);
         }
         for (CropConfig crop: FarmingRegistrator.GRAPES) {
-            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
-            tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
-            addSeed(crop);
-        }
-        for (CropConfig crop: FarmingRegistrator.HERBS) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             addSeed(crop);

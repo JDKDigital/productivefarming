@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.util.TraitsHelper;
-import net.darkhax.bookshelf.common.api.data.codecs.map.MapCodecs;
 import net.darkhax.bookshelf.common.api.util.MathsHelper;
 import net.darkhax.botanypots.common.api.context.BotanyPotContext;
 import net.darkhax.botanypots.common.api.data.itemdrops.ItemDropProvider;
@@ -18,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -29,23 +27,15 @@ public record ProductiveDropProvider(List<ProductiveDrop> drops) implements Item
     public static final Supplier<ItemDropProviderType<?>> TYPE = ItemDropProviderType.getLazy(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "productive_drop"));
 
     public static final MapCodec<ProductiveDropProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            MapCodecs.flexibleList(ProductiveDrop.CODEC.codec()).fieldOf("items").forGetter(ProductiveDropProvider::drops)
+            ProductiveDrop.CODEC.listOf().fieldOf("items").forGetter(ProductiveDropProvider::drops)
     ).apply(instance, ProductiveDropProvider::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ProductiveDropProvider> STREAM = StreamCodec.of(
         (buffer, value) -> {
-            buffer.writeInt(value.drops.size());
-            for (ProductiveDrop drop : value.drops) {
-                ProductiveDrop.STREAM.encode(buffer, drop);
-            }
+            ProductiveDrop.STREAM.apply(ByteBufCodecs.list()).encode(buffer, value.drops);
         },
         (buffer) -> {
-            final int size = buffer.readInt();
-            final List<ProductiveDrop> drops = new LinkedList<>();
-            for (int i = 0; i < size; i++) {
-                drops.add(ProductiveDrop.STREAM.decode(buffer));
-            }
-            return new ProductiveDropProvider(drops);
+            return new ProductiveDropProvider(ProductiveDrop.STREAM.apply(ByteBufCodecs.list()).decode(buffer));
         }
     );
 
@@ -74,7 +64,7 @@ public record ProductiveDropProvider(List<ProductiveDrop> drops) implements Item
     }
 
     public record ProductiveDrop(ItemStack drop, float chance) {
-        public static final MapCodec<ProductiveDrop> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        public static final Codec<ProductiveDrop> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 ItemStack.CODEC.fieldOf("result").forGetter(ProductiveDrop::drop),
                 Codec.floatRange(0f, 1f).optionalFieldOf("chance", 1f).forGetter(ProductiveDrop::chance)
         ).apply(instance, ProductiveDrop::new));

@@ -167,7 +167,6 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
     private void processFishFarm(List<BlockPos> cropPositions) {
         if (level instanceof ServerLevel serverLevel) {
             List<LivingEntity> entities = serverLevel.getEntitiesOfClass(LivingEntity.class, (new AABB(farmConfig.topCorners().getFirst().below(farmConfig.height()).getCenter(), farmConfig.topCorners().getSecond().getCenter()))).stream().filter(e -> e.getType().is(ModTags.FISH_FARM_ENTITIES) || e instanceof AbstractFish).toList();
-            ProductiveFarming.LOGGER.info("entities " + entities.size());
             if (entities.size() > 1) {
                 // Entity count map
                 Map<EntityType<?>, Integer> entityCount = new HashMap<>();

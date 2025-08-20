@@ -1,0 +1,35 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
+  "type": "botanypots:crop",
+  "display": {
+    "type": "botanypots:aging",
+    "block": "productivefarming:bok_choy",
+    "options": {}
+  },
+  "drops": {
+    "type": "botanypots:items",
+    "items": [
+      {
+        "result": {
+          "count": 1,
+          "id": "productivefarming:bok_choy"
+        }
+      },
+      {
+        "chance": 0.1,
+        "result": {
+          "count": 1,
+          "id": "productivefarming:bok_choy_seeds"
+        }
+      }
+    ]
+  },
+  "input": {
+    "item": "productivefarming:bok_choy_seeds"
+  }
+}

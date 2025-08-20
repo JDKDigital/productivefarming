@@ -30,6 +30,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ProductiveFarming.MODID + ".message.farm_formed", "Farm structure assembled with height %s");
         add(ProductiveFarming.MODID + ".message.farm_invalid", "Farm structure invalid. %s");
 
+        add("block." + ProductiveFarming.MODID + ".watering_trough.tooltip", "Increases growth speed of nearby animals");
+        add("block." + ProductiveFarming.MODID + ".feeding_trough.tooltip", "Makes nearby animals breed");
         add(ProductiveFarming.MODID + ".pollen.name", "%s");
         add(ProductiveFarming.MODID + ".information.pollen", "Use on a fully grown crop to manually pollinate it.");
         add(ProductiveFarming.MODID + ".tooltip.extend", "Hold [SHIFT] for more info");

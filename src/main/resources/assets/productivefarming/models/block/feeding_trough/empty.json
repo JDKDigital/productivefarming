@@ -5,7 +5,8 @@
     "bottom": "minecraft:block/composter_bottom",
     "top": "productivefarming:block/feeding_trough/top",
     "side": "productivefarming:block/feeding_trough/side",
-    "legs": "minecraft:block/oak_planks"
+    "legs": "minecraft:block/oak_planks",
+    "particle": "productivefarming:block/feeding_trough/side"
   },
   "elements": [
     {

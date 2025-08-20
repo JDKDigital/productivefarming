@@ -1,0 +1,45 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
+  "type": "botanypots:crop",
+  "display": [
+    {
+      "type": "botanypots:simple",
+      "block_state": {
+        "block": "productivefarming:blue_jade_corn",
+        "properties": {
+          "age": "6",
+          "half": "lower"
+        }
+      },
+      "options": {}
+    },
+    {
+      "type": "botanypots:simple",
+      "block_state": {
+        "block": "productivefarming:blue_jade_corn",
+        "properties": {
+          "age": "6",
+          "half": "upper"
+        }
+      },
+      "options": {}
+    }
+  ],
+  "drops": {
+    "type": "botanypots:items",
+    "items": {
+      "result": {
+        "count": 1,
+        "id": "productivefarming:blue_jade_corn"
+      }
+    }
+  },
+  "input": {
+    "item": "productivefarming:blue_jade_corn"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
+  "type": "botanypots:crop",
+  "display": {
+    "type": "botanypots:aging",
+    "block": "productivefarming:cabbage",
+    "options": {}
+  },
+  "drops": {
+    "type": "botanypots:items",
+    "items": [
+      {
+        "result": {
+          "count": 1,
+          "id": "productivefarming:cabbage"
+        }
+      },
+      {
+        "chance": 0.1,
+        "result": {
+          "count": 1,
+          "id": "productivefarming:cabbage_seeds"
+        }
+      }
+    ]
+  },
+  "input": {
+    "item": "productivefarming:cabbage_seeds"
+  }
+}
