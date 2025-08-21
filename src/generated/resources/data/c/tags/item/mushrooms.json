@@ -3,6 +3,14 @@
     "minecraft:brown_mushroom",
     "minecraft:red_mushroom",
     "minecraft:crimson_fungus",
-    "minecraft:warped_fungus"
+    "minecraft:warped_fungus",
+    "productivefarming:chanterelle",
+    "productivefarming:laetiporus",
+    "productivefarming:lions_mane",
+    "productivefarming:morel",
+    "productivefarming:oyster_mushroom",
+    "productivefarming:porcini",
+    "productivefarming:shiitake",
+    "productivefarming:black_truffle"
   ]
 }

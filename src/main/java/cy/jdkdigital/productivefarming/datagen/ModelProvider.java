@@ -120,6 +120,10 @@ public class ModelProvider implements DataProvider
             }
         }
 
+        for (CropConfig crop : FarmingRegistrator.SHROOMS) {
+            generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), "item/shrooms/", modelOutput);
+        }
+
         for (FishConfig fish : FarmingRegistrator.FISHIES) {
             if (fish.hasBlock()) {
                 generateFlatItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, fish.name())), "item/fish/", modelOutput);
@@ -319,6 +323,9 @@ public class ModelProvider implements DataProvider
             createAttachedMushroom(FarmingRegistrator.RED_MUSHROOM_GROWTH.get());
             createAttachedMushroom(FarmingRegistrator.CRIMSON_FUNGUS_GROWTH.get());
             createAttachedMushroom(FarmingRegistrator.WARPED_FUNGUS_GROWTH.get());
+            FarmingRegistrator.SHROOMS.forEach(cropConfig -> {
+                createAttachedMushroom(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, cropConfig.name() + "_growth")));
+            });
         }
 
         static ModelTemplate verticalTrellisLeaves = new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "block/vertical_trellis_leaves")), Optional.empty(), TextureSlot.ALL);
@@ -534,14 +541,15 @@ public class ModelProvider implements DataProvider
 
             this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block)
                     .with(PropertyDispatch.property(BlockStateProperties.AGE_4).generate((age) -> {
-                        ResourceLocation modelLocation = RenderTypedModelTemplate.CROP.create(mushroomPlace.withPath(p -> p + "_stage_" + age), TextureMapping.crop(TextureMapping.getBlockTexture(block)), this.modelOutput);
+                        ResourceLocation modelLocation = RenderTypedModelTemplate.CROP.create(mushroomPlace.withPath(p -> p + "_stage_" + age), TextureMapping.crop(TextureMapping.getBlockTexture(block).withPath(p -> p.replace("block/", "block/shrooms/") + "/stage_" + age)), this.modelOutput);
                         return Variant.variant().with(VariantProperties.MODEL, modelLocation);
                     }))
-                    .with(PropertyDispatch.property(BlockStateProperties.HORIZONTAL_FACING).
+                    .with(PropertyDispatch.property(BlockStateProperties.FACING).
                             select(Direction.EAST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).
                             select(Direction.SOUTH, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).
                             select(Direction.WEST, Variant.variant().with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).
-                            select(Direction.NORTH, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))
+                            select(Direction.NORTH, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)).select(Direction.DOWN, Variant.variant().with(VariantProperties.X_ROT, VariantProperties.Rotation.R180))
+                            .select(Direction.UP, Variant.variant())
             ));
         }
 

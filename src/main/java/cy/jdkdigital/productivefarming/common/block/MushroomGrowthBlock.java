@@ -1,5 +1,6 @@
 package cy.jdkdigital.productivefarming.common.block;
 
+import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.MushroomGrowthCropBlockEntity;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
@@ -30,40 +31,52 @@ public class MushroomGrowthBlock extends ProductiveCropBlock
 {
     private static final Map<Direction, VoxelShape[]> SHAPE_BY_AGE = new HashMap<>() {{
         put(Direction.EAST, new VoxelShape[]{
-                Shapes.empty(),
+                Block.box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0),
                 Block.box(0.0, 0.0, 0.0, 4.0, 16.0, 16.0),
                 Block.box(0.0, 0.0, 0.0, 6.0, 16.0, 16.0),
                 Block.box(0.0, 0.0, 0.0, 8.0, 16.0, 16.0),
                 Block.box(0.0, 0.0, 0.0, 10.0, 16.0, 16.0)
         });
         put(Direction.WEST, new VoxelShape[]{
-                Shapes.empty(),
+                Block.box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0),
                 Block.box(12.0, 0.0, 0.0, 16.0, 16.0, 16.0),
                 Block.box(10.0, 0.0, 0.0, 16.0, 16.0, 16.0),
                 Block.box(8.0, 0.0, 0.0, 16.0, 16.0, 16.0),
                 Block.box(6.0, 0.0, 0.0, 16.0, 16.0, 16.0)
         });
         put(Direction.NORTH, new VoxelShape[]{
-                Shapes.empty(),
+                Block.box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0),
                 Block.box(0.0, 0.0, 12.0, 16.0, 16.0, 16.0),
                 Block.box(0.0, 0.0, 10.0, 16.0, 16.0, 16.0),
                 Block.box(0.0, 0.0, 8.0, 16.0, 16.0, 16.0),
                 Block.box(0.0, 0.0, 6.0, 16.0, 16.0, 16.0)
         });
         put(Direction.SOUTH, new VoxelShape[]{
-                Shapes.empty(),
+                Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 1.0),
                 Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 4.0),
                 Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 6.0),
                 Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 8.0),
                 Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 10.0)
         });
+        put(Direction.UP, new VoxelShape[]{
+                Block.box(0.0, 0.0, 0.0, 16.0, 1.0, 16.0),
+                Block.box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),
+                Block.box(0.0, 0.0, 0.0, 16.0, 6.0, 16.0),
+                Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
+                Block.box(0.0, 0.0, 0.0, 16.0, 10.0, 16.0)
+        });
+        put(Direction.DOWN, new VoxelShape[]{
+                Block.box(0.0, 0.0, 0.0, 16.0, 15.0, 16.0),
+                Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0),
+                Block.box(0.0, 0.0, 0.0, 16.0, 10.0, 16.0),
+                Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
+                Block.box(0.0, 0.0, 0.0, 16.0, 6.0, 16.0)
+        });
     }};
-    private final ResourceLocation shroom;
 
-    public MushroomGrowthBlock(Properties properties, ResourceLocation shroom) {
-        super(new CropConfig(shroom.toString(), false, null), properties); // TODO
-        this.shroom = shroom;
-        this.registerDefaultState(this.stateDefinition.any().setValue(this.getAgeProperty(), 0).setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
+    public MushroomGrowthBlock(CropConfig crop, Properties properties) {
+        super(crop, properties); // TODO
+        this.registerDefaultState(this.stateDefinition.any().setValue(this.getAgeProperty(), 0).setValue(BlockStateProperties.FACING, Direction.UP));
     }
 
     @Override
@@ -73,23 +86,23 @@ public class MushroomGrowthBlock extends ProductiveCropBlock
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(this.getAgeProperty()).add(BlockStateProperties.HORIZONTAL_FACING);
+        builder.add(this.getAgeProperty()).add(BlockStateProperties.FACING);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return super.getStateForPlacement(context).setValue(BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection());
+        return super.getStateForPlacement(context).setValue(BlockStateProperties.FACING, context.getHorizontalDirection());
     }
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE_BY_AGE.get(state.getValue(BlockStateProperties.HORIZONTAL_FACING))[this.getAge(state)];
+        return SHAPE_BY_AGE.get(state.getValue(BlockStateProperties.FACING))[this.getAge(state)];
     }
 
     @Override
     protected BlockState getStateForAge(BlockState state, Level level, BlockPos pos, int age) {
-        return super.getStateForAge(age).setValue(BlockStateProperties.HORIZONTAL_FACING, state.getValue(BlockStateProperties.HORIZONTAL_FACING));
+        return super.getStateForAge(age).setValue(BlockStateProperties.FACING, state.getValue(BlockStateProperties.FACING));
     }
 
     @Override
@@ -104,16 +117,20 @@ public class MushroomGrowthBlock extends ProductiveCropBlock
 
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        return !level.getBlockState(pos.relative(state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite())).isAir();
+        return !level.getBlockState(pos.relative(state.getValue(BlockStateProperties.FACING).getOpposite())).isAir();
     }
 
     @Override
     public ItemStack getHarvestItemStack(LevelReader level, BlockPos pos, BlockState state) {
-        return BuiltInRegistries.ITEM.get(shroom).getDefaultInstance();
+        return getBaseSeedId().asItem().getDefaultInstance();
     }
 
     @Override
     protected ItemLike getBaseSeedId() {
-        return BuiltInRegistries.ITEM.get(shroom);
+        var item = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, getCropConfig().name()));
+        if (item.getDefaultInstance().isEmpty()) {
+            item = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(getCropConfig().name()));
+        }
+        return item;
     }
 }

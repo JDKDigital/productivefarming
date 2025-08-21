@@ -2,6 +2,6 @@
   "parent": "minecraft:block/crop",
   "render_type": "cutout",
   "textures": {
-    "crop": "productivefarming:block/brown_mushroom_growth"
+    "crop": "productivefarming:block/shrooms/brown_mushroom_growth/stage_2"
   }
 }

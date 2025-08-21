@@ -2,6 +2,6 @@
   "parent": "minecraft:block/crop",
   "render_type": "cutout",
   "textures": {
-    "crop": "productivefarming:block/warped_fungus_growth"
+    "crop": "productivefarming:block/shrooms/warped_fungus_growth/stage_3"
   }
 }

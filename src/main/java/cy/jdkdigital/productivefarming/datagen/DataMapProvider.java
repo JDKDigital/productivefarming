@@ -3,6 +3,7 @@ package cy.jdkdigital.productivefarming.datagen;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.datamap.CropTrait;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -27,11 +28,12 @@ public class DataMapProvider extends net.neoforged.neoforge.common.data.DataMapP
         final var compostables = builder(NeoForgeDataMaps.COMPOSTABLES);
         ProductiveFarming.ITEMS.getEntries().forEach(holder -> {
             var stack = holder.get().getDefaultInstance();
+            
             if (stack.getFoodProperties(null) != null) {
                 compostables.add(holder, new Compostable(0.65f, false), false);
-            } else if (stack.is(Tags.Items.SEEDS)) {
-                compostables.add(holder, new Compostable(0.3f, true), false);
             }
         });
+        compostables.add(Tags.Items.SEEDS, new Compostable(0.3f, true), false);
+        compostables.add(Tags.Items.MUSHROOMS, new Compostable(0.65f, false), false);
     }
 }

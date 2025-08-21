@@ -295,6 +295,15 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("lemon_balm", "Melissa officinalis");
             put("lemongrass", "Cymbopogon schoenanthus");
             put("wintergreen", "Gaultheria procumbens");
+            // Shrooms
+            put("black_truffle", "Tuber melanosporum");
+            put("chanterelle", "Cantharellus cibarius");
+            put("laetiporus", "Laetiporus speciosus");
+            put("lions_mane", "Hericium erinaceus");
+            put("morel", "Morchella esculenta");
+            put("oyster_mushroom", "Pleurotus ostreatus");
+            put("porcini", "Boletus edulis");
+            put("shiitake", "Lentinula edodes");
         }};
 
         return names.getOrDefault(name, "Missing taxonomy for " + name);

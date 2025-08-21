@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FarmingRegistrator
@@ -242,6 +243,22 @@ public class FarmingRegistrator
         add(new CropConfig("raspberry", false, BERRY_FOOD, BerryBushBlock::new));
         add(new CropConfig("redcurrant", false, BERRY_FOOD, BerryBushBlock::new));
     }};
+
+    public static final DeferredHolder<Block, Block> BROWN_MUSHROOM_GROWTH = registerBlock("brown_mushroom_growth", () -> new MushroomGrowthBlock(new CropConfig("brown_mushroom", false, null), BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape()), false);
+    public static final DeferredHolder<Block, Block> RED_MUSHROOM_GROWTH = registerBlock("red_mushroom_growth", () -> new MushroomGrowthBlock(new CropConfig("red_mushroom", false, null), BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM).replaceable().dynamicShape()), false);
+    public static final DeferredHolder<Block, Block> CRIMSON_FUNGUS_GROWTH = registerBlock("crimson_fungus_growth", () -> new MushroomGrowthBlock(new CropConfig("crimson_fungus", false, null), BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS).replaceable().dynamicShape()), false);
+    public static final DeferredHolder<Block, Block> WARPED_FUNGUS_GROWTH = registerBlock("warped_fungus_growth", () -> new MushroomGrowthBlock(new CropConfig("warped_fungus", false, null), BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS).replaceable().dynamicShape()), false);
+    public static List<CropConfig> SHROOMS = new ArrayList<>()
+    {{
+        add(new CropConfig("chanterelle", false, null, MushroomGrowthBlock::new));
+        add(new CropConfig("laetiporus", false, null, MushroomGrowthBlock::new));
+        add(new CropConfig("lions_mane", false, null, MushroomGrowthBlock::new));
+        add(new CropConfig("morel", false, null, MushroomGrowthBlock::new));
+        add(new CropConfig("oyster_mushroom", false, null, MushroomGrowthBlock::new));
+        add(new CropConfig("porcini", false, null, MushroomGrowthBlock::new));
+        add(new CropConfig("shiitake", false, null, MushroomGrowthBlock::new));
+        add(new CropConfig("black_truffle", false, null, MushroomGrowthBlock::new));
+    }};
     public static List<FishConfig> FISHIES = new ArrayList<>()
     {{
 //        add(new FishConfig("anchovy", null, null, false, Foods.SALMON, Foods.COOKED_SALMON));
@@ -353,6 +370,7 @@ public class FarmingRegistrator
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<SimpleCropBlockEntity>> CROP_BLOCK_ENTITY;
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<ColorfulFlowerBlockEntity>> FLOWER_BLOCK_ENTITY;
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<ColorfulFlowerPotBlockEntity>> FLOWER_POT_BLOCK_ENTITY;
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<MushroomGrowthCropBlockEntity>> MUSHROOM_GROWTH_BLOCK_ENTITY;
 
     static Map<String, DeferredHolder<Block, Block>> registeredBlocks = new HashMap<>();
     public static void init() {
@@ -425,6 +443,15 @@ public class FarmingRegistrator
                 CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             }
         });
+        SHROOMS.forEach(crop -> {
+            registerItem(crop.name(), () -> new CropBlockItem(registeredBlocks.get(crop.name() + "_growth").get(), new Item.Properties()));
+//            registeredBlocks.put(crop.name(), registerBlock(crop.name(), () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape()), false));
+            registeredBlocks.put(crop.name() + "_growth", registerBlock(crop.name() + "_growth", () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape()), false));
+
+//            if (crop.food() != null) {
+//                CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+//            } TODO crated shrooms
+        });
         FISHIES.forEach(fish -> {
             if (fish.entitySupplier() != null) {
                 registerFishEntity(fish.name(), fish.entitySupplier());
@@ -477,11 +504,20 @@ public class FarmingRegistrator
         FLOWER_POT_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("potted_flower", () -> BlockEntityType.Builder.of(ColorfulFlowerPotBlockEntity::new,
                 getFlowerPots()
         ).build(null));
+        MUSHROOM_GROWTH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("mushroom_growth", () -> BlockEntityType.Builder.of(MushroomGrowthCropBlockEntity::new,
+                getShrooms()
+        ).build(null));
     }
 
     public static Block[] getAllCrops() {
         return Stream.concat(GRAPES.stream(), Stream.concat(VERTICAL_TRELLIS.stream(), Stream.concat(TRELLIS.stream(), Stream.concat(BERRIES.stream(), Stream.concat(CROPS.stream(), Stream.concat(VANILLA_CROPS.stream(), HERBS.stream()))))))
                 .map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0]);
+    }
+
+    public static Block[] getShrooms() {
+        var list = SHROOMS.stream().map(cropConfig -> registeredBlocks.get(cropConfig.name() + "_growth").get()).collect(Collectors.toCollection(ArrayList::new));
+        list.addAll(List.of(BROWN_MUSHROOM_GROWTH.get(), RED_MUSHROOM_GROWTH.get(), CRIMSON_FUNGUS_GROWTH.get(), WARPED_FUNGUS_GROWTH.get()));
+        return list.toArray(new Block[0]);
     }
 
     public static Block[] getFlowers() {
@@ -505,15 +541,6 @@ public class FarmingRegistrator
 //    public static final DeferredHolder<Item, Item> HOTDOG_ARMOR = registerItem("hotdog_armor", () -> new AnimalArmorItem(
 //            ArmorMaterials.ARMADILLO, AnimalArmorItem.BodyType.CANINE, true, new Item.Properties().durability(ArmorItem.Type.BODY.getDurability(4))
 //    ));
-
-    // Composter mushroom growth
-    public static final DeferredHolder<Block, Block> BROWN_MUSHROOM_GROWTH = registerBlock("brown_mushroom_growth", () -> new MushroomGrowthBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape(), ResourceLocation.withDefaultNamespace("brown_mushroom")), false);
-    public static final DeferredHolder<Block, Block> RED_MUSHROOM_GROWTH = registerBlock("red_mushroom_growth", () -> new MushroomGrowthBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM).replaceable().dynamicShape(), ResourceLocation.withDefaultNamespace("red_mushroom")), false);
-    public static final DeferredHolder<Block, Block> CRIMSON_FUNGUS_GROWTH = registerBlock("crimson_fungus_growth", () -> new MushroomGrowthBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS).replaceable().dynamicShape(), ResourceLocation.withDefaultNamespace("crimson_fungus")), false);
-    public static final DeferredHolder<Block, Block> WARPED_FUNGUS_GROWTH = registerBlock("warped_fungus_growth", () -> new MushroomGrowthBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS).replaceable().dynamicShape(), ResourceLocation.withDefaultNamespace("warped_fungus")), false);
-    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<MushroomGrowthCropBlockEntity>> MUSHROOM_GROWTH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("mushroom_growth", () -> BlockEntityType.Builder.of(MushroomGrowthCropBlockEntity::new,
-            BROWN_MUSHROOM_GROWTH.get(), RED_MUSHROOM_GROWTH.get(), CRIMSON_FUNGUS_GROWTH.get(), WARPED_FUNGUS_GROWTH.get()
-    ).build(null));
 
     // Machines
 //    public static final DeferredHolder<Block, Block> FISH_TRAP = registerBlock("fish_trap", () -> new FishTrapBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL)), true);

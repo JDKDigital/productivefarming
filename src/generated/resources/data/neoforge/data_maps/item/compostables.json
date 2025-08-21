@@ -1,5 +1,12 @@
 {
   "values": {
+    "#c:mushrooms": {
+      "chance": 0.65
+    },
+    "#c:seeds": {
+      "can_villager_compost": true,
+      "chance": 0.3
+    },
     "productivefarming:agave": {
       "chance": 0.65
     },

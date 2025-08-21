@@ -90,7 +90,9 @@ public class ItemTagProvider extends ItemTagsProvider
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             addSeed(crop);
         }
-
+        for (CropConfig crop: FarmingRegistrator.SHROOMS) {
+            tag(ModTags.Items.MUSHROOMS).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+        }
         for (FishConfig fish: FarmingRegistrator.FISHIES) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", fish.name()));
             if (fish.hasBlock()) {

@@ -9,15 +9,18 @@ import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.registry.ModTags;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import cy.jdkdigital.productivefarming.util.FishConfig;
+import net.darkhax.botanypots.common.impl.data.display.types.AgingDisplayState;
 import net.darkhax.botanypots.common.impl.data.display.types.BasicOptions;
 import net.darkhax.botanypots.common.impl.data.display.types.SimpleDisplayState;
 import net.darkhax.botanypots.common.impl.data.itemdrops.SimpleDropProvider;
 import net.darkhax.botanypots.common.impl.data.recipe.crop.BasicCrop;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
@@ -28,6 +31,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
+import net.neoforged.neoforge.common.crafting.BlockTagIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -235,6 +239,9 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
             for (CropConfig crop: FarmingRegistrator.STEMS) {
                 cropRecipe(crop, recipeOutput);
             }
+            for (CropConfig crop: FarmingRegistrator.SHROOMS) {
+                shroomRecipe(crop, recipeOutput);
+            }
         }
 
         private static void cropRecipe(CropConfig crop, RecipeOutput recipeOutput) {
@@ -258,25 +265,37 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
             }
         }
 
-//        private static void cropRecipe(CropConfig crop, RecipeOutput recipeOutput) {
-//            var seed = BuiltInRegistries.ITEM.get(rL(crop.hasSeed() ? crop.name() + "_seeds" : crop.name()));
-//            var cropBlock = BuiltInRegistries.BLOCK.get(rL(crop.name()));
-//            List<ProductiveDropProvider.ProductiveDrop> drops = new ArrayList<>(){{
-//                add(new ProductiveDropProvider.ProductiveDrop(BuiltInRegistries.ITEM.get(rL(crop.name())).getDefaultInstance(), 1f));
-//            }};
-//            if (crop.hasSeed()) {
-//                drops.add(new ProductiveDropProvider.ProductiveDrop(seed.getDefaultInstance(), 0.1f));
-//            }
-//            if (cropBlock instanceof DoubleCropBlock) {
-//                BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), BasicCrop.DIRT, List.of(new ProductiveDropProvider(drops)), List.of(
-//                                new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER).setValue(((DoubleCropBlock) cropBlock).getAgeProperty(), ((DoubleCropBlock) cropBlock).getMaxAge()), BasicOptions.ofDefault()),
-//                                new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER).setValue(((DoubleCropBlock) cropBlock).getAgeProperty(), ((DoubleCropBlock) cropBlock).getMaxAge()), BasicOptions.ofDefault())
-//                        ))
-//                        .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
-//            } else {
-//                BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), List.of(new ProductiveDropProvider(drops)))
-//                        .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
-//            }
-//        }
+        private static void shroomRecipe(CropConfig shroom, RecipeOutput recipeOutput) {
+            var shroomItem = BuiltInRegistries.ITEM.get(rL(shroom.name()));
+            var growthBlock = BuiltInRegistries.BLOCK.get(rL(shroom.name() + "_growth"));
+            List<SimpleDropProvider.SimpleDrop> drops = new ArrayList<>(){{
+                add(new SimpleDropProvider.SimpleDrop(shroomItem.getDefaultInstance(), 1f));
+            }};
+            BotanyPotBlockDerivedCropRecipeBuilder.drops(growthBlock, Ingredient.of(shroomItem), new BlockTagIngredient(BlockTags.MUSHROOM_GROW_BLOCK).toVanilla(), List.of(new SimpleDropProvider(drops)), List.of(
+                            new AgingDisplayState(growthBlock, BasicOptions.ofDefault())
+                    ))
+                    .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + shroom.name()));
+        }
+
+        private static void productiveCropRecipe(CropConfig crop, RecipeOutput recipeOutput) {
+            var seed = BuiltInRegistries.ITEM.get(rL(crop.hasSeed() ? crop.name() + "_seeds" : crop.name()));
+            var cropBlock = BuiltInRegistries.BLOCK.get(rL(crop.name()));
+            List<ProductiveDropProvider.ProductiveDrop> drops = new ArrayList<>(){{
+                add(new ProductiveDropProvider.ProductiveDrop(BuiltInRegistries.ITEM.get(rL(crop.name())).getDefaultInstance(), 1f));
+            }};
+            if (crop.hasSeed()) {
+                drops.add(new ProductiveDropProvider.ProductiveDrop(seed.getDefaultInstance(), 0.1f));
+            }
+            if (cropBlock instanceof DoubleCropBlock) {
+                BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), BasicCrop.DIRT, List.of(new ProductiveDropProvider(drops)), List.of(
+                                new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER).setValue(((DoubleCropBlock) cropBlock).getAgeProperty(), ((DoubleCropBlock) cropBlock).getMaxAge()), BasicOptions.ofDefault()),
+                                new SimpleDisplayState(cropBlock.defaultBlockState().setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER).setValue(((DoubleCropBlock) cropBlock).getAgeProperty(), ((DoubleCropBlock) cropBlock).getMaxAge()), BasicOptions.ofDefault())
+                        ))
+                        .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
+            } else {
+                BotanyPotBlockDerivedCropRecipeBuilder.drops(cropBlock, Ingredient.of(seed), List.of(new ProductiveDropProvider(drops)))
+                        .save(recipeOutput.withConditions(new ModLoadedCondition("botanypots")), rL("botanypots/" + crop.name()));
+            }
+        }
     }
 }
