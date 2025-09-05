@@ -78,17 +78,21 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving);
 
+        // Update fence state when a fence is placed next to the crop
         var blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof FencedCropBlockEntity fencedCropBlockEntity && fencedCropBlockEntity.getFence() != null && fencedCropBlockEntity.getFence().is(BlockTags.FENCES)) {
-            for (Direction dir : validGrowthDirections(level, pos)) {
-                if (level.getBlockState(pos.relative(dir)).is(BlockTags.FENCES)) {
+            for (Direction dir : Direction.values()) {
+                if (dir.getAxis().isHorizontal()) {
                     var fenceState = fencedCropBlockEntity.getFence();
-                    if (dir.getAxis().isHorizontal()) {
+                    if (level.getBlockState(pos.relative(dir)).is(BlockTags.FENCES)) {
                         fenceState = fenceState.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(dir), true);
+                    } else {
+                        fenceState = fenceState.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(dir), false);
                     }
                     fencedCropBlockEntity.setFence(fenceState);
                 }
             }
+            fencedCropBlockEntity.setChanged();
         }
     }
 

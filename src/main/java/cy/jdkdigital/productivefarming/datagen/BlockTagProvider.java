@@ -14,6 +14,7 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 public class BlockTagProvider extends BlockTagsProvider
@@ -143,12 +144,20 @@ public class BlockTagProvider extends BlockTagsProvider
         });
         tag(ModTags.Blocks.POLLINATABLE).addTag(BlockTags.FLOWERS).addTag(BlockTags.CROPS);
 
-        FarmingRegistrator.CROPS.forEach(crop -> {
+        Arrays.stream(FarmingRegistrator.getAllCrops()).forEach(crop -> {
+            tag(BlockTags.CROPS).add(crop);
+        });
+        FarmingRegistrator.GRAPES.forEach(crop -> {
+            var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_leaves"));
+            tag(BlockTags.FENCES).add(block);
+        });
+        FarmingRegistrator.TRELLIS.forEach(crop -> {
+            var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_leaves"));
+            tag(BlockTags.FENCES).add(block);
+        });
+        FarmingRegistrator.VERTICAL_TRELLIS.forEach(crop -> {
             var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
-            if (block instanceof VineLeafBlock) {
-                tag(BlockTags.FENCES).add(block);
-            }
-            tag(BlockTags.CROPS).add(block); // TODO add all crops to this tag
+            tag(BlockTags.FENCES).add(block);
         });
 
         FarmingRegistrator.FISHIES.forEach(fishConfig -> {

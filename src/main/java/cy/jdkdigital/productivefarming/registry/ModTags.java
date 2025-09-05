@@ -32,14 +32,13 @@ public class ModTags
         public static final TagKey<Item> CRAB_FOOD = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "crab_food"));
         public static final TagKey<Item> FERTILIZERS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "fertilizers"));
         public static final TagKey<Item> FISHES = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("fishes"));
-        public static final TagKey<Item> SEEDS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "seeds"));
         public static final TagKey<Item> BERRIES = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "berries"));
         public static final TagKey<Item> HERBS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "herbs"));
         public static final TagKey<Item> MUSHROOMS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "mushrooms"));
-        public static final TagKey<Item> DRIED_TOBACCO = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "tobacco/dried"));
-        public static final TagKey<Item> TOBACCO = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "tobacco"));
+        public static final TagKey<Item> DRIED_TOBACCO = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "tobaccos/dried"));
+        public static final TagKey<Item> TOBACCO = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "tobaccos"));
         public static final TagKey<Item> CORN = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "corn"));
-        public static final TagKey<Item> FENCEPOST_CROP = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "fencepost_crop"));
+        public static final TagKey<Item> FENCEPOST_CROP = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "fencepost_crops"));
     }
 
     public static class Biomes {

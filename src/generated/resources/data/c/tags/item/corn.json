@@ -1,9 +1,9 @@
 {
   "values": [
-    "#c:black_aztec_corn",
-    "#c:blue_jade_corn",
-    "#c:rainbow_corn",
-    "#c:sugar_pearl_corn",
-    "#c:yellow_dent_corn"
+    "productivefarming:black_aztec_corn",
+    "productivefarming:blue_jade_corn",
+    "productivefarming:rainbow_corn",
+    "productivefarming:sugar_pearl_corn",
+    "productivefarming:yellow_dent_corn"
   ]
 }

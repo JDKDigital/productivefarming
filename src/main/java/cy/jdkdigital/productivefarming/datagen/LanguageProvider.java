@@ -271,6 +271,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("tobacco", "Nicotiana tabacum");
             put("tea", "Camellia sinensis");
             put("pineapple", "Ananas comosus");
+            put("quinoa", "Chenopodium quinoa");
             put("yellow_dent_corn", "Zea mays convar. saccharata var. rugosa"); // TODO correct names for corn variants
             put("sugar_pearl_corn", "Zea mays convar. saccharata var. rugosa");
             put("rainbow_corn", "Zea mays convar. saccharata var. rugosa");

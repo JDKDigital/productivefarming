@@ -37,12 +37,6 @@ public class ItemTagProvider extends ItemTagsProvider
         tag(ModTags.Items.MUSHROOMS).add(Items.BROWN_MUSHROOM, Items.RED_MUSHROOM, Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS);
         tag(ModTags.Items.DRIED_TOBACCO).add(FarmingRegistrator.DRIED_TOBACCO.get());
         tag(ModTags.Items.TOBACCO).addTag(ModTags.Items.DRIED_TOBACCO);
-        tag(ModTags.Items.CORN)
-                .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "black_aztec_corn")))
-                .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "blue_jade_corn")))
-                .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "rainbow_corn")))
-                .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "sugar_pearl_corn")))
-                .addTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "yellow_dent_corn")));
 
         tag(ModTags.Items.VANILLA_SEEDS).add(Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS, Items.POTATO, Items.CARROT, Items.RED_MUSHROOM, Items.BROWN_MUSHROOM, Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS);
 
@@ -56,8 +50,7 @@ public class ItemTagProvider extends ItemTagsProvider
             tag(herbTag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             tag(ModTags.Items.HERBS).addTag(herbTag);
             addSeed(crop);
-            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
-            tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+            addParentTag("herbs", "herbs/" + crop.name());
         }
         for (CropConfig crop: FarmingRegistrator.BERRIES) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "berries/" + crop.name()));
@@ -66,30 +59,35 @@ public class ItemTagProvider extends ItemTagsProvider
             addSeed(crop);
         }
         for (CropConfig crop: FarmingRegistrator.CROPS) {
-            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "crops/" + crop.name()));
+            addParentTag("crops", "crops/" + crop.name());
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             addSeed(crop);
         }
         for (CropConfig crop: FarmingRegistrator.TRELLIS) {
-            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "crops/" + crop.name()));
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+            addParentTag("crops", "crops/" + crop.name());
             addSeed(crop);
             tag(ModTags.Items.FENCEPOST_CROP).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
         }
         for (CropConfig crop: FarmingRegistrator.VERTICAL_TRELLIS) {
-            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "crops/" + crop.name()));
+            addParentTag("crops", "crops/" + crop.name());
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             addSeed(crop);
             tag(ModTags.Items.FENCEPOST_CROP).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
         }
         for (CropConfig crop: FarmingRegistrator.GRAPES) {
-            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "crops/" + crop.name()));
+            addParentTag("crops", "crops/" + crop.name());
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             addSeed(crop);
             tag(ModTags.Items.FENCEPOST_CROP).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
         }
         for (CropConfig crop: FarmingRegistrator.STEMS) {
-            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
+            var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "crops/" + crop.name()));
+            addParentTag("crops", "crops/" + crop.name());
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             addSeed(crop);
         }
@@ -118,6 +116,31 @@ public class ItemTagProvider extends ItemTagsProvider
             tag(tagKey).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, resourceLocation.withPath(p -> p + "_bag").getPath())));
             tag(Tags.Items.STORAGE_BLOCKS).addTag(tagKey);
         });
+
+        addGeneralTag("leafy_greens", "arugula", "bok_choy", "butterhead_lettuce", "celery", "chard", "collard", "endive", "iceberg_lettuce", "kale", "romain_lettuce", "spinach", "watercress");
+        addGeneralTag("tomatoes", "roma_tomato", "beefsteak_tomato", "black_beauty_tomato", "blue_beauty_tomato", "white_wonder_tomato");
+        addGeneralTag("cherry_tomatoes", "cherry_tomato", "chocolate_pear_tomato", "yellow_pear_tomato", "sungold_tomato");
+        addGeneralTag("vegetables", "arrowroot", "green_bell_pepper", "yellow_bell_pepper", "orange_bell_pepper", "red_bell_pepper", "black_bell_pepper", "purple_bell_pepper", "white_bell_pepper", "broccoli", "brussels_sprout", "burdock_root", "cauliflower", "daikon", "eddoe", "eggplant", "endive", "kohlrabi", "leek", "onion", "parsnip", "peas", "pineapple", "radish", "rhubarb", "rutabaga", "salsify", "sugar_beet", "turnip", "ulluco", "wasabi", "peanuts", "ginger", "green_bean", "spring_onion", "sweet_potato", "wintergreen", "pitaya", "monstera_deliciosa", "black_aztec_corn", "blue_jade_corn", "rainbow_corn", "sugar_pearl_corn", "yellow_dent_corn", "tomatillo", "konjac", "okra", "asparagus", "artichoke", "malanga", "yam", "water_chestnut", "water_caltrop");
+        addGeneralTag("corn", "black_aztec_corn", "blue_jade_corn", "rainbow_corn", "sugar_pearl_corn", "yellow_dent_corn");
+
+        addParentTag("leafy_green", "leafy_greens");
+        addParentTag("tomatoes", "cherry_tomatoes");
+        addParentTag("tomato", "tomatoes");
+        addParentTag("cherry_tomato", "cherry_tomatoes");
+        addParentTag("vegetable", "vegetables");
+    }
+
+    private void addParentTag(String parentTag, String tagName) {
+        var parent = tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", parentTag)));
+        var tag = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", tagName));
+        parent.addTag(tag);
+    }
+
+    private void addGeneralTag(String tagName, String... crops) {
+        var tag = tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", tagName)));
+        for (String crop : crops) {
+            tag.add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop)));
+        }
     }
 
     private void addSeed(CropConfig crop) {

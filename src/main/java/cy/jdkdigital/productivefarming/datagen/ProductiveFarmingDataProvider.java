@@ -21,7 +21,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = ProductiveFarming.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = ProductiveFarming.MODID)
 public class ProductiveFarmingDataProvider
 {
     @SubscribeEvent

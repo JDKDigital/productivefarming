@@ -1,5 +1,5 @@
 {
-  "parent": "productivefarming:block/inset_leaves",
+  "parent": "productivefarming:block/vertical_trellis_leaves",
   "textures": {
     "all": "productivefarming:block/trellis/vanilla/stage_4"
   }

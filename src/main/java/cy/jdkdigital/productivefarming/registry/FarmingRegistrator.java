@@ -183,7 +183,6 @@ public class FarmingRegistrator
     }};
     public static List<CropConfig> TRELLIS = new ArrayList<>() {{
         add(new CropConfig("kiwi", false, Foods.BEETROOT, TrellisLeafBlock::new));
-        add(new CropConfig("vanilla", true, null, TrellisLeafBlock::new));
         add(new CropConfig("goji_berry", false, BERRY_FOOD, TrellisLeafBlock::new));
     }};
     public static List<CropConfig> VERTICAL_TRELLIS = new ArrayList<>() {{
@@ -191,6 +190,7 @@ public class FarmingRegistrator
         add(new CropConfig("spoon_gourd", false, Foods.BEETROOT, VerticalTrellisLeafBlock::new));
         add(new CropConfig("luffa", false, Foods.MELON_SLICE, VerticalTrellisLeafBlock::new));
         add(new CropConfig("cucumber", false, Foods.MELON_SLICE, VerticalTrellisLeafBlock::new));
+        add(new CropConfig("vanilla", true, null, VerticalTrellisLeafBlock::new));
         add(new CropConfig("zucchini", false, Foods.MELON_SLICE, VerticalTrellisLeafBlock::new));
         add(new CropConfig("akebia", false, Foods.APPLE, VerticalTrellisLeafBlock::new));
         add(new CropConfig("sarsaparilla", true, null, VerticalTrellisLeafBlock::new));
@@ -512,7 +512,7 @@ public class FarmingRegistrator
 
     public static Block[] getAllCrops() {
         return Stream.concat(GRAPES.stream(), Stream.concat(VERTICAL_TRELLIS.stream(), Stream.concat(TRELLIS.stream(), Stream.concat(BERRIES.stream(), Stream.concat(CROPS.stream(), Stream.concat(VANILLA_CROPS.stream(), HERBS.stream()))))))
-                .map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0]);
+                .map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).distinct().toList().toArray(new Block[0]);
     }
 
     public static Block[] getShrooms() {

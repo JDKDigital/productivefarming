@@ -1,4 +1,3 @@
-- tags to support farmers delight foods
 - botany pots compat (fix drops)
 - farming for blockheads market recipes
 - chance for seed drop on harvest for crops that have seeds
