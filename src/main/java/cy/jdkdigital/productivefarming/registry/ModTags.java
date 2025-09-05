@@ -39,6 +39,7 @@ public class ModTags
         public static final TagKey<Item> DRIED_TOBACCO = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "tobacco/dried"));
         public static final TagKey<Item> TOBACCO = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "tobacco"));
         public static final TagKey<Item> CORN = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "corn"));
+        public static final TagKey<Item> FENCEPOST_CROP = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "fencepost_crop"));
     }
 
     public static class Biomes {

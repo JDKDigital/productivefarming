@@ -1,3 +1,12 @@
+1.21.1-0.3.0-pre
+
+- Added ponders for farm multiblock
+- Added config to turn off farm villager trades
+- Fixed feeding trough not allowing manual item insertion
+- Added more shrooms
+- 
+
+
 1.21.1-0.2.0
 
 - Increased farm controller inventory
@@ -7,6 +16,7 @@
 - Fish farms have increased entity limit and increased nutrient rich water production
 - Allowed glass blocks in farm multiblock structure
 - Fixed farm controller, feeding trough and watering trough loot tables
+- Changed farm right clicker for better compatibility with other mods crops
 
 
 1.21.1-0.1.1

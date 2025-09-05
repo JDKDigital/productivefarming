@@ -2,6 +2,7 @@ package cy.jdkdigital.productivefarming.common.item;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
+import cy.jdkdigital.productivefarming.registry.ModTags;
 import cy.jdkdigital.productivefarming.util.FarmUtil;
 import cy.jdkdigital.productivefarming.util.TraitsHelper;
 import net.minecraft.ChatFormatting;
@@ -29,6 +30,9 @@ public class CropBlockItem extends ItemNameBlockItem
             tooltipComponents.add(Component.translatable(ProductiveFarming.MODID + ".trait." + TraitsHelper.MUTABILITY, TraitsHelper.getValueName(TraitsHelper.MUTABILITY, stack.getOrDefault(FarmingDataComponents.MUTABILITY, 0))).withStyle(ChatFormatting.GRAY));
         } else {
             tooltipComponents.add(Component.translatable(ProductiveFarming.MODID + ".tooltip.extend").withStyle(ChatFormatting.DARK_GRAY));
+        }
+        if (stack.is(ModTags.Items.FENCEPOST_CROP)) {
+            tooltipComponents.add(Component.translatable(ProductiveFarming.MODID + ".tooltip.fencepost_crop").withStyle(ChatFormatting.AQUA));
         }
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }

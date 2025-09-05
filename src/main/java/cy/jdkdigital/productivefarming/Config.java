@@ -5,11 +5,30 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public class Config
 {
     private static final ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
+    private static final ModConfigSpec.Builder STARTUP_BUILDER = new ModConfigSpec.Builder();
     public static final ModConfigSpec SERVER_CONFIG;
+    public static final ModConfigSpec STARTUP_CONFIG;
     public static final Server SERVER = new Server(SERVER_BUILDER);
+    public static final Startup STARTUP = new Startup(STARTUP_BUILDER);
 
     static {
         SERVER_CONFIG = SERVER_BUILDER.build();
+        STARTUP_CONFIG = STARTUP_BUILDER.build();
+    }
+
+    public static class Startup
+    {
+        public final ModConfigSpec.BooleanValue villagersTradeSeeds;
+
+        public Startup(ModConfigSpec.Builder builder) {
+            builder.push("General");
+
+            villagersTradeSeeds = builder
+                    .comment("Seeds can be obtained from farmer villager trades")
+                    .define("villagersTradeSeeds", true);
+
+            builder.pop();
+        }
     }
 
     public static class Server
@@ -29,7 +48,6 @@ public class Config
 
         public final ModConfigSpec.BooleanValue traitsOnVanillaCrops;
         public final ModConfigSpec.BooleanValue spawnFlowersWithBonemeal;
-        public final ModConfigSpec.BooleanValue villagersTradeSeeds;
 
         public Server(ModConfigSpec.Builder builder) {
             builder.push("General");
@@ -85,10 +103,6 @@ public class Config
             spawnFlowersWithBonemeal = builder
                     .comment("Spawn productive farming flowers when using bonemeal on grass blocks")
                     .define("spawnFlowersWithBonemeal", false);
-
-            villagersTradeSeeds = builder
-                    .comment("Seeds can be obtained from farmer villager trades")
-                    .define("villagersTradeSeeds", true);
 
             builder.pop();
         }

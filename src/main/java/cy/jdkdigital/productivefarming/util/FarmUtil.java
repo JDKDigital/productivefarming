@@ -169,7 +169,6 @@ public class FarmUtil
                 }
             }
 
-
             // Pollinate crops
             Map<RecipeHolder<CropMutationRecipe>, Pair<ResourceLocation, ResourceLocation>> matchedRecipes = new HashMap<>();
             var allRecipes = level.getRecipeManager().getAllRecipesFor(FarmingRegistrator.CROP_MUTATION_TYPE.get());

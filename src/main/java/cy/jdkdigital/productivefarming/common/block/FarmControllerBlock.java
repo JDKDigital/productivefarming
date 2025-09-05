@@ -102,7 +102,7 @@ public class FarmControllerBlock extends CapabilityContainerBlock implements IMu
             try {
                 blockEntity.setMultiBlockData(detectMultiblock(level, pos));
                 level.setBlockAndUpdate(pos, blockEntity.getBlockState().setValue(BlockStateProperties.ATTACHED, true));
-                player.sendSystemMessage(Component.translatable(ProductiveFarming.MODID + ".message.farm_formed", blockEntity.getMultiblockData().height()));
+                player.sendSystemMessage(Component.translatable(ProductiveFarming.MODID + ".message.farm_formed", blockEntity.getMultiblockData().height() + 1));
                 openGui((ServerPlayer) player, blockEntity);
             } catch (InvalidStructureException ise) {
                 level.setBlockAndUpdate(pos, blockEntity.getBlockState().setValue(BlockStateProperties.ATTACHED, false));

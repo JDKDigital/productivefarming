@@ -18,11 +18,7 @@
 
 - Patchouli guide book "Big Book of Agronomy"
 
-- Bunny taming
-
 - Corn cob pipe cosmetic curio
-
-- Hotdog armor
 
 - Possible compat https://www.curseforge.com/minecraft/mc-mods/flower-pots-plus
 
@@ -32,3 +28,12 @@
     - Crop mutations. Some crops can mutate with the help of bees.
     - Chapter on farm multiblock with picture
     - Chapter on flowers and dyes. Flowers near a working hive will propagate and combine into new colors. It's possible to breed your way to any color/dye from brown tulips to pink wither roses.
+
+
+// different soil?
+// mob farming machines to be as high as a fence and show a fence top based on the fence on one side
+
+// Tamable lobster that brings you fishing loot in the morning
+// Add carp to worldgen - carps in captivity can turn into koi
+
+// play-ball for doggos with squeaky toy sound

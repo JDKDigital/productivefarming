@@ -31,12 +31,8 @@ public record ProductiveDropProvider(List<ProductiveDrop> drops) implements Item
     ).apply(instance, ProductiveDropProvider::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ProductiveDropProvider> STREAM = StreamCodec.of(
-        (buffer, value) -> {
-            ProductiveDrop.STREAM.apply(ByteBufCodecs.list()).encode(buffer, value.drops);
-        },
-        (buffer) -> {
-            return new ProductiveDropProvider(ProductiveDrop.STREAM.apply(ByteBufCodecs.list()).decode(buffer));
-        }
+        (buffer, value) -> ProductiveDrop.STREAM.apply(ByteBufCodecs.list()).encode(buffer, value.drops),
+        (buffer) -> new ProductiveDropProvider(ProductiveDrop.STREAM.apply(ByteBufCodecs.list()).decode(buffer))
     );
 
     @Override

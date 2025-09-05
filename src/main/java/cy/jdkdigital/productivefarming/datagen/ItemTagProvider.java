@@ -74,16 +74,19 @@ public class ItemTagProvider extends ItemTagsProvider
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             addSeed(crop);
+            tag(ModTags.Items.FENCEPOST_CROP).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
         }
         for (CropConfig crop: FarmingRegistrator.VERTICAL_TRELLIS) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             addSeed(crop);
+            tag(ModTags.Items.FENCEPOST_CROP).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
         }
         for (CropConfig crop: FarmingRegistrator.GRAPES) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             addSeed(crop);
+            tag(ModTags.Items.FENCEPOST_CROP).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
         }
         for (CropConfig crop: FarmingRegistrator.STEMS) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", crop.name()));

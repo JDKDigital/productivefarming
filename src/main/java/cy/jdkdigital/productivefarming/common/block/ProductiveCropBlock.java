@@ -1,6 +1,7 @@
 package cy.jdkdigital.productivefarming.common.block;
 
 import cy.jdkdigital.productivefarming.Config;
+import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.CropBlockEntity;
 import cy.jdkdigital.productivefarming.common.block.entity.SimpleCropBlockEntity;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
@@ -33,9 +34,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock, EntityBlock
@@ -189,6 +192,15 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
     @Override
     protected int getBonemealAgeIncrease(Level pLevel) {
         return Mth.nextInt(pLevel.random, getMaxAge() > 4 ? 2 : 1, getMaxAge() < 4 ? 2 : 5);
+    }
+
+    @Override
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+        var drops = super.getDrops(state, params);
+        drops.forEach(stack -> {
+            // TODO Apply yield
+        });
+        return drops;
     }
 
     public static float getModifiedGrowthSpeed(BlockState blockState, BlockGetter level, BlockPos pos) {

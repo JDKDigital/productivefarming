@@ -161,6 +161,15 @@ dependencies {
     implementation "curse.maven:botany-pots-353928:6895762"
     implementation "curse.maven:prickle-1023259:6546240"
     implementation "curse.maven:bookshelf-228525:6717571"
+    implementation "curse.maven:mystical-agriculture-246640:6864755"
+    implementation "curse.maven:cucumber-272335:6864715"
+    implementation "curse.maven:ftb-ultimine-forge-386134:6930900"
+    implementation "curse.maven:ftb-library-forge-404465:6874538"
+    implementation "curse.maven:architectury-api-419699:5786327"
+    implementation "curse.maven:supplementaries-412082:6913494"
+    implementation "curse.maven:selene-499980:6914080"
+    implementation "curse.maven:immersive-engineering-231951:6733669"
+
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

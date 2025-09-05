@@ -35,6 +35,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ProductiveFarming.MODID + ".pollen.name", "%s");
         add(ProductiveFarming.MODID + ".information.pollen", "Use on a fully grown crop to manually pollinate it.");
         add(ProductiveFarming.MODID + ".tooltip.extend", "Hold [SHIFT] for more info");
+        add(ProductiveFarming.MODID + ".tooltip.fencepost_crop", "Must be planted on a fence post");
         add(ProductiveFarming.MODID + ".trait." + TraitsHelper.GROWTH, "Growth speed: %s");
         add(ProductiveFarming.MODID + ".trait." + TraitsHelper.YIELD, "Yield: %s");
         add(ProductiveFarming.MODID + ".trait." + TraitsHelper.RESISTANCE, "Resistance: %s");
@@ -102,6 +103,20 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("tooltip." + ProductiveFarming.MODID + ".brown_mushroom.latin", getLatinName("brown_mushroom"));
         add("tooltip." + ProductiveFarming.MODID + ".warped_fungus.latin", getLatinName("warped_fungus"));
         add("tooltip." + ProductiveFarming.MODID + ".crimson_fungus.latin", getLatinName("crimson_fungus"));
+
+        // Ponder
+        add(ProductiveFarming.MODID + ".ponder.farm_building.header", "Multiblock Farms Structure");
+        add(ProductiveFarming.MODID + ".ponder.farm_building.text_1", "The minimum size for the farm is 3x3, corners are optional");
+        add(ProductiveFarming.MODID + ".ponder.farm_building.text_2", "The inside of the farm can be any block you need for your crops");
+        add(ProductiveFarming.MODID + ".ponder.farm_building.text_3", "Additionally, the farm multiblock must have a Farm Controller...");
+        add(ProductiveFarming.MODID + ".ponder.farm_farming.header", "Multiblock Farming");
+        add(ProductiveFarming.MODID + ".ponder.farm_farming.text_1", "Crops planted on the farm will be automatically harvested");
+        add(ProductiveFarming.MODID + ".ponder.farm_farming.text_2", "When crops grow they have a small chance to improve their traits");
+        add(ProductiveFarming.MODID + ".ponder.fish_farm.header", "Fish farms");
+        add(ProductiveFarming.MODID + ".ponder.fish_farm.text_1", "If you make your farm taller you can use it as a fish farm");
+        add(ProductiveFarming.MODID + ".ponder.fish_farm.text_2", "Creatures inside the farm boundaries will be automatically bred and slaughtered");
+        add(ProductiveFarming.MODID + ".ponder.fish_farm.text_3", "Fish will produce nutrient rich water which can be pumped to a crop farm for increased growth");
+        add(ProductiveFarming.MODID + ".ponder.fish_farm.text_4", "You can also combine the two farms and have an aquaponics system");
     }
 
     @Override
@@ -125,10 +140,6 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("potato", "Solanum tuberosum");
             put("carrot", "Daucus carota");
             put("beetroot", "Beta vulgaris");
-            put("red_mushroom", "Amanita muscaria");
-            put("brown_mushroom", "Boletus edulis");
-            put("warped_fungus", "Fungus contortus");
-            put("crimson_fungus", "Fungus coccinus");
 
             put("kadsura", "Kadsura japonica");
             put("blackberry", "Rubus fruticosus");
@@ -296,6 +307,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("lemongrass", "Cymbopogon schoenanthus");
             put("wintergreen", "Gaultheria procumbens");
             // Shrooms
+            put("red_mushroom", "Amanita muscaria");
+            put("brown_mushroom", "Boletus edulis");
+            put("warped_fungus", "Fungus contortus");
+            put("crimson_fungus", "Fungus coccinus");
             put("black_truffle", "Tuber melanosporum");
             put("chanterelle", "Cantharellus cibarius");
             put("laetiporus", "Laetiporus speciosus");
@@ -303,6 +318,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             put("morel", "Morchella esculenta");
             put("oyster_mushroom", "Pleurotus ostreatus");
             put("porcini", "Boletus edulis");
+            put("portobello", "Agaricus bisporus");
             put("shiitake", "Lentinula edodes");
         }};
 

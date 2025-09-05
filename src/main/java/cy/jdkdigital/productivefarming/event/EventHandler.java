@@ -193,11 +193,11 @@ public class EventHandler
             if (event.getUsePhase().equals(UseItemOnBlockEvent.UsePhase.BLOCK) && event.getItemStack().is(ModTags.Items.MUSHROOMS) && serverLevel.random.nextFloat() < 0.2f) {
                 var blockName = ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, BuiltInRegistries.ITEM.getKey(event.getItemStack().getItem()).getPath() + "_growth");
                 var growth = BuiltInRegistries.BLOCK.get(blockName).defaultBlockState();
-                if (growth.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+                if (growth.hasProperty(BlockStateProperties.FACING)) {
                     // find free spot on the composter side to plant shrooms
                     for (Direction direction : Direction.Plane.HORIZONTAL.shuffledCopy(serverLevel.random)) {
                         if (serverLevel.getBlockState(event.getPos().relative(direction)).isAir()) {
-                            serverLevel.setBlockAndUpdate(event.getPos().relative(direction), growth.setValue(BlockStateProperties.HORIZONTAL_FACING, direction));
+                            serverLevel.setBlockAndUpdate(event.getPos().relative(direction), growth.setValue(BlockStateProperties.FACING, direction));
                             if (serverLevel.getBlockEntity(event.getPos().relative(direction)) instanceof MushroomGrowthCropBlockEntity growthCropBlockEntity) {
                                 growthCropBlockEntity.applyComponentsFromItemStack(event.getItemStack());
                             }
@@ -330,7 +330,7 @@ public class EventHandler
 
     @SubscribeEvent
     public static void onVillagerTradesEvent(VillagerTradesEvent event) {
-        if (Config.SERVER_CONFIG.isLoaded() && Config.SERVER.villagersTradeSeeds.get() && event.getType().equals(VillagerProfession.FARMER)) {
+        if (Config.STARTUP.villagersTradeSeeds.get() && event.getType().equals(VillagerProfession.FARMER)) {
             FarmingRegistrator.CROPS.forEach(cropConfig -> {
                 if (!RecipeHelper.isMutatedCrop(cropConfig)) {
                     var seed = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, cropConfig.name() + (cropConfig.hasSeed() ? "_seeds" : "")));

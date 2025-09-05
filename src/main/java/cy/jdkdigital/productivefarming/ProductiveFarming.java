@@ -82,30 +82,8 @@ public class ProductiveFarming
         FarmingRegistrator.init();
         FarmingDataComponents.init();
 
-        // TODO
-        // multiblock farm: controller, siding, in/output, RF?
-        // different soil?
-        // mob farming machines to be as high as a fence and show a fence top based on the fence on one side
-
-        // Tamable lobster that brings you fishing loot in the morning
-
-        // Fish farming:
-        // persist entities in fish farms
-        // Fish tanks with fishies.
-        // Has actual fish entities in a multiblock tank.
-        // Produces fish, fish products and nutrient rich water.
-        // Must pump fresh water into it
-        // Add carp to worldgen - carps in captivity can turn into koi
-
-        // Hydroponics:
-        // Grow beds being fed nutrient rich water for speedy growth
-
-        // Aquaponics:
-        // Fish farms and hydroponics grow beds connected together, maybe in one multiblock (crops on top of fish tank) so they don't need piping
-
-        // play-ball for doggos with squeaky toy sound
-
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
+        modContainer.registerConfig(ModConfig.Type.STARTUP, Config.STARTUP_CONFIG);
 
         if(FMLEnvironment.dist.isClient()) {
             PonderIndex.addPlugin(new FarmingPonderPlugin());

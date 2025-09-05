@@ -250,14 +250,15 @@ public class FarmingRegistrator
     public static final DeferredHolder<Block, Block> WARPED_FUNGUS_GROWTH = registerBlock("warped_fungus_growth", () -> new MushroomGrowthBlock(new CropConfig("warped_fungus", false, null), BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS).replaceable().dynamicShape()), false);
     public static List<CropConfig> SHROOMS = new ArrayList<>()
     {{
+        add(new CropConfig("black_truffle", false, null, MushroomGrowthBlock::new));
         add(new CropConfig("chanterelle", false, null, MushroomGrowthBlock::new));
         add(new CropConfig("laetiporus", false, null, MushroomGrowthBlock::new));
         add(new CropConfig("lions_mane", false, null, MushroomGrowthBlock::new));
         add(new CropConfig("morel", false, null, MushroomGrowthBlock::new));
         add(new CropConfig("oyster_mushroom", false, null, MushroomGrowthBlock::new));
         add(new CropConfig("porcini", false, null, MushroomGrowthBlock::new));
+        add(new CropConfig("portobello", false, null, MushroomGrowthBlock::new));
         add(new CropConfig("shiitake", false, null, MushroomGrowthBlock::new));
-        add(new CropConfig("black_truffle", false, null, MushroomGrowthBlock::new));
     }};
     public static List<FishConfig> FISHIES = new ArrayList<>()
     {{
