@@ -168,8 +168,10 @@ public class BlockTagProvider extends BlockTagsProvider
 
         FarmingRegistrator.CRATED_CROPS.forEach(resourceLocation -> {
             var tagKey = BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/" + resourceLocation.getPath()));
-            tag(tagKey).add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, resourceLocation.withPath(p -> p + "_crate").getPath())));
+            var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, resourceLocation.withPath(p -> p + "_crate").getPath()));
+            tag(tagKey).add(block);
             tag(Tags.Blocks.STORAGE_BLOCKS).addTag(tagKey);
+            tag(BlockTags.MINEABLE_WITH_AXE).add(block);
         });
     }
 

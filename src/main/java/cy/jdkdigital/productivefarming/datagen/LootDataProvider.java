@@ -167,6 +167,10 @@ public class LootDataProvider implements DataProvider
             for (FlowerConfig flower : FarmingRegistrator.VINES) {
                 createFlowerDrops(flower);
             }
+            FarmingRegistrator.CRATED_CROPS.forEach(cratePath -> {
+                dropSelf(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID,
+                        cratePath.withPath(p -> p + "_crate").getPath())));
+            });
         }
 
         @Override
