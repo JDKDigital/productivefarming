@@ -355,6 +355,14 @@ public class EventHandler
                     }
                 }
             });
+            FarmingRegistrator.SHROOMS.forEach(cropConfig -> {
+                if (!RecipeHelper.isMutatedCrop(cropConfig)) {
+                    var seed = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, cropConfig.name() + (cropConfig.hasSeed() ? "_seeds" : "")));
+                    if (!seed.getDefaultInstance().isEmpty()) {
+                        event.getTrades().get(3).add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 2), Optional.empty(), new ItemStack(seed, (int) (1 + Math.random() * 4)), 1, 16, 4, 0.2F));
+                    }
+                }
+            });
             FarmingRegistrator.GRAPES.forEach(cropConfig -> {
                 if (!RecipeHelper.isMutatedCrop(cropConfig)) {
                     var seed = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, cropConfig.name() + (cropConfig.hasSeed() ? "_seeds" : "")));

@@ -30,7 +30,8 @@ public class CropProvider implements IBlockComponentProvider, StreamServerDataPr
         }
         IElementHelper helper = IElementHelper.get();
         if (data.hasMutation()) {
-            tooltip.add(Component.translatable("jade." + ProductiveFarming.MODID + ".mutation", Component.translatable("block." + ProductiveFarming.MODID + "." + data.mutation().getPath())));
+            tooltip.add(Component.translatable("jade." + ProductiveFarming.MODID + ".mutation", Component.translatable("block." + ProductiveFarming.MODID + "." + data.mutation().getPath()).withStyle(ChatFormatting.GREEN)));
+            tooltip.add(Component.translatable("jade." + ProductiveFarming.MODID + ".mutation_harvest"));
         }
         if (Minecraft.getInstance().player == null || Minecraft.getInstance().player.isShiftKeyDown()) {
             tooltip.add(Component.translatable(ProductiveFarming.MODID + ".trait." + TraitsHelper.GROWTH, TraitsHelper.getValueName(TraitsHelper.GROWTH, data.growth)));

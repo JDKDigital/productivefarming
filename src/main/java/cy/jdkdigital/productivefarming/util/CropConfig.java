@@ -3,6 +3,7 @@ package cy.jdkdigital.productivefarming.util;
 import cy.jdkdigital.productivefarming.common.block.ProductiveCropBlock;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.level.FoliageColor;
 
 public final class CropConfig
 {
@@ -13,7 +14,7 @@ public final class CropConfig
     private final int cropColor;
 
     public CropConfig(String name, boolean hasSeed, FoodProperties food) {
-        this(name, hasSeed, food, 0xff);
+        this(name, hasSeed, food, FoliageColor.getDefaultColor());
     }
 
     public CropConfig(String name, boolean hasSeed, FoodProperties food, int cropColor) {
@@ -21,7 +22,7 @@ public final class CropConfig
     }
 
     public CropConfig(String name, boolean hasSeed, FoodProperties food, FarmingRegistrator.CropBlockSupplier supplier) {
-        this(name, hasSeed, food, supplier, 0xff);
+        this(name, hasSeed, food, supplier, FoliageColor.getDefaultColor());
     }
 
     public CropConfig(String name, boolean hasSeed, FoodProperties food, FarmingRegistrator.CropBlockSupplier supplier, int cropColor) {

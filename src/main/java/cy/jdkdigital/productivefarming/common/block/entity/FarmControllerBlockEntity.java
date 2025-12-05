@@ -6,7 +6,9 @@ import cy.jdkdigital.productivefarming.inventory.FarmControllerContainer;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.registry.ModTags;
 import cy.jdkdigital.productivelib.common.block.entity.IMultiBlockControllerBlockEntity;
+import cy.jdkdigital.productivelib.common.block.entity.IUpgradeableBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
+import cy.jdkdigital.productivelib.registry.LibItems;
 import cy.jdkdigital.productivelib.util.MultiBlockDetector;
 import cy.jdkdigital.productivelib.util.harvest.HarvestCompatHandler;
 import net.minecraft.core.BlockPos;
@@ -46,7 +48,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class FarmControllerBlockEntity extends TickingBlockEntity implements IMultiBlockControllerBlockEntity, MenuProvider
+public class FarmControllerBlockEntity extends TickingBlockEntity implements IMultiBlockControllerBlockEntity, IUpgradeableBlockEntity, MenuProvider
 {
     private MultiBlockDetector.MultiBlockData farmConfig;
 
@@ -73,6 +75,12 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
         }
     };
     private final IFluidHandler fluidHandler = new FluidTank(10000, fluidStack -> fluidStack.getFluid().isSame(FarmingRegistrator.NUTRIENT_WATER.get()));
+
+    protected IItemHandlerModifiable upgradeHandler = new InventoryHandlerHelper.UpgradeHandler(4, this, List.of(
+            LibItems.UPGRADE_TIME.get(),
+            LibItems.UPGRADE_TIME_2.get(),
+            LibItems.UPGRADE_STABILITY.get()
+    ));
 
     public FarmControllerBlockEntity(BlockPos pos, BlockState state) {
         super(FarmingRegistrator.FARM_CONTROLLER_BLOCK_ENTITY.get(), pos, state);
@@ -142,6 +150,11 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
     @Override
     public IFluidHandler getFluidHandler() {
         return fluidHandler;
+    }
+
+    @Override
+    public IItemHandlerModifiable getUpgradeHandler() {
+        return null;
     }
 
     @Override

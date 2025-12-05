@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import cy.jdkdigital.productivefarming.common.item.SeedBagItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -32,7 +33,7 @@ public class SeedBagItemRenderer extends BlockEntityWithoutLevelRenderer
         if (pStack.getItem() instanceof SeedBagItem seedBagItem) {
             if (pDisplayContext.equals(ItemDisplayContext.GUI)) {
                 Lighting.setupForFlatItems();
-                pPackedLight = 15728880;
+                pPackedLight = LightTexture.FULL_BRIGHT;
             }
             boolean leftHand = pDisplayContext.equals(ItemDisplayContext.FIRST_PERSON_LEFT_HAND);
             boolean firstPerson = leftHand || pDisplayContext.equals(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND);
@@ -49,20 +50,14 @@ public class SeedBagItemRenderer extends BlockEntityWithoutLevelRenderer
                 var seedStack = new ItemStack(seedItem);
                 var seedModel = itemRenderer.getModel(seedStack, Minecraft.getInstance().level, null, 0);
 
-//                if (inHand) {
-//                    pPoseStack.scale(1.0f, 1.0f, 1.1f);
-//                    pPoseStack.translate(0f, 0, 0.1f);
-//                } else
                 if (!pDisplayContext.equals(ItemDisplayContext.GROUND)) {
                     pPoseStack.translate(0f, -0.15f, 0f);
                 }
-//                if (!inHand) {
-                    pPoseStack.scale(0.5f, 0.5f, 1.1f);
-//                }
+                pPoseStack.scale(0.5f, 0.5f, 1.1f);
                 itemRenderer.render(seedStack, pDisplayContext, leftHand, pPoseStack, pBuffer, pPackedLight, pPackedOverlay, seedModel);
             }
-//            pPoseStack.flush();
             if (pDisplayContext.equals(ItemDisplayContext.GUI)) {
+                Minecraft.getInstance().renderBuffers().bufferSource().endBatch();
                 Lighting.setupFor3DItems();
             }
             pPoseStack.popPose();

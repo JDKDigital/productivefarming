@@ -48,7 +48,7 @@ public class FeedingTroughBlockEntity extends TickingBlockEntity implements Menu
         }
 
         @Override
-        public boolean isInputSlot(int slot) {
+        public boolean isInputSlotItem(int slot, ItemStack item) {
             return true;
         }
 

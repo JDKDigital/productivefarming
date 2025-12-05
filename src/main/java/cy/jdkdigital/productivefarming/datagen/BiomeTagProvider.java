@@ -25,7 +25,13 @@ public class BiomeTagProvider extends BiomeTagsProvider
                 .addTag(Tags.Biomes.IS_LUSH)
                 .addTag(Tags.Biomes.IS_PLAINS)
                 .addTag(Tags.Biomes.IS_FLORAL)
-                .addTag(Tags.Biomes.IS_HILL);
+                .addTag(Tags.Biomes.IS_HILL)
+                .addTag(Tags.Biomes.IS_JUNGLE)
+                .addTag(Tags.Biomes.IS_MOUNTAIN)
+                .addTag(Tags.Biomes.IS_MAGICAL)
+                .addTag(Tags.Biomes.IS_SWAMP)
+                .addTag(Tags.Biomes.IS_TEMPERATE_OVERWORLD)
+                .addTag(Tags.Biomes.IS_WET_OVERWORLD);
     }
 
     @Override

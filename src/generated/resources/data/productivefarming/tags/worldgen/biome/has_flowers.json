@@ -4,6 +4,12 @@
     "#c:is_lush",
     "#c:is_plains",
     "#c:is_floral",
-    "#c:is_hill"
+    "#c:is_hill",
+    "#c:is_jungle",
+    "#c:is_mountain",
+    "#c:is_magical",
+    "#c:is_swamp",
+    "#c:is_temperate/overworld",
+    "#c:is_wet/overworld"
   ]
 }

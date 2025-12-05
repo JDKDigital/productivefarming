@@ -25,6 +25,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("jei." + ProductiveFarming.MODID + ".crop_fruiting", "Crop Fruiting");
         add("jei." + ProductiveFarming.MODID + ".crop_mutation", "Crop Mutation");
         add("jade." + ProductiveFarming.MODID + ".mutation", "Mutation: %s");
+        add("jade." + ProductiveFarming.MODID + ".mutation_harvest", "Right click to safely harvest the mutated crop");
         add("config.jade.plugin_" + ProductiveFarming.MODID + ".crop", "Crops");
         add(ProductiveFarming.MODID + ".screen.progress", "Progress: %s");
         add(ProductiveFarming.MODID + ".message.farm_formed", "Farm structure assembled with height %s");
@@ -36,6 +37,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ProductiveFarming.MODID + ".information.pollen", "Use on a fully grown crop to manually pollinate it.");
         add(ProductiveFarming.MODID + ".tooltip.extend", "Hold [SHIFT] for more info");
         add(ProductiveFarming.MODID + ".tooltip.fencepost_crop", "Must be planted on a fence post");
+        add(ProductiveFarming.MODID + ".tooltip.double_crop", "Requires two blocks of space to grow.");
         add(ProductiveFarming.MODID + ".trait." + TraitsHelper.GROWTH, "Growth speed: %s");
         add(ProductiveFarming.MODID + ".trait." + TraitsHelper.YIELD, "Yield: %s");
         add(ProductiveFarming.MODID + ".trait." + TraitsHelper.RESISTANCE, "Resistance: %s");

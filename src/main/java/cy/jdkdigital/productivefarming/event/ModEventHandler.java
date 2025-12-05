@@ -66,6 +66,11 @@ public class ModEventHandler
                 (myBlockEntity, side) -> myBlockEntity.getItemHandler()
         );
         event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                FarmingRegistrator.WATERING_TROUGH_BLOCK_ENTITY.get(),
+                (myBlockEntity, side) -> myBlockEntity.getFluidHandler()
+        );
+        event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 FarmingRegistrator.FARM_CONTROLLER_BLOCK_ENTITY.get(),
                 (myBlockEntity, side) -> myBlockEntity.getItemHandler()

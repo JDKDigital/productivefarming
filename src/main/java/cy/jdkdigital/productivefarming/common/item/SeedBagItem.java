@@ -35,7 +35,7 @@ public class SeedBagItem extends Item
             var seedItem = BuiltInRegistries.ITEM.get(seed);
             if (seedItem instanceof BlockItem seedBlock) {
                 // Plant in a 3x3 area
-                var area = (new AABB(pContext.getClickedPos())).inflate(1);
+                var area = (new AABB(pContext.getClickedPos())).setMinX(pContext.getClickedPos().getX()-1).setMinZ(pContext.getClickedPos().getZ()-1);
 
                 AtomicInteger plantedSeeds = new AtomicInteger(0);
                 BlockPos.betweenClosedStream(area).forEach(blockPos -> {

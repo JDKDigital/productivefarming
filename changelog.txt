@@ -1,3 +1,18 @@
+1.21.1-0.4.1
+
+- Fixed crop mutations not working for grape crops
+
+
+1.21.1-0.4.0
+
+- Added shrooms to villager trades
+- Fixed incompatibility with FTB Ultimine causing mutated crops to not drop
+- Whitelisted more biomes for flower spawns
+- Corrected config names
+- Exposed fluid handler for watering trough
+- Fixed not being able to manually insert into a feeding trough
+
+
 1.21.1-0.3.1
 
 - Added crop block tag to crops

@@ -274,6 +274,12 @@
     "productivefarming:spring_onion": {
       "chance": 0.65
     },
+    "productivefarming:strawberry": {
+      "chance": 0.65
+    },
+    "productivefarming:sugar_beet": {
+      "chance": 0.65
+    },
     "productivefarming:sugar_pearl_corn": {
       "chance": 0.65
     },

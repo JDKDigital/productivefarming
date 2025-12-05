@@ -61,7 +61,7 @@ public class LootDataProvider implements DataProvider
 
     @Override
     public String getName() {
-        return "Productive Trees Block Loot Table datagen";
+        return "Productive Farming Block Loot Table datagen";
     }
 
     @Override

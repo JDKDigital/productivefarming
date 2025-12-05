@@ -83,7 +83,7 @@ public class ItemTagProvider extends ItemTagsProvider
             addParentTag("crops", "crops/" + crop.name());
             tag(tag).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
             addSeed(crop);
-            tag(ModTags.Items.FENCEPOST_CROP).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
+            tag(ModTags.Items.FENCEPOST_CROP).add(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")));
         }
         for (CropConfig crop: FarmingRegistrator.STEMS) {
             var tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "crops/" + crop.name()));

@@ -3,6 +3,7 @@ package cy.jdkdigital.productivefarming.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import net.darkhax.bookshelf.common.api.data.codecs.map.MapCodecs;
 import net.darkhax.botanypots.common.api.data.display.types.Display;
@@ -40,7 +41,26 @@ public record CropMutationRecipe(ResourceLocation targetCrop, ResourceLocation p
     }
 
     public boolean matches(ResourceLocation targetCrop, ResourceLocation pollenCrop) {
-        return this.targetCrop.equals(targetCrop) && this.pollenCrop.equals(pollenCrop);
+        if (this.targetCrop.equals(targetCrop) && this.pollenCrop.equals(pollenCrop)) {
+            return true;
+        }
+        // if we have vanilla crops enabled, check anything with default namespace as mod namespace instead
+        if (ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, this.targetCrop.getPath()).equals(targetCrop)) {
+            return this.pollenCrop.equals(pollenCrop) || ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, this.pollenCrop.getPath()).equals(pollenCrop);
+        }
+        if (ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, this.pollenCrop.getPath()).equals(targetCrop)) {
+            return this.targetCrop.equals(pollenCrop) || ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, this.targetCrop.getPath()).equals(pollenCrop);
+        }
+
+        // check for _leaves as well to match grapes and the likes
+        if (this.targetCrop.withPath(p -> p + "_leaves").equals(targetCrop)) {
+            return this.pollenCrop.equals(pollenCrop) || this.pollenCrop.withPath(p -> p + "_leaves").equals(pollenCrop);
+        }
+        if (this.pollenCrop.withPath(p -> p + "_leaves").equals(targetCrop)) {
+            return this.targetCrop.equals(pollenCrop) || this.targetCrop.withPath(p -> p + "_leaves").equals(pollenCrop);
+        }
+
+        return false;
     }
 
     @Override

@@ -35,9 +35,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -76,20 +79,18 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (isMaxAge(state)) {
             if (level.getBlockEntity(pos) instanceof CropBlockEntity cropBlockEntity) {
-                if (stack.is(FarmingRegistrator.POLLEN.get())) {
-                    if (stack.has(FarmingDataComponents.POLLEN_BLOCK_COMPONENT)) {
-                        var recipe = RecipeHelper.getPollinationRecipe(level, BuiltInRegistries.BLOCK.getKey(state.getBlock()), stack.get(FarmingDataComponents.POLLEN_BLOCK_COMPONENT));
-                        if (recipe != null) {
-                            if (!level.isClientSide) {
-                                cropBlockEntity.setMutation(recipe.value().mutation());
-
-                                if (!player.isCreative()) {
-                                    stack.shrink(1);
-                                }
-                                level.levelEvent(2005, pos, 0);
+                if (stack.is(FarmingRegistrator.POLLEN.get()) && stack.has(FarmingDataComponents.POLLEN_BLOCK_COMPONENT)) {
+                    var recipe = RecipeHelper.getPollinationRecipe(level, BuiltInRegistries.BLOCK.getKey(state.getBlock()), stack.get(FarmingDataComponents.POLLEN_BLOCK_COMPONENT));
+                    if (recipe != null) {
+                        if (!level.isClientSide) {
+                            cropBlockEntity.setMutation(recipe.value().mutation());
+                            if (!player.hasInfiniteMaterials()) {
+                                stack.shrink(1);
                             }
-                            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                            level.levelEvent(2005, pos, 0);
+                            return ItemInteractionResult.FAIL;
                         }
+                        return ItemInteractionResult.sidedSuccess(true);
                     }
                 }
             }
@@ -116,6 +117,7 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
                 level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
                 level.setBlock(pos, state.setValue(this.getAgeProperty(), getHarvestedAge()), Block.UPDATE_CLIENTS);
                 postHarvest(state, level, pos, player);
+                return InteractionResult.CONSUME;
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
@@ -197,9 +199,22 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
     @Override
     protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         var drops = super.getDrops(state, params);
-        drops.forEach(stack -> {
-            // TODO Apply yield
-        });
+        if (params.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof CropBlockEntity cropBlockEntity) {
+            List<ItemStack> newDrops = new ArrayList<>();
+            drops.forEach(cropStack -> {
+                if (state.getBlock() instanceof ProductiveCropBlock cropBlock && !cropBlock.getCropConfig().hasSeed()) {
+                    // Apply traits to seedless crops when harvested
+                    cropBlockEntity.applyComponentsToItemStack(cropStack);
+                }
+                if (cropBlockEntity.hasMutation()) {
+                    cropStack = cropBlockEntity.getMutatedSeedStack(cropBlockEntity.getMutation());
+                }
+                cropStack.grow(cropBlockEntity.getYield());
+                newDrops.add(cropStack);
+            });
+            cropBlockEntity.setMutation(null);
+            return newDrops;
+        }
         return drops;
     }
 

@@ -112,6 +112,9 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
         buildCrateRecipes(recipeOutput);
         buildSeedBagRecipes(recipeOutput);
         buildMutationRecipes(recipeOutput);
+        if (ModList.get().isLoaded("botanypots")) {
+            BotanyPotsCompat.buildRecipes(recipeOutput);
+        }
     }
 
     protected static <T extends AbstractCookingRecipe> void simpleCookingRecipe(RecipeOutput pFinishedRecipeConsumer, String pCookingMethod, RecipeSerializer<T> pCookingSerializer, int pCookingTime, ItemLike pIngredient, ItemLike pResult, float pExperience, AbstractCookingRecipe.Factory<T> recipeFactory) {
@@ -168,7 +171,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
                 .save(recipeOutput, rL( "pollination/rainbow_corn"));
 
         // Tomato mutations
-        CropMutationRecipeBuilder.direct(rL("roma_tomato"), rL("potato"), rL("beefsteak_tomato"), 1.0f)
+        CropMutationRecipeBuilder.direct(rL("roma_tomato"), ResourceLocation.withDefaultNamespace("potato"), rL("beefsteak_tomato"), 1.0f)
                 .save(recipeOutput, rL("pollination/beefsteak_tomato"));
         CropMutationRecipeBuilder.direct(rL("beefsteak_tomato"), rL("roma_tomato"), rL("black_beauty_tomato"), 0.3f)
                 .save(recipeOutput, rL("pollination/black_beauty_tomato"));
@@ -178,7 +181,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
                 .save(recipeOutput, rL("pollination/white_wonder_tomato"));
 
         // Cherry tomato mutations
-        CropMutationRecipeBuilder.direct(rL("cherry_tomato"), rL("beetroot"), rL("chocolate_pear_tomato"), 0.3f)
+            CropMutationRecipeBuilder.direct(rL("cherry_tomato"), ResourceLocation.withDefaultNamespace("beetroot"), rL("chocolate_pear_tomato"), 0.3f)
                 .save(recipeOutput, rL("pollination/chocolate_pear_tomato"));
         CropMutationRecipeBuilder.direct(rL("cherry_tomato"), rL("chocolate_pear_tomato"), rL("yellow_pear_tomato"), 0.3f)
                 .save(recipeOutput, rL("pollination/yellow_pear_tomato"));
@@ -206,10 +209,6 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider im
                 .save(recipeOutput, rL("pollination/golden_raspberry"));
         CropMutationRecipeBuilder.direct(rL("golden_raspberry"), rL("goji_berry"), rL("miracle_berry"), 0.5f)
                 .save(recipeOutput, rL("pollination/miracle_berry"));
-
-        if (ModList.get().isLoaded("botanypots")) {
-            BotanyPotsCompat.buildRecipes(recipeOutput);
-        }
     }
 
     private static ResourceLocation rL(String name) {

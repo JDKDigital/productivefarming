@@ -41,13 +41,13 @@ public abstract class CropBlockEntity extends AbstractBlockEntity
         setMutation(mutation, false);
     }
 
-    public void setMutation(ResourceLocation mutation, boolean recursive) {
+    public void setMutation(ResourceLocation mutation, boolean isFromLoop) {
         this.mutation = mutation;
         this.setChanged();
         if (this.level != null) {
             this.level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
 
-            if (!recursive && getBlockState().getBlock() instanceof DoubleCropBlock) {
+            if (!isFromLoop && getBlockState().getBlock() instanceof DoubleCropBlock) {
                 var otherHalf = level.getBlockEntity(getBlockPos().relative(getBlockState().getValue(BlockStateProperties.DOUBLE_BLOCK_HALF).equals(DoubleBlockHalf.LOWER) ? Direction.UP : Direction.DOWN));
                 if (otherHalf instanceof CropBlockEntity otherCropBlockEntity && !otherCropBlockEntity.hasMutation()) {
                     otherCropBlockEntity.setMutation(mutation, true);

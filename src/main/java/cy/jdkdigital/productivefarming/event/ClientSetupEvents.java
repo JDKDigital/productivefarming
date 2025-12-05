@@ -42,7 +42,7 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.client.model.DynamicFluidContainerModel;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-@EventBusSubscriber(modid = ProductiveFarming.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = ProductiveFarming.MODID, value = Dist.CLIENT)
 public class ClientSetupEvents
 {
     @SubscribeEvent
@@ -67,20 +67,6 @@ public class ClientSetupEvents
                 return FastColor.ARGB32.color(i * 32, 255 - i * 8, i * 4);
             }, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem")));
         });
-//        FarmingRegistrator.VINES.forEach(crop -> {
-//            event.register((blockState, lightReader, pos, tintIndex) -> -2046180, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")));
-//            event.register((blockState, lightReader, pos, tintIndex) -> {
-//                int i = blockState.getValue(StemBlock.AGE);
-//                return FastColor.ARGB32.color(i * 32, 255 - i * 8, i * 4);
-//            }, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
-//        });
-//        FarmingRegistrator.TRELLIS.forEach(crop -> {
-//            event.register((blockState, lightReader, pos, tintIndex) -> -2046180, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")));
-//            event.register((blockState, lightReader, pos, tintIndex) -> {
-//                int i = blockState.getValue(StemBlock.AGE);
-//                return FastColor.ARGB32.color(i * 32, 255 - i * 8, i * 4);
-//            }, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())));
-//        });
 
         event.register((blockState, lightReader, pos, tintIndex) -> {
             return lightReader != null && pos != null && lightReader.getBlockEntity(pos) instanceof CropBlockEntity cropBlockEntity ? cropBlockEntity.getMutationColor() : -1;

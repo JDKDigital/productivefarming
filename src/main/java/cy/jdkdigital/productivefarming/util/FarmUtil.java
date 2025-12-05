@@ -102,15 +102,13 @@ public class FarmUtil
         crops.forEach(blockPos -> {
             var state = level.getBlockState(blockPos);
             if (state.is(ModTags.Blocks.POLLINATABLE)) {
-                if (!(state.getBlock() instanceof CropBlock cropBlock) || cropBlock.isMaxAge(state)) {
-                    var stateKey = BuiltInRegistries.BLOCK.getKey(state.getBlock());
-                    cropMap.put(stateKey, blockPos);
-                    if (state.is(BlockTags.FLOWERS)) {
-                        flowerMap.put(stateKey, blockPos);
-                    }
-                    if (!uniqueCrops.contains(stateKey)) {
-                        uniqueCrops.add(stateKey);
-                    }
+                var stateKey = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+                cropMap.put(stateKey, blockPos);
+                if (state.is(BlockTags.FLOWERS)) {
+                    flowerMap.put(stateKey, blockPos);
+                }
+                if (!uniqueCrops.contains(stateKey)) {
+                    uniqueCrops.add(stateKey);
                 }
             }
         });
@@ -188,8 +186,16 @@ public class FarmUtil
                 RecipeHolder<CropMutationRecipe> pickedRecipe = (RecipeHolder<CropMutationRecipe>) matchedRecipes.keySet().toArray()[level.random.nextInt(matchedRecipes.size())];
 
                 BlockPos targetPos = cropMap.get(pickedRecipe.value().targetCrop());
+                if (targetPos == null) {
+                    // check if it was a _leaves block
+                    targetPos = cropMap.get(pickedRecipe.value().targetCrop().withPath(p -> p + "_leaves"));
+                }
+                if (targetPos == null) {
+                    // check if it was a vanilla converted crop
+                    targetPos = cropMap.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, pickedRecipe.value().targetCrop().getPath()));
+                }
 
-                if (level.random.nextFloat() <= (pickedRecipe.value().chance() * (isSpecialPollinator ? 5 : 1))) {
+                if (targetPos != null && level.random.nextFloat() <= (pickedRecipe.value().chance() * (isSpecialPollinator ? 5 : 1))) {
                     if (level.getBlockEntity(targetPos) instanceof CropBlockEntity cropBlockEntity) {
                         cropBlockEntity.setMutation(pickedRecipe.value().mutation());
                     }

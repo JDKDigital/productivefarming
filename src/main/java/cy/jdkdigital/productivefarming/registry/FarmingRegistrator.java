@@ -41,10 +41,7 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -110,8 +107,8 @@ public class FarmingRegistrator
         add(new CropConfig("salsify", true, Foods.BEETROOT)); // maybe a weed you can propagate, not actually farm (shear to get the flower, break to get the root?)
         add(new CropConfig("soy_bean", false, Foods.BEETROOT));
         add(new CropConfig("spinach", true, LEAFY));
-        add(new CropConfig("strawberry", false, null));
-        add(new CropConfig("sugar_beet", true, null));
+        add(new CropConfig("strawberry", false, Foods.SWEET_BERRIES));
+        add(new CropConfig("sugar_beet", true, Foods.BEETROOT));
         add(new CropConfig("sweet_marjoram", true, null));
         add(new CropConfig("turnip", true, Foods.BEETROOT));
         add(new CropConfig("ulluco", false, Foods.POTATO));
@@ -373,7 +370,7 @@ public class FarmingRegistrator
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<ColorfulFlowerPotBlockEntity>> FLOWER_POT_BLOCK_ENTITY;
     public static DeferredHolder<BlockEntityType<?>, BlockEntityType<MushroomGrowthCropBlockEntity>> MUSHROOM_GROWTH_BLOCK_ENTITY;
 
-    static Map<String, DeferredHolder<Block, Block>> registeredBlocks = new HashMap<>();
+    static Map<String, Supplier<Block>> registeredBlocks = new HashMap<>();
     public static void init() {
         VANILLA_CROPS.forEach(crop -> {
             var cropBlock = registerBlock(crop.name(), () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT)), false);
@@ -512,7 +509,7 @@ public class FarmingRegistrator
 
     public static Block[] getAllCrops() {
         return Stream.concat(GRAPES.stream(), Stream.concat(VERTICAL_TRELLIS.stream(), Stream.concat(TRELLIS.stream(), Stream.concat(BERRIES.stream(), Stream.concat(CROPS.stream(), Stream.concat(VANILLA_CROPS.stream(), HERBS.stream()))))))
-                .map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).distinct().toList().toArray(new Block[0]);
+                .map(cropConfig -> new ArrayList<>(Arrays.asList(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.getOrDefault(cropConfig.name() + "_leaves", () -> null).get()))).flatMap(List::stream).filter(Objects::nonNull).distinct().toList().toArray(new Block[0]);
     }
 
     public static Block[] getShrooms() {

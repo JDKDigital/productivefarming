@@ -54,15 +54,15 @@ public class Config
 
             farmMaxVolume = builder
                     .comment("Max internal volume of the farm multiblock")
-                    .defineInRange("foundryMaxVolume", 200, 1, Integer.MAX_VALUE);
+                    .defineInRange("farmMaxVolume", 1024, 1, Integer.MAX_VALUE);
 
             farmMaxCircumference = builder
                     .comment("Max circumference of the farm multiblock")
-                    .defineInRange("foundryMaxCircumference", 200, 1, Integer.MAX_VALUE);
+                    .defineInRange("farmMaxCircumference", 200, 1, Integer.MAX_VALUE);
 
             farmMaxHeight = builder
                     .comment("Max height of the farm multiblock")
-                    .defineInRange("foundryMaxHeight", 20, 1, Integer.MAX_VALUE);
+                    .defineInRange("farmMaxHeight", 20, 1, Integer.MAX_VALUE);
 
             feedingTroughTickRate = builder
                     .comment("Tickrate for Feeding Troughs")

@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -46,6 +47,12 @@ public class BlockTagProvider extends BlockTagsProvider
                 BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cantaloupe")),
                 BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "honeydew_melon"))
         );
+
+        // FTB Ultimine compat
+        var umBlacklist = tag(BlockTags.create(ResourceLocation.parse("ftbultimine:single_crop_harvesting_blacklist")));
+        for (Block cropBlock : FarmingRegistrator.getAllCrops()) {
+            umBlacklist.add(cropBlock);
+        }
 
         // Flowers from bonemeal
         tag(ModTags.Blocks.CAN_SPAWN_FROM_BONEMEAL).add(

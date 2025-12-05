@@ -1,12 +1,14 @@
 package cy.jdkdigital.productivefarming.common.block;
 
 import com.mojang.datafixers.DataFixUtils;
+import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.CropBlockEntity;
 import cy.jdkdigital.productivefarming.common.block.entity.FencedCropBlockEntity;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -94,6 +96,11 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock
             }
             fencedCropBlockEntity.setChanged();
         }
+    }
+
+    @Override
+    public ItemStack getHarvestItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        return getCloneItemStack(level, pos, state);
     }
 
     @Override
