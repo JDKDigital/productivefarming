@@ -1,6 +1,5 @@
 package cy.jdkdigital.productivefarming.common.item;
 
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.ModTags;
 import net.minecraft.core.Direction;

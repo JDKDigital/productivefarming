@@ -44,6 +44,7 @@ public class Config
         public final ModConfigSpec.DoubleValue clamSpreadChance;
         public final ModConfigSpec.DoubleValue flowerPropagationChance;
         public final ModConfigSpec.DoubleValue traitIncreaseChance;
+        public final ModConfigSpec.DoubleValue speedUpgradeModifier;
         public final ModConfigSpec.IntValue pollenChanceFromSieve; // TODO 1.22 change to double
 
         public final ModConfigSpec.BooleanValue traitsOnVanillaCrops;
@@ -91,6 +92,10 @@ public class Config
             traitIncreaseChance = builder
                     .comment("Chance for crops to increase traits when growing")
                     .defineInRange("traitIncreaseChance", 0.05, 0, 1);
+
+            speedUpgradeModifier = builder
+                    .comment("Tick speed bonus from using speed upgrades in the farm")
+                    .defineInRange("speedUpgradeModifier", 0.12, 0, 1);
 
             pollenChanceFromSieve = builder
                     .comment("Chance to get a pollen when using sieve upgrades in hives")

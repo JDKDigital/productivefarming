@@ -14,7 +14,6 @@ import net.darkhax.botanypots.common.impl.data.display.types.BasicOptions;
 import net.darkhax.botanypots.common.impl.data.display.types.SimpleDisplayState;
 import net.darkhax.botanypots.common.impl.data.itemdrops.SimpleDropProvider;
 import net.darkhax.botanypots.common.impl.data.recipe.crop.BasicCrop;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;

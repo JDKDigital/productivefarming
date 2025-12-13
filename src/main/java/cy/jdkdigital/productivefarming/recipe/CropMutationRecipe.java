@@ -5,28 +5,18 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
-import net.darkhax.bookshelf.common.api.data.codecs.map.MapCodecs;
-import net.darkhax.botanypots.common.api.data.display.types.Display;
-import net.darkhax.botanypots.common.api.data.display.types.DisplayType;
-import net.darkhax.botanypots.common.api.data.itemdrops.ItemDropProvider;
-import net.darkhax.botanypots.common.api.data.itemdrops.ItemDropProviderType;
-import net.darkhax.botanypots.common.impl.data.display.types.BasicOptions;
-import net.darkhax.botanypots.common.impl.data.recipe.crop.BasicCrop;
-import net.darkhax.botanypots.common.impl.data.recipe.crop.BlockDerivedCrop;
-import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Optional;
 
 public record CropMutationRecipe(ResourceLocation targetCrop, ResourceLocation pollenCrop, ResourceLocation mutation, float chance) implements Recipe<RecipeInput>
 {

@@ -5,8 +5,6 @@ import cy.jdkdigital.productivefarming.registry.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
-import net.minecraft.data.tags.PoiTypeTagsProvider;
-import net.minecraft.tags.BiomeTags;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 

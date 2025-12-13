@@ -3,6 +3,7 @@ package cy.jdkdigital.productivefarming.event;
 import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.DoubleCropBlock;
+import cy.jdkdigital.productivefarming.common.block.IColorfulFlowerBlock;
 import cy.jdkdigital.productivefarming.common.block.entity.ColorfulFlowerBlockEntity;
 import cy.jdkdigital.productivefarming.common.block.entity.MushroomGrowthCropBlockEntity;
 import cy.jdkdigital.productivefarming.integrations.productivebees.CompatHandler;
@@ -15,6 +16,8 @@ import cy.jdkdigital.productivefarming.util.RecipeHelper;
 import cy.jdkdigital.productivefarming.util.TraitsHelper;
 import cy.jdkdigital.productivelib.event.BeeReleaseEvent;
 import cy.jdkdigital.productivelib.event.CollectValidUpgradesEvent;
+import cy.jdkdigital.productivelib.event.UpgradeTooltipEvent;
+import cy.jdkdigital.productivelib.registry.LibItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,14 +29,20 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
+import net.minecraft.world.entity.animal.Cod;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
@@ -49,6 +58,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 import net.neoforged.neoforge.event.entity.player.BonemealEvent;
@@ -58,6 +71,8 @@ import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +83,67 @@ import java.util.stream.Stream;
 @EventBusSubscriber(modid = ProductiveFarming.MODID)
 public class EventHandler
 {
+    @SubscribeEvent
+    public static void buildContents(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey().equals(FarmingRegistrator.TAB_KEY)) {
+            for (DeferredHolder<Item, ? extends Item> item : ProductiveFarming.ITEMS.getEntries()) {
+                if (item.is(FarmingRegistrator.FARM_HATCH.getId())) continue;
+
+                if (item.is(ItemTags.FLOWERS) && item.get() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IColorfulFlowerBlock colorfulFlowerBlock) {
+                    var stack = item.get().getDefaultInstance();
+                    stack.set(FarmingDataComponents.COLOR, colorfulFlowerBlock.getDefaultColor());
+                    event.accept(stack);
+                } else {
+                    event.accept(item.value());
+                }
+            }
+            if (ModList.get().isLoaded("productivebees")) {
+                event.accept(LibItems.UPGRADE_POLLEN_SIEVE.get());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEntityAttributeCreate(EntityAttributeCreationEvent event) {
+        // Entity attribute assignments
+        FarmingRegistrator.FISHIES.forEach(fishConfig -> {
+            if (fishConfig.entitySupplier() != null) {
+                var entityType = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, fishConfig.name()));
+                // TODO different attributes per entity
+                event.put((EntityType<? extends LivingEntity>) entityType, Cod.createAttributes().build());
+            }
+        });
+    }
+
+    @SubscribeEvent
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                FarmingRegistrator.FEEDING_TROUGH_BLOCK_ENTITY.get(),
+                (myBlockEntity, side) -> myBlockEntity.getItemHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                FarmingRegistrator.WATERING_TROUGH_BLOCK_ENTITY.get(),
+                (myBlockEntity, side) -> myBlockEntity.getFluidHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                FarmingRegistrator.FARM_CONTROLLER_BLOCK_ENTITY.get(),
+                (myBlockEntity, side) -> myBlockEntity.getItemHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                FarmingRegistrator.FARM_CONTROLLER_BLOCK_ENTITY.get(),
+                (myBlockEntity, side) -> myBlockEntity.getFluidHandler()
+        );
+    }
+
+    @SubscribeEvent
+    private static void registerDataMap(final RegisterDataMapTypesEvent event) {
+        event.register(FarmingRegistrator.CROP_TRAITS);
+    }
+
     @SubscribeEvent
     static void onServerStart(ServerAboutToStartEvent event) {
         Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registries.PROCESSOR_LIST).orElseThrow();
@@ -236,6 +312,18 @@ public class EventHandler
     public static void collectValidUpgrades(CollectValidUpgradesEvent event) {
         if (ModList.get().isLoaded("productivebees")) {
             CompatHandler.collectValidUpgrades(event);
+        }
+    }
+
+    @SubscribeEvent
+    public static void addUpgradeTooltip(UpgradeTooltipEvent event) {
+        var upgradeType = BuiltInRegistries.ITEM.getKey(event.getStack().getItem());
+
+        String tPrefix = "productivefarming.information.upgrade." + upgradeType.getPath() + ".";
+        switch (upgradeType.getPath()) {
+            case "upgrade_time", "upgrade_time_2", "upgrade_stability" -> {
+                event.addValidBlock(Component.translatable("productivefarming.devices.farm_controller"), tPrefix + "farm_controller");
+            }
         }
     }
 

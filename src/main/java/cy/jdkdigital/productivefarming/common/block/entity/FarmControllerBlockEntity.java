@@ -1,10 +1,11 @@
 package cy.jdkdigital.productivefarming.common.block.entity;
 
 import cy.jdkdigital.productivefarming.Config;
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.inventory.FarmControllerContainer;
+import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.registry.ModTags;
+import cy.jdkdigital.productivelib.common.block.entity.ICapabilityBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.IMultiBlockControllerBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.IUpgradeableBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
@@ -99,7 +100,8 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
 
     @Override
     int tickRate() {
-        return 300;
+        int speedModifier = getUpgradeCount(LibItems.UPGRADE_TIME.get()) + (getUpgradeCount(LibItems.UPGRADE_TIME_2.get()) * 2) + 1;
+        return (int)(300f * (1 - Math.min(0.93, speedModifier * Config.SERVER.speedUpgradeModifier.get())));
     }
 
     @Override
@@ -126,8 +128,15 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
                 processCropFarm(cropPositions);
 
                 // collect items, void excess
+                boolean stripStats = getUpgradeCount(LibItems.UPGRADE_STABILITY.get()) > 0;
                 List<ItemEntity> lootStacks = level.getEntitiesOfClass(ItemEntity.class, (new AABB(farmConfig.topCorners().getFirst().above(3).getCenter(), farmConfig.topCorners().getSecond().below(farmConfig.height() + 1).getBottomCenter()))).stream().toList();
                 lootStacks.forEach(itemEntity -> {
+                    if (stripStats && itemEntity.getItem().has(FarmingDataComponents.GROWTH)) {
+                        itemEntity.getItem().remove(FarmingDataComponents.GROWTH);
+                        itemEntity.getItem().remove(FarmingDataComponents.YIELD);
+                        itemEntity.getItem().remove(FarmingDataComponents.RESISTANCE);
+                        itemEntity.getItem().remove(FarmingDataComponents.MUTABILITY);
+                    }
                     if (inventoryHandler instanceof InventoryHandlerHelper.BlockEntityItemStackHandler handler && handler.addOutput(itemEntity.getItem()).isEmpty()) {
                         itemEntity.kill();
                     }
@@ -154,7 +163,7 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
 
     @Override
     public IItemHandlerModifiable getUpgradeHandler() {
-        return null;
+        return upgradeHandler;
     }
 
     @Override

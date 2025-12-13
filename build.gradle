@@ -134,6 +134,7 @@ configurations {
 
 dependencies {
     implementation fileTree('libs') { include '*.jar'}
+    implementation "local.libs:productivebees-1.21.1-13.12.0"
 
     jarJar(group: 'cy.jdkdigital.productivelib', name: 'productivelib', version: "${lib_version_range}") {
         transitive(false)
@@ -153,7 +154,7 @@ dependencies {
     implementation "net.createmod.ponder:Ponder-NeoForge-1.21.1:${ponder_version}"
     implementation "com.tterrag.registrate:Registrate:${registrate_version}"
 
-    implementation "curse.maven:productivebees-377897:6702701"
+//    implementation "curse.maven:productivebees-377897:6702701"
     implementation "curse.maven:jade-324717:6667790"
     implementation "curse.maven:dyenamics-509276:6620953"
     implementation "curse.maven:utilitarian-929559:6650737"
@@ -167,8 +168,8 @@ dependencies {
 //    implementation "curse.maven:ftb-ultimine-forge-386134:6930900"
     implementation "curse.maven:ftb-library-forge-404465:6874538"
     implementation "curse.maven:architectury-api-419699:5786327"
-    implementation "curse.maven:supplementaries-412082:6913494"
-    implementation "curse.maven:selene-499980:6914080"
+//    implementation "curse.maven:supplementaries-412082:6913494"
+//    implementation "curse.maven:selene-499980:6914080"
     implementation "curse.maven:immersive-engineering-231951:6733669"
 
 }

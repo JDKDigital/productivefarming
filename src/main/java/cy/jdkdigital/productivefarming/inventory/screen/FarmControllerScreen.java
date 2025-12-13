@@ -2,13 +2,13 @@ package cy.jdkdigital.productivefarming.inventory.screen;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.inventory.FarmControllerContainer;
+import cy.jdkdigital.productivelib.client.screen.AbstractUpgradeableContainerScreen;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class FarmControllerScreen extends AbstractContainerScreen<FarmControllerContainer>
+public class FarmControllerScreen extends AbstractUpgradeableContainerScreen<FarmControllerContainer>
 {
     private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "textures/gui/container/farm_controller.png");
 
@@ -18,15 +18,8 @@ public class FarmControllerScreen extends AbstractContainerScreen<FarmController
 
     @Override
     public void render(GuiGraphics matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack, mouseX, mouseY, partialTicks);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
-    }
-
-    @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        guiGraphics.drawString(font, this.title, 8, 6, 4210752, false);
-        guiGraphics.drawString(font, this.playerInventoryTitle, 8, (this.getYSize() - 96 + 2), 4210752, false);
     }
 
     @Override

@@ -13,10 +13,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class FarmControllerContainer extends AbstractContainer
+public class FarmControllerContainer extends AbstractContainer<FarmControllerBlockEntity>
 {
-    public final FarmControllerBlockEntity blockEntity;
-
     private final ContainerLevelAccess canInteractWithCallable;
 
     public FarmControllerContainer(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
@@ -24,12 +22,13 @@ public class FarmControllerContainer extends AbstractContainer
     }
 
     public FarmControllerContainer(final int windowId, final Inventory playerInventory, final FarmControllerBlockEntity blockEntity) {
-        super(FarmingRegistrator.FARM_CONTROLLER_MENU.get(), windowId);
+        super(FarmingRegistrator.FARM_CONTROLLER_MENU.get(), blockEntity, windowId);
 
-        this.blockEntity = blockEntity;
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
 
-        addSlotBox(this.blockEntity.inventoryHandler, 0, 8, 19, 9, 18, 3, 18);
+        addSlotBox(this.getBlockEntity().getItemHandler(), 0, 8, 19, 9, 18, 3, 18);
+
+        addSlotBox(this.getBlockEntity().getUpgradeHandler(), 0, 178, 8, 1, 18, 4, 18);
 
         layoutPlayerInventorySlots(playerInventory, 0, 8, 84);
     }
@@ -47,10 +46,5 @@ public class FarmControllerContainer extends AbstractContainer
     @Override
     public boolean stillValid(@Nonnull final Player player) {
         return canInteractWithCallable.evaluate((world, pos) -> world.getBlockState(pos).getBlock() instanceof FarmControllerBlock && player.distanceToSqr((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D, true);
-    }
-
-    @Override
-    protected BlockEntity getBlockEntity() {
-        return blockEntity;
     }
 }

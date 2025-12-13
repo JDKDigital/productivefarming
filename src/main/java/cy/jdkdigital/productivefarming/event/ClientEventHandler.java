@@ -43,7 +43,7 @@ import net.neoforged.neoforge.client.model.DynamicFluidContainerModel;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 @EventBusSubscriber(modid = ProductiveFarming.MODID, value = Dist.CLIENT)
-public class ClientSetupEvents
+public class ClientEventHandler
 {
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event) {

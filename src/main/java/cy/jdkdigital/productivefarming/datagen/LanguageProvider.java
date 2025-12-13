@@ -31,6 +31,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ProductiveFarming.MODID + ".message.farm_formed", "Farm structure assembled with height %s");
         add(ProductiveFarming.MODID + ".message.farm_invalid", "Farm structure invalid. %s");
 
+        add(ProductiveFarming.MODID + ".devices.farm_controller", "Multiblock Farm");
+        add(ProductiveFarming.MODID + ".information.upgrade.upgrade_stability.farm_controller", "Strips stats from collected crops.");
+        add(ProductiveFarming.MODID + ".information.upgrade.upgrade_time.farm_controller", "Decreases time between harvesting attempts, use with care.\n   Multiple upgrades can be installed.");
+        add(ProductiveFarming.MODID + ".information.upgrade.upgrade_time_2.farm_controller", "It's twice as good as the other one.");
+
         add("block." + ProductiveFarming.MODID + ".watering_trough.tooltip", "Increases growth speed of nearby animals");
         add("block." + ProductiveFarming.MODID + ".feeding_trough.tooltip", "Makes nearby animals breed");
         add(ProductiveFarming.MODID + ".pollen.name", "%s");

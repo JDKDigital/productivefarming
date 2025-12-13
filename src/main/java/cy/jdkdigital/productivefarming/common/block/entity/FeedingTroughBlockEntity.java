@@ -5,8 +5,8 @@ import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.common.block.FeedingTroughBlock;
 import cy.jdkdigital.productivefarming.inventory.FeedingTroughContainer;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import cy.jdkdigital.productivelib.common.block.entity.IUpgradeableBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
-import cy.jdkdigital.productivelib.common.block.entity.UpgradeableBlockEntity;
 import cy.jdkdigital.productivelib.registry.LibItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FeedingTroughBlockEntity extends TickingBlockEntity implements MenuProvider, UpgradeableBlockEntity
+public class FeedingTroughBlockEntity extends TickingBlockEntity implements MenuProvider, IUpgradeableBlockEntity
 {
     static final UUID PLAYER_UUID = UUID.nameUUIDFromBytes("feeding_trough".getBytes(StandardCharsets.UTF_8));
 

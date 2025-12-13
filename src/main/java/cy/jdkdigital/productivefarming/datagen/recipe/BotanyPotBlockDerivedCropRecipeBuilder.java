@@ -7,6 +7,7 @@ import net.darkhax.botanypots.common.impl.data.display.types.BasicOptions;
 import net.darkhax.botanypots.common.impl.data.recipe.crop.BasicCrop;
 import net.darkhax.botanypots.common.impl.data.recipe.crop.BlockDerivedCrop;
 import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +16,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
-import net.minecraft.advancements.critereon.BlockPredicate;
 
 import java.util.List;
 import java.util.Optional;

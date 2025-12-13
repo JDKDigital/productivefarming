@@ -3,7 +3,7 @@ package cy.jdkdigital.productivefarming.common.block.entity;
 import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
-import cy.jdkdigital.productivelib.common.block.entity.UpgradeableBlockEntity;
+import cy.jdkdigital.productivelib.common.block.entity.IUpgradeableBlockEntity;
 import cy.jdkdigital.productivelib.registry.LibItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +17,7 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import java.util.List;
 
-public class WateringTroughBlockEntity extends TickingBlockEntity implements UpgradeableBlockEntity
+public class WateringTroughBlockEntity extends TickingBlockEntity implements IUpgradeableBlockEntity
 {
     protected FluidTank fluidHandler = new FluidTank(10000, fluidStack -> fluidStack.is(Tags.Fluids.WATER));
 
