@@ -194,6 +194,7 @@ tasks.withType(ProcessResources).configureEach {
             lib_version            : lib_version,
             lib_version_range      : lib_version_range,
             pb_version             : pb_version,
+            pb_version_range       : pb_version_range,
             jei_version            : jei_version,
     ]
     inputs.properties replaceProperties

@@ -471,7 +471,7 @@ public class FarmingRegistrator
             registerItem(seedName.getPath() + "_bag", () -> new SeedBagItem(seedName, new Item.Properties()));
         });
         FLOWERS.forEach(flowerConfig -> {
-            var flower = registerBlock(flowerConfig.name(), () -> flowerConfig.isDouble() ? new ColorfulTallFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ROSE_BUSH), flowerConfig.baseColor()) : new ColorfulFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY), flowerConfig.baseColor()), true);
+            var flower = registerBlock(flowerConfig.name(), () -> flowerConfig.isDouble() ? new ColorfulTallFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ROSE_BUSH), flowerConfig.baseColor()) : new ColorfulFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY), flowerConfig.baseColor()), flowerConfig.isDouble() ? DoubleHighBlockItem::new : BlockItem::new);
             registeredBlocks.put(flowerConfig.name(), flower);
             if (!flowerConfig.isDouble()) {
                 var pottedFlower = registerBlock("potted_" + flowerConfig.name(), () -> new ColorfulFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_OAK_SAPLING)), false);
@@ -598,7 +598,7 @@ public class FarmingRegistrator
         return registerPlantableCrop(crop, supplier, CropBlockItem::new);
     }
 
-    public static DeferredHolder<Block, Block> registerPlantableCrop(CropConfig crop, Supplier<Block> supplier, CropItemSupplier<BlockItem> item) {
+    public static DeferredHolder<Block, Block> registerPlantableCrop(CropConfig crop, Supplier<Block> supplier, ItemSupplier<BlockItem> item) {
         var cropBlock = registerBlock(crop.name(), supplier, false);
         if (crop.hasSeed()) {
             registerItem(crop.name() + "_seeds", () -> item.create(cropBlock.get(), new Item.Properties()));
@@ -634,9 +634,13 @@ public class FarmingRegistrator
     }
 
     public static DeferredHolder<Block, Block> registerBlock(String name, Supplier<Block> supplier, boolean hasItem) {
+        return registerBlock(name, supplier, hasItem ? BlockItem::new : null);
+    }
+
+    public static DeferredHolder<Block, Block> registerBlock(String name, Supplier<Block> supplier, ItemSupplier<BlockItem> item) {
         var block = ProductiveFarming.BLOCKS.register(name, supplier);
-        if (hasItem) {
-            registerItem(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        if (item != null) {
+            registerItem(name, () -> item.create(block.get(), new Item.Properties()));
         }
         return block;
     }
@@ -706,7 +710,7 @@ public class FarmingRegistrator
     }
 
     @FunctionalInterface
-    public interface CropItemSupplier<T extends Item>
+    public interface ItemSupplier<T extends Item>
     {
         T create(Block block, Item.Properties properties);
     }

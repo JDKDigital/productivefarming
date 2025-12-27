@@ -1,3 +1,7 @@
+
+- Fixed double flowers growing through blocks and added griefing permission checks
+
+
 1.21.1-0.5.0
 
 - Upgrade item tooltip updates

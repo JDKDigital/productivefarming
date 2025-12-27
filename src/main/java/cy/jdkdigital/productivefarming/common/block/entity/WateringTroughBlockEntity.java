@@ -2,8 +2,8 @@ package cy.jdkdigital.productivefarming.common.block.entity;
 
 import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
-import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
 import cy.jdkdigital.productivelib.common.block.entity.IUpgradeableBlockEntity;
+import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
 import cy.jdkdigital.productivelib.registry.LibItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

@@ -1,5 +1,6 @@
 package cy.jdkdigital.productivefarming.util;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import cy.jdkdigital.productivefarming.Config;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
@@ -13,22 +14,30 @@ import cy.jdkdigital.productivelib.util.ColorUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.TallFlowerBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.util.BlockSnapshot;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.event.EventHooks;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class FarmUtil
 {
+    static final UUID PLAYER_UUID = UUID.nameUUIDFromBytes("productive_farmer".getBytes(StandardCharsets.UTF_8));
+
     // TODO move to datamap
     public static Map<ResourceLocation, Integer> VANILLA_FLOWER_COLORS = new HashMap<>() {{
         put(ResourceLocation.parse("minecraft:rose_bush"), 0xffff4540);
@@ -94,7 +103,7 @@ public class FarmUtil
         return "tooltip." + ProductiveFarming.MODID + "." + key + ".latin";
     }
 
-    public static void pollinateCrops(Level level, BlockPos pos, int distance, boolean isSpecialPollinator, List<ResourceLocation> uniqueCrops) {
+    public static void pollinateCrops(ServerLevel level, BlockPos pos, int distance, boolean isSpecialPollinator, List<ResourceLocation> uniqueCrops) {
         List<BlockPos> crops = BlockPos.betweenClosedStream(pos.offset(-distance, -distance, -distance), pos.offset(distance, distance, distance)).map(BlockPos::immutable).toList();
         // Build permutation map
         Map<ResourceLocation, BlockPos> flowerMap = new HashMap<>();
@@ -144,23 +153,27 @@ public class FarmUtil
                             .replace("pink_tulip", "tulip");
                     var newFlower = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, pBeeFlower)).defaultBlockState();
                     if (newFlower.is(BlockTags.FLOWERS)) {
+                        Player fakePlayer = FakePlayerFactory.get(level, new GameProfile(PLAYER_UUID, "flower_master"));
+
                         // Find valid block to place it on
                         var list = BlockPos.betweenClosedStream(pos.offset(-distance, -distance + 2, -distance), pos.offset(distance, distance - 2, distance)).map(BlockPos::immutable).collect(Collectors.toList());
                         Collections.shuffle(list);
                         for (BlockPos blockPos : list) {
-                            if (level.getBlockState(blockPos).canBeReplaced() && newFlower.canSurvive(level, blockPos) && level.setBlock(blockPos, newFlower, CropBlock.UPDATE_ALL_IMMEDIATE)) {
-                                // Set color
-                                if (level.getBlockEntity(blockPos) instanceof ColorfulFlowerBlockEntity flowerBlockEntity) {
-                                    flowerBlockEntity.setColor(ColorUtil.blend(colorA, colorB, Mth.lerp(level.random.nextFloat(), 0.3f, 0.7f)));
-                                    // for double flower
-                                    if (newFlower.is(BlockTags.TALL_FLOWERS)) {
-                                        level.setBlockAndUpdate(blockPos.above(), newFlower.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
-                                        if (level.getBlockEntity(blockPos.above()) instanceof ColorfulFlowerBlockEntity flowerBlockEntityAbove) {
-                                            flowerBlockEntityAbove.setColor(flowerBlockEntity.getColor());
+                            if (level.getBlockState(blockPos).canBeReplaced() && (!(newFlower.getBlock() instanceof TallFlowerBlock) || level.getBlockState(blockPos.above()).canBeReplaced()) && newFlower.canSurvive(level, blockPos) && !EventHooks.onBlockPlace(fakePlayer, BlockSnapshot.create(level.dimension(), level, blockPos), fakePlayer.getDirection())) {
+                                if (level.setBlock(blockPos, newFlower, CropBlock.UPDATE_ALL_IMMEDIATE)) {
+                                    // Set color
+                                    if (level.getBlockEntity(blockPos) instanceof ColorfulFlowerBlockEntity flowerBlockEntity) {
+                                        flowerBlockEntity.setColor(ColorUtil.blend(colorA, colorB, Mth.lerp(level.random.nextFloat(), 0.3f, 0.7f)));
+                                        // for double flower
+                                        if (newFlower.is(BlockTags.TALL_FLOWERS)) {
+                                            level.setBlockAndUpdate(blockPos.above(), newFlower.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
+                                            if (level.getBlockEntity(blockPos.above()) instanceof ColorfulFlowerBlockEntity flowerBlockEntityAbove) {
+                                                flowerBlockEntityAbove.setColor(flowerBlockEntity.getColor());
+                                            }
                                         }
                                     }
+                                    return;
                                 }
-                                return;
                             }
                         }
                     }
