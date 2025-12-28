@@ -166,6 +166,15 @@
     "productivefarming:rosemary",
     "productivefarming:sage",
     "productivefarming:thyme",
-    "productivefarming:ostrich_fiddlehead"
+    "productivefarming:ostrich_fiddlehead",
+    "productivefarming:black_truffle_growth",
+    "productivefarming:chanterelle_growth",
+    "productivefarming:laetiporus_growth",
+    "productivefarming:lions_mane_growth",
+    "productivefarming:morel_growth",
+    "productivefarming:oyster_mushroom_growth",
+    "productivefarming:porcini_growth",
+    "productivefarming:portobello_growth",
+    "productivefarming:shiitake_growth"
   ]
 }

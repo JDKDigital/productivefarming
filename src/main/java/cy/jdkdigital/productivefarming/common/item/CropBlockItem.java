@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.List;
 
@@ -36,6 +37,9 @@ public class CropBlockItem extends ItemNameBlockItem
         }
         if (stack.is(ModTags.Items.FENCEPOST_CROP)) {
             tooltipComponents.add(Component.translatable(ProductiveFarming.MODID + ".tooltip.fencepost_crop").withStyle(ChatFormatting.AQUA));
+        }
+        if (stack.is(Tags.Items.MUSHROOMS)) {
+            tooltipComponents.add(Component.translatable(ProductiveFarming.MODID + ".tooltip.mushroom_crop").withStyle(ChatFormatting.AQUA));
         }
         if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof DoubleCropBlock) {
             tooltipComponents.add(Component.translatable(ProductiveFarming.MODID + ".tooltip.double_crop").withStyle(ChatFormatting.AQUA));

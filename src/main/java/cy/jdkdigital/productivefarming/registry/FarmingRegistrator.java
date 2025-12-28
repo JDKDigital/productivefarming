@@ -414,8 +414,8 @@ public class FarmingRegistrator
             }
         });
         STEMS.forEach(crop -> {
-            registerItem(crop.name() + "_slice", crop.food());
-            registerItem(crop.name() + "_seeds", () -> new CropBlockItem(registeredBlocks.get(crop.name() + "_stem").get(), new Item.Properties()));
+            registerFoodItem(crop.name() + "_slice", crop.food());
+            registerItem(crop.name() + "_seeds", () -> new CropBlockItem(registeredBlocks.get(crop.name() + "_stem").get(), cropProperties()));
             registeredBlocks.put(crop.name(), registerBlock(crop.name(), () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.MELON)), true));
             registeredBlocks.put(crop.name() + "_stem", registerBlock(crop.name() + "_stem", () -> new StemBlock(
                     ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
@@ -442,7 +442,7 @@ public class FarmingRegistrator
             }
         });
         SHROOMS.forEach(crop -> {
-            registerItem(crop.name(), () -> new CropBlockItem(registeredBlocks.get(crop.name() + "_growth").get(), new Item.Properties()));
+            registerItem(crop.name(), () -> new CropBlockItem(registeredBlocks.get(crop.name() + "_growth").get(), cropProperties()));
 //            registeredBlocks.put(crop.name(), registerBlock(crop.name(), () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape()), false));
             registeredBlocks.put(crop.name() + "_growth", registerBlock(crop.name() + "_growth", () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape()), false));
 
@@ -601,17 +601,17 @@ public class FarmingRegistrator
     public static DeferredHolder<Block, Block> registerPlantableCrop(CropConfig crop, Supplier<Block> supplier, ItemSupplier<BlockItem> item) {
         var cropBlock = registerBlock(crop.name(), supplier, false);
         if (crop.hasSeed()) {
-            registerItem(crop.name() + "_seeds", () -> item.create(cropBlock.get(), new Item.Properties()));
+            registerItem(crop.name() + "_seeds", () -> item.create(cropBlock.get(), cropProperties()));
             if (crop.food() != null) {
-                registerCropItem(crop.name(), crop.food());
+                registerFoodCropItem(crop.name(), crop.food());
             } else {
-                registerItem(crop.name());
+                registerItem(crop.name(), () -> new CropItem(new Item.Properties()));
             }
         } else {
             if (crop.food() != null) {
-                registerItem(crop.name(), () -> item.create(cropBlock.get(), new Item.Properties().food(crop.food())));
+                registerItem(crop.name(), () -> item.create(cropBlock.get(), cropProperties().food(crop.food())));
             } else {
-                registerItem(crop.name(), () -> item.create(cropBlock.get(), new Item.Properties()));
+                registerItem(crop.name(), () -> item.create(cropBlock.get(), cropProperties()));
             }
         }
         return cropBlock;
@@ -621,11 +621,11 @@ public class FarmingRegistrator
         return registerItem(name, () -> new Item(new Item.Properties()));
     }
 
-    public static DeferredHolder<Item, Item> registerItem(String name, FoodProperties food) {
+    public static DeferredHolder<Item, Item> registerFoodItem(String name, FoodProperties food) {
         return registerItem(name, () -> new Item(new Item.Properties().food(food)));
     }
 
-    public static DeferredHolder<Item, Item> registerCropItem(String name, FoodProperties food) {
+    public static DeferredHolder<Item, Item> registerFoodCropItem(String name, FoodProperties food) {
         return registerItem(name, () -> new CropItem(new Item.Properties().food(food)));
     }
 
@@ -701,6 +701,14 @@ public class FarmingRegistrator
                 .tickRate(30)
                 .slopeFindDistance(4)
                 .levelDecreasePerBlock(2);
+    }
+
+    private static Item.Properties cropProperties() {
+        return new Item.Properties()
+                .component(FarmingDataComponents.GROWTH, 0)
+                .component(FarmingDataComponents.YIELD, 0)
+                .component(FarmingDataComponents.RESISTANCE, 0)
+                .component(FarmingDataComponents.MUTABILITY, 0);
     }
 
     @FunctionalInterface

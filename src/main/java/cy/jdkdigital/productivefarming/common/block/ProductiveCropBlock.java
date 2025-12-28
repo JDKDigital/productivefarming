@@ -1,6 +1,7 @@
 package cy.jdkdigital.productivefarming.common.block;
 
 import cy.jdkdigital.productivefarming.Config;
+import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.entity.CropBlockEntity;
 import cy.jdkdigital.productivefarming.common.block.entity.SimpleCropBlockEntity;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
@@ -75,21 +76,19 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (isMaxAge(state)) {
-            if (level.getBlockEntity(pos) instanceof CropBlockEntity cropBlockEntity) {
-                if (stack.is(FarmingRegistrator.POLLEN.get()) && stack.has(FarmingDataComponents.POLLEN_BLOCK_COMPONENT)) {
-                    var recipe = RecipeHelper.getPollinationRecipe(level, BuiltInRegistries.BLOCK.getKey(state.getBlock()), stack.get(FarmingDataComponents.POLLEN_BLOCK_COMPONENT));
-                    if (recipe != null) {
-                        if (!level.isClientSide) {
-                            cropBlockEntity.setMutation(recipe.value().mutation());
-                            if (!player.hasInfiniteMaterials()) {
-                                stack.shrink(1);
-                            }
-                            level.levelEvent(2005, pos, 0);
-                            return ItemInteractionResult.FAIL;
+        if (level.getBlockEntity(pos) instanceof CropBlockEntity cropBlockEntity) {
+            if (stack.is(FarmingRegistrator.POLLEN.get()) && stack.has(FarmingDataComponents.POLLEN_BLOCK_COMPONENT)) {
+                var recipe = RecipeHelper.getPollinationRecipe(level, BuiltInRegistries.BLOCK.getKey(state.getBlock()), stack.get(FarmingDataComponents.POLLEN_BLOCK_COMPONENT));
+                if (recipe != null) {
+                    if (!level.isClientSide) {
+                        cropBlockEntity.setMutation(recipe.value().mutation());
+                        if (!player.hasInfiniteMaterials()) {
+                            stack.shrink(1);
                         }
-                        return ItemInteractionResult.sidedSuccess(true);
+                        level.levelEvent(2005, pos, 0);
+                        return ItemInteractionResult.FAIL;
                     }
+                    return ItemInteractionResult.sidedSuccess(true);
                 }
             }
         }

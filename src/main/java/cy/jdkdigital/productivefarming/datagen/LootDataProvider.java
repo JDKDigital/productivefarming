@@ -35,9 +35,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -118,7 +116,11 @@ public class LootDataProvider implements DataProvider
                 }
             }
             for (CropConfig crop : FarmingRegistrator.HERBS) {
-                dropSeedlessCrop(crop);
+                if (crop.hasSeed()) {
+                    dropSeedCrop(crop);
+                } else {
+                    dropSeedlessCrop(crop);
+                }
             }
             for (CropConfig crop : FarmingRegistrator.BERRIES) {
                 dropSeedlessCrop(crop);
@@ -202,13 +204,17 @@ public class LootDataProvider implements DataProvider
                         .hasBlockStateProperties(cropBlock)
                         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(cropBlock.getAgeProperty(), cropBlock.getMaxAge()));
 
+                LootItemCondition.Builder seeBuilder = ExplosionCondition.survivesExplosion();
                 if (block.defaultBlockState().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
                     builder = LootItemBlockStatePropertyCondition
                             .hasBlockStateProperties(cropBlock)
-                            .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(cropBlock.getAgeProperty(), cropBlock.getMaxAge()).hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
+                            .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(cropBlock.getAgeProperty(), cropBlock.getMaxAge()).hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER));
+                    seeBuilder = LootItemBlockStatePropertyCondition
+                            .hasBlockStateProperties(cropBlock)
+                            .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER));
                 }
 
-                this.add(cropBlock, this.createCropDrops(cropBlock, cropItem, seedItem, builder));
+                this.add(cropBlock, this.createCropDrops(cropBlock, cropItem, seedItem, builder, seeBuilder));
             }
         }
 
@@ -262,8 +268,7 @@ public class LootDataProvider implements DataProvider
                     );
         }
 
-        @Override
-        protected LootTable.Builder createCropDrops(Block cropBlock, Item grownCropItem, Item seedsItem, LootItemCondition.Builder dropGrownCropCondition) {
+        protected LootTable.Builder createCropDrops(Block cropBlock, Item grownCropItem, Item seedsItem, LootItemCondition.Builder dropGrownCropCondition, LootItemCondition.Builder dropSeedCondition) {
             HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
             return this.applyExplosionDecay(
                     cropBlock,
@@ -271,7 +276,7 @@ public class LootDataProvider implements DataProvider
                             .withPool(
                                     LootPool.lootPool().add(
                                             LootItem.lootTableItem(grownCropItem).when(dropGrownCropCondition)
-                                                    .otherwise(LootItem.lootTableItem(seedsItem).apply(cropComponents()))
+                                                    .otherwise(LootItem.lootTableItem(seedsItem).when(dropSeedCondition).apply(cropComponents()))
 
                                     )
                             )
@@ -279,6 +284,7 @@ public class LootDataProvider implements DataProvider
                                     LootPool.lootPool().when(dropGrownCropCondition)
                                             .add(
                                                     LootItem.lootTableItem(seedsItem)
+                                                            .when(dropSeedCondition)
                                                             .apply(ApplyBonusCount.addBonusBinomialDistributionCount(registrylookup.getOrThrow(Enchantments.FORTUNE), 0.5714286F, 3))
                                                             .apply(cropComponents())
                                             )

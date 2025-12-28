@@ -52,6 +52,9 @@ public class BlockTagProvider extends BlockTagsProvider
         for (Block cropBlock : FarmingRegistrator.getAllCrops()) {
             umBlacklist.add(cropBlock);
         }
+        FarmingRegistrator.SHROOMS.forEach(cropConfig -> {
+            umBlacklist.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, cropConfig.name() + "_growth")));
+        });
 
         // Flowers from bonemeal
         tag(ModTags.Blocks.CAN_SPAWN_FROM_BONEMEAL).add(

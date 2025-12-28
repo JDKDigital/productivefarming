@@ -20,7 +20,7 @@
                   "condition": "minecraft:block_state_property",
                   "properties": {
                     "age": "6",
-                    "half": "upper"
+                    "half": "lower"
                   }
                 }
               ],
@@ -28,6 +28,15 @@
             },
             {
               "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "productivefarming:quinoa",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "half": "lower"
+                  }
+                }
+              ],
               "functions": [
                 {
                   "function": "minecraft:copy_components",
@@ -55,13 +64,22 @@
           "condition": "minecraft:block_state_property",
           "properties": {
             "age": "6",
-            "half": "upper"
+            "half": "lower"
           }
         }
       ],
       "entries": [
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "productivefarming:quinoa",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "half": "lower"
+              }
+            }
+          ],
           "functions": [
             {
               "enchantment": "minecraft:fortune",

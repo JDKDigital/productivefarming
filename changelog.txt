@@ -1,5 +1,11 @@
+1.21.1-0.5.1
 
 - Fixed double flowers growing through blocks and added griefing permission checks
+- Fixed mushroom growths not being harvestable
+- Fixed herb crop loot tables not dropping seeds
+- Fixed seed duplication for som crops when destroyed
+- Fixed some crops not being compostable
+- Fixed traded seeds and crops not being stackable with harvested seeds and crops
 
 
 1.21.1-0.5.0

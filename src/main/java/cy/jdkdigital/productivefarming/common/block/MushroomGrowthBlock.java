@@ -14,6 +14,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -74,7 +75,7 @@ public class MushroomGrowthBlock extends ProductiveCropBlock
     }};
 
     public MushroomGrowthBlock(CropConfig crop, Properties properties) {
-        super(crop, properties); // TODO
+        super(crop, properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(this.getAgeProperty(), 0).setValue(BlockStateProperties.FACING, Direction.UP));
     }
 
@@ -117,6 +118,11 @@ public class MushroomGrowthBlock extends ProductiveCropBlock
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return !level.getBlockState(pos.relative(state.getValue(BlockStateProperties.FACING).getOpposite())).isAir();
+    }
+
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.is(Blocks.COMPOSTER);
     }
 
     @Override

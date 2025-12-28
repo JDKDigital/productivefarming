@@ -43,6 +43,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ProductiveFarming.MODID + ".tooltip.extend", "Hold [SHIFT] for more info");
         add(ProductiveFarming.MODID + ".tooltip.fencepost_crop", "Must be planted on a fence post");
         add(ProductiveFarming.MODID + ".tooltip.double_crop", "Requires two blocks of space to grow.");
+        add(ProductiveFarming.MODID + ".tooltip.mushroom_crop", "Composting this has a chance of growing new shrooms on the side of the composter.");
         add(ProductiveFarming.MODID + ".trait." + TraitsHelper.GROWTH, "Growth speed: %s");
         add(ProductiveFarming.MODID + ".trait." + TraitsHelper.YIELD, "Yield: %s");
         add(ProductiveFarming.MODID + ".trait." + TraitsHelper.RESISTANCE, "Resistance: %s");
@@ -103,6 +104,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
         });
         FarmingRegistrator.VERTICAL_TRELLIS.forEach(crop -> {
+            add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
+        });
+        FarmingRegistrator.SHROOMS.forEach(crop -> {
             add("tooltip." + ProductiveFarming.MODID + "." + crop.name() + ".latin", getLatinName(crop.name()));
         });
 

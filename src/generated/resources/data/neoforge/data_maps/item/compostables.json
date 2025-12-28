@@ -1,5 +1,11 @@
 {
   "values": {
+    "#c:crops": {
+      "chance": 0.5
+    },
+    "#c:herbs": {
+      "chance": 0.5
+    },
     "#c:mushrooms": {
       "chance": 0.65
     },
@@ -8,316 +14,628 @@
       "chance": 0.3
     },
     "productivefarming:agave": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:akebia": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:arrowroot": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:artichoke": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:arugula": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:asparagus": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:beefsteak_tomato": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:black_aztec_corn": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:black_beauty_tomato": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:black_bell_pepper": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:blackberry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:blackcurrant": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:blue_beauty_tomato": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:blue_jade_corn": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:blueberry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:bok_choy": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:boysenberry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:broccoli": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:brussels_sprout": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:burdock_root": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:butterhead_lettuce": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:butternut_squash": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:cabbage": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:cantaloupe_slice": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:cardamon": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:cauliflower": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:celery": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:chard": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:cherry_tomato": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:chili_pepper": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:chocolate_pear_tomato": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:cloudberry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:collard": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:concord_grape": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:cotton_candy_grape": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:cranberry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:cucumber": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:daikon": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:eddoe": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:eggplant": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:endive": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:ferula": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:garlic": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:ginger": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:golden_raspberry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:gooseberry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:green_bean": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:green_bell_pepper": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:green_grape": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:honeydew_melon_slice": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:iceberg_lettuce": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:jalapeno": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:jute": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:kadsura": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:kale": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:kiwi": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:kohlrabi": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:konjac": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:leek": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:lingoberry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:luffa": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:malanga": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:miracle_berry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:monstera_deliciosa": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:okra": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:onion": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:orange_bell_pepper": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:parsnip": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:peanuts": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:peas": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:pineapple": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:pitaya": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:purple_bell_pepper": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:radish": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:rainbow_corn": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:raspberry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:red_bell_pepper": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:red_grape": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:redcurrant": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:rhubarb": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:roma_tomato": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:romain_lettuce": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:rutabaga": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:salsify": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:sea_buckthorn": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:soy_bean": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:spinach": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:spoon_gourd": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:spring_onion": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:strawberry": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:sugar_beet": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:sugar_pearl_corn": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:sungold_tomato": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:sweet_potato": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:tomatillo": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:turnip": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:ulluco": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:white_bell_pepper": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:white_wonder_tomato": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:yam": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:yellow_bell_pepper": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:yellow_dent_corn": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:yellow_pear_tomato": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     },
     "productivefarming:zucchini": {
-      "chance": 0.65
+      "replace": true,
+      "value": {
+        "chance": 0.65
+      }
     }
   }
 }
