@@ -25,6 +25,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -165,6 +166,9 @@ public class LootDataProvider implements DataProvider
             }
             for (FlowerConfig flower : FarmingRegistrator.FLOWERS) {
                 createFlowerDrops(flower);
+                if (!flower.isDouble()) {
+                    createFlowerPotDrops(flower);
+                }
             }
             for (FlowerConfig flower : FarmingRegistrator.VINES) {
                 createFlowerDrops(flower);
@@ -326,7 +330,7 @@ public class LootDataProvider implements DataProvider
 
         private void createFlowerDrops(FlowerConfig flower) {
             var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flower.name()));
-            if (block instanceof ColorfulTallFlowerBlock) {
+            if (flower.isDouble()) {
                 // handled in code because double plants don't get components applied correctly, thanks Mojang
 //                this.add(block, createSinglePropConditionTable(block, DoublePlantBlock.HALF, DoubleBlockHalf.LOWER));
             } else {
@@ -337,6 +341,27 @@ public class LootDataProvider implements DataProvider
                 this.add(block, LootTable.lootTable().withPool(
                         LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                                 .add(builder)));
+            }
+        }
+
+        private void createFlowerPotDrops(FlowerConfig flower) {
+            var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "potted_" + flower.name()));
+            var flowerItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flower.name()));
+            if (!flower.isDouble()) {
+                LootPoolEntryContainer.Builder<?> builder = LootItem.lootTableItem(flowerItem)
+                        .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(FarmingDataComponents.COLOR.get()))
+                        .when(ExplosionCondition.survivesExplosion());
+
+                this.add(block, LootTable.lootTable()
+                        .withPool(
+                                LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                                        .add(builder)
+                        )
+                        .withPool(
+                                LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                                        .add(LootItem.lootTableItem(Items.FLOWER_POT).when(ExplosionCondition.survivesExplosion()))
+                        )
+                );
             }
         }
 

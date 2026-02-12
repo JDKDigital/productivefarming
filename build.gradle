@@ -139,7 +139,7 @@ dependencies {
     jarJar(group: 'cy.jdkdigital.productivelib', name: 'productivelib', version: "${lib_version_range}") {
         transitive(false)
     }
-    jarJar(group: 'net.createmod.ponder', name: 'Ponder-NeoForge-1.21.1', version: "${ponder_version}") {
+    jarJar(group: 'net.createmod.ponder', name: 'ponder-neoforge', version: "${ponder_version}") {
         transitive(false)
     }
     jarJar(group: 'dev.engine-room.flywheel', name: 'flywheel-neoforge-1.21.1', version: "${flywheel_version}") {
@@ -151,7 +151,7 @@ dependencies {
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    implementation "net.createmod.ponder:Ponder-NeoForge-1.21.1:${ponder_version}"
+    implementation "net.createmod.ponder:ponder-neoforge:${ponder_version}"
     implementation "com.tterrag.registrate:Registrate:${registrate_version}"
 
 //    implementation "curse.maven:productivebees-377897:6702701"

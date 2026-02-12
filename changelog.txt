@@ -1,3 +1,9 @@
+1.21.1-0.5.2
+
+- Fixed flowers in flower pots
+- Updated ponder
+
+
 1.21.1-0.5.1
 
 - Fixed double flowers growing through blocks and added griefing permission checks

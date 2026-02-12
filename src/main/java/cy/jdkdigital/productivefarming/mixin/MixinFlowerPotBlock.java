@@ -19,10 +19,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = FlowerPotBlock.class)
 public abstract class MixinFlowerPotBlock
 {
-    @Inject(at = {@At(value = "RETURN", ordinal = 2)}, method = {"useItemOn"})
+    @Inject(at = {@At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;consume(ILnet/minecraft/world/entity/LivingEntity;)V")}, method = {"useItemOn"})
     public void canSurvive(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<ItemInteractionResult> cir) {
         if (stack.has(FarmingDataComponents.COLOR) && level.getBlockEntity(pos) instanceof ColorfulFlowerPotBlockEntity colorfulFlowerPotBlock) {
-            colorfulFlowerPotBlock.setColor(stack.get(FarmingDataComponents.COLOR));
+            colorfulFlowerPotBlock.setColor(stack.getOrDefault(FarmingDataComponents.COLOR, -1));
         }
     }
 }

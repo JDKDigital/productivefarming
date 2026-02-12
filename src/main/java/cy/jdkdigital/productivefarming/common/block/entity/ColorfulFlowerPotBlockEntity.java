@@ -44,11 +44,11 @@ public class ColorfulFlowerPotBlockEntity extends AbstractBlockEntity
         tag.putInt("color", this.color);
     }
 
-//    @Override
-//    protected void applyImplicitComponents(DataComponentInput componentInput) {
-//        super.applyImplicitComponents(componentInput);
-//        setColor(componentInput.getOrDefault(FarmingDataComponents.COLOR, this.color));
-//    }
+    @Override
+    protected void applyImplicitComponents(DataComponentInput componentInput) {
+        super.applyImplicitComponents(componentInput);
+        setColor(componentInput.getOrDefault(FarmingDataComponents.COLOR, this.color));
+    }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder components) {

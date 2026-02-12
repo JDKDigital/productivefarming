@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "minecraft:flowers"
+    },
+    "L": {
+      "item": "minecraft:paper"
+    },
+    "I": {
+      "item": "minecraft:glass_bottle"
+    },
+    "U": {
+      "item": "productivelib:upgrade_base"
+    }
+  },
+  "pattern": [
+    "#L#",
+    "IUI",
+    "#L#"
+  ],
+  "result": {
+    "id": "productivelib:upgrade_pollen_sieve"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "productivebees"
+    }
+  ]
+}
