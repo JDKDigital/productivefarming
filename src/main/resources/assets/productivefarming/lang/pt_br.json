@@ -663,7 +663,7 @@
   "jei.productivefarming.crop_mutation": "Mutação do Cultivo",
   "productivefarming.devices.farm_controller": "Fazenda Multibloco",
   "productivefarming.information.pollen": "Use em um cultivo totalmente crescido para polinizá-lo manualmente.",
-  "productivefarming.information.upgrade.upgrade_stability.farm_controller": "Remove estatísticas das culturas coletadas.",
+  "productivefarming.information.upgrade.upgrade_stability.farm_controller": "Extrai estatísticas das colheitas coletadas.",
   "productivefarming.information.upgrade.upgrade_time.farm_controller": "Diminui o tempo entre tentativas de colheita, use com cuidado.\n Múltiplas melhorias podem ser instaladas.",
   "productivefarming.information.upgrade.upgrade_time_2.farm_controller": "É duas vezes melhor que o outro.",
   "productivefarming.message.farm_formed": "Estrutura da fazenda montada com altura %s",
