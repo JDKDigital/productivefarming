@@ -1,0 +1,24 @@
+{
+  "values": [
+    "minecraft:wheat",
+    "minecraft:carrots",
+    "minecraft:potatoes",
+    "minecraft:beetroots",
+    {
+      "id": "#mysticalagriculture:crops",
+      "required": false
+    },
+    {
+      "id": "#croptopia:crops",
+      "required": false
+    },
+    {
+      "id": "silentgear:flax_plant",
+      "required": false
+    },
+    {
+      "id": "silentgear:fluffy_plant",
+      "required": false
+    }
+  ]
+}

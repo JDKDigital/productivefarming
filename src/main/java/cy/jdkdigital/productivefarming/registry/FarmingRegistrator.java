@@ -1,5 +1,6 @@
 package cy.jdkdigital.productivefarming.registry;
 
+import com.mojang.serialization.Codec;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.common.block.*;
 import cy.jdkdigital.productivefarming.common.block.entity.*;
@@ -16,8 +17,9 @@ import cy.jdkdigital.productivefarming.util.FlowerConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -31,9 +33,9 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
@@ -42,6 +44,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -223,7 +226,7 @@ public class FarmingRegistrator
         add(new CropConfig("thyme", true, null, HerbBlock::new));
         add(new CropConfig("ostrich_fiddlehead", true, null, HerbBlock::new)); // TODO worldgen
     }};
-    static final FoodProperties BERRY_FOOD = (new FoodProperties.Builder()).alwaysEdible().fast().nutrition(1).saturationModifier(0.1F).build();
+    static final FoodProperties BERRY_FOOD = (new FoodProperties.Builder()).alwaysEdible().nutrition(1).saturationModifier(0.1F).build();
     public static List<CropConfig> BERRIES = new ArrayList<>()
     {{
         add(new CropConfig("kadsura", false, BERRY_FOOD, BerryBushBlock::new));
@@ -241,10 +244,10 @@ public class FarmingRegistrator
         add(new CropConfig("redcurrant", false, BERRY_FOOD, BerryBushBlock::new));
     }};
 
-    public static final DeferredHolder<Block, Block> BROWN_MUSHROOM_GROWTH = registerBlock("brown_mushroom_growth", () -> new MushroomGrowthBlock(new CropConfig("brown_mushroom", false, null), BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape()), false);
-    public static final DeferredHolder<Block, Block> RED_MUSHROOM_GROWTH = registerBlock("red_mushroom_growth", () -> new MushroomGrowthBlock(new CropConfig("red_mushroom", false, null), BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM).replaceable().dynamicShape()), false);
-    public static final DeferredHolder<Block, Block> CRIMSON_FUNGUS_GROWTH = registerBlock("crimson_fungus_growth", () -> new MushroomGrowthBlock(new CropConfig("crimson_fungus", false, null), BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS).replaceable().dynamicShape()), false);
-    public static final DeferredHolder<Block, Block> WARPED_FUNGUS_GROWTH = registerBlock("warped_fungus_growth", () -> new MushroomGrowthBlock(new CropConfig("warped_fungus", false, null), BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS).replaceable().dynamicShape()), false);
+    public static final DeferredHolder<Block, Block> BROWN_MUSHROOM_GROWTH = registerBlock("brown_mushroom_growth", p -> new MushroomGrowthBlock(new CropConfig("brown_mushroom", false, null), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape(), false);
+    public static final DeferredHolder<Block, Block> RED_MUSHROOM_GROWTH = registerBlock("red_mushroom_growth", p -> new MushroomGrowthBlock(new CropConfig("red_mushroom", false, null), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM).replaceable().dynamicShape(), false);
+    public static final DeferredHolder<Block, Block> CRIMSON_FUNGUS_GROWTH = registerBlock("crimson_fungus_growth", p -> new MushroomGrowthBlock(new CropConfig("crimson_fungus", false, null), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS).replaceable().dynamicShape(), false);
+    public static final DeferredHolder<Block, Block> WARPED_FUNGUS_GROWTH = registerBlock("warped_fungus_growth", p -> new MushroomGrowthBlock(new CropConfig("warped_fungus", false, null), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS).replaceable().dynamicShape(), false);
     public static List<CropConfig> SHROOMS = new ArrayList<>()
     {{
         add(new CropConfig("black_truffle", false, null, MushroomGrowthBlock::new));
@@ -275,43 +278,15 @@ public class FarmingRegistrator
 //        add(new FishConfig("tuna", Tuna::new, CodRenderer::new, false, Foods.SALMON, Foods.COOKED_SALMON));
     }};
 
-    public static List<ResourceLocation> CRATED_CROPS = new ArrayList<>()
+    public static List<Identifier> CRATED_CROPS = new ArrayList<>()
     {{
-//        add(ResourceLocation.withDefaultNamespace("baked_potato"));
-//        add(ResourceLocation.withDefaultNamespace("apple"));
-//        add(ResourceLocation.withDefaultNamespace("chorus_fruit"));
-//        add(ResourceLocation.withDefaultNamespace("sweet_berries"));
-//        add(ResourceLocation.withDefaultNamespace("glow_berries"));
-//        add(ResourceLocation.withDefaultNamespace("beef"));
-//        add(ResourceLocation.withDefaultNamespace("cooked_beef"));
-//        add(ResourceLocation.withDefaultNamespace("chicken"));
-//        add(ResourceLocation.withDefaultNamespace("cooked_chicken"));
-//        add(ResourceLocation.withDefaultNamespace("mutton"));
-//        add(ResourceLocation.withDefaultNamespace("cooked_mutton"));
-//        add(ResourceLocation.withDefaultNamespace("porkchop"));
-//        add(ResourceLocation.withDefaultNamespace("cooked_porkchop"));
-//        add(ResourceLocation.withDefaultNamespace("rabbit"));
-//        add(ResourceLocation.withDefaultNamespace("cooked_rabbit"));
-//        add(ResourceLocation.withDefaultNamespace("salmon"));
-//        add(ResourceLocation.withDefaultNamespace("cooked_salmon"));
-//        add(ResourceLocation.withDefaultNamespace("cod"));
-//        add(ResourceLocation.withDefaultNamespace("cooked_cod"));
-//        add(ResourceLocation.withDefaultNamespace("tropical_fish"));
-//        add(ResourceLocation.withDefaultNamespace("pufferfish"));
-//        add(ResourceLocation.withDefaultNamespace("cocoa_beans"));
-//        add(ResourceLocation.withDefaultNamespace("egg"));
-//        add(ResourceLocation.withDefaultNamespace("turtle_egg"));
-//        add(ResourceLocation.withDefaultNamespace("sniffer_egg"));
-//        add(ResourceLocation.withDefaultNamespace("golden_apple"));
-//        add(ResourceLocation.withDefaultNamespace("golden_carrot"));
-//        add(ResourceLocation.withDefaultNamespace("ink_sac"));
     }};
-    public static List<ResourceLocation> SEED_BAGS = new ArrayList<>()
+    public static List<Identifier> SEED_BAGS = new ArrayList<>()
     {{
-        add(ResourceLocation.withDefaultNamespace("pumpkin_seeds"));
-        add(ResourceLocation.withDefaultNamespace("melon_seeds"));
-        add(ResourceLocation.withDefaultNamespace("torchflower_seeds"));
-        add(ResourceLocation.withDefaultNamespace("pitcher_pod"));
+        add(Identifier.withDefaultNamespace("pumpkin_seeds"));
+        add(Identifier.withDefaultNamespace("melon_seeds"));
+        add(Identifier.withDefaultNamespace("torchflower_seeds"));
+        add(Identifier.withDefaultNamespace("pitcher_pod"));
     }};
     public static List<FlowerConfig> FLOWERS = new ArrayList<>() {{
         // vanilla copies
@@ -372,82 +347,87 @@ public class FarmingRegistrator
 
     static Map<String, Supplier<Block>> registeredBlocks = new HashMap<>();
     public static void init() {
+        ProductiveFarming.BLOCKS.addAlias(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "wheat"), Identifier.withDefaultNamespace("wheat"));
+        ProductiveFarming.BLOCKS.addAlias(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "potato"), Identifier.withDefaultNamespace("potatoes"));
+        ProductiveFarming.BLOCKS.addAlias(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "carrot"), Identifier.withDefaultNamespace("carrots"));
+        ProductiveFarming.BLOCKS.addAlias(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "beetroot"), Identifier.withDefaultNamespace("beetroots"));
+
         VANILLA_CROPS.forEach(crop -> {
-            var cropBlock = registerBlock(crop.name(), () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT)), false);
-            registeredBlocks.put(crop.name(), cropBlock);
             if (crop.food() != null) {
-                CRATED_CROPS.add(ResourceLocation.withDefaultNamespace(crop.name()));
+                CRATED_CROPS.add(Identifier.withDefaultNamespace(crop.name()));
             }
             if (crop.hasSeed()) {
-                SEED_BAGS.add(ResourceLocation.withDefaultNamespace(crop.name() + "_seeds"));
+                SEED_BAGS.add(Identifier.withDefaultNamespace(crop.name() + "_seeds"));
             }
         });
         CROPS.forEach(crop -> {
-            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT))));
+            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, p -> crop.supplier().create(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).mapColor(MapColor.PLANT)));
             if (crop.food() != null) {
-                CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                CRATED_CROPS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             }
             if (crop.hasSeed()) {
-                SEED_BAGS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"));
+                SEED_BAGS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"));
             }
         });
         TRELLIS.forEach(crop -> {
-            registeredBlocks.put(crop.name() + "_leaves", registerBlock(crop.name() + "_leaves", () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LEAVES).offsetType(BlockBehaviour.OffsetType.XYZ).dynamicShape()), false));
-            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, () -> new FencedStemBlock(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM)), StemGrowinSeedItem::new));
-            registeredBlocks.put("attached_" + crop.name() + "_stem", registerBlock("attached_" + crop.name() + "_stem", () -> new AttachedFencedStemBlock(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.ATTACHED_MELON_STEM)), false));
+            registeredBlocks.put(crop.name() + "_leaves", registerBlock(crop.name() + "_leaves", p -> crop.supplier().create(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LEAVES).offsetType(BlockBehaviour.OffsetType.XYZ).dynamicShape(), false));
+            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, p -> new FencedStemBlock(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM), StemGrowinSeedItem::new));
+            registeredBlocks.put("attached_" + crop.name() + "_stem", registerBlock("attached_" + crop.name() + "_stem", p -> new AttachedFencedStemBlock(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.ATTACHED_MELON_STEM), false));
             if (crop.food() != null) {
-                CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                CRATED_CROPS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             }
         });
         VERTICAL_TRELLIS.forEach(crop -> {
-            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LEAVES).offsetType(BlockBehaviour.OffsetType.XYZ).dynamicShape()), StemGrowinSeedItem::new));
+            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, p -> crop.supplier().create(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LEAVES).offsetType(BlockBehaviour.OffsetType.XYZ).dynamicShape(), StemGrowinSeedItem::new));
             if (crop.food() != null) {
-                CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                CRATED_CROPS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             }
         });
         GRAPES.forEach(crop -> {
-            registeredBlocks.put(crop.name() + "_leaves", registerBlock(crop.name() + "_leaves", () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LEAVES).offsetType(BlockBehaviour.OffsetType.XYZ).dynamicShape()), false));
-            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, () -> new FencedStemBlock(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM)), StemGrowinSeedItem::new));
-            registeredBlocks.put("attached_" + crop.name() + "_stem", registerBlock("attached_" + crop.name() + "_stem", () -> new AttachedFencedStemBlock(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.ATTACHED_MELON_STEM)), false));
+            registeredBlocks.put(crop.name() + "_leaves", registerBlock(crop.name() + "_leaves", p -> crop.supplier().create(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LEAVES).offsetType(BlockBehaviour.OffsetType.XYZ).dynamicShape(), false));
+            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, p -> new FencedStemBlock(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM), StemGrowinSeedItem::new));
+            registeredBlocks.put("attached_" + crop.name() + "_stem", registerBlock("attached_" + crop.name() + "_stem", p -> new AttachedFencedStemBlock(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.ATTACHED_MELON_STEM), false));
             if (crop.food() != null) {
-                CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                CRATED_CROPS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             }
         });
         STEMS.forEach(crop -> {
             registerFoodItem(crop.name() + "_slice", crop.food());
-            registerItem(crop.name() + "_seeds", () -> new CropBlockItem(registeredBlocks.get(crop.name() + "_stem").get(), cropProperties()));
-            registeredBlocks.put(crop.name(), registerBlock(crop.name(), () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.MELON)), true));
-            registeredBlocks.put(crop.name() + "_stem", registerBlock(crop.name() + "_stem", () -> new StemBlock(
-                    ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
-                    ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")),
-                    ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")),
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM)), false));
-            registeredBlocks.put("attached_" + crop.name() + "_stem", registerBlock("attached_" + crop.name() + "_stem", () -> new AttachedStemBlock(
-                    ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem")),
-                    ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
-                    ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")),
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM)), false));
-            CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+            registerItem(crop.name() + "_seeds", p -> new CropBlockItem(registeredBlocks.get(crop.name() + "_stem").get(), cropProperties(p)));
+            registeredBlocks.put(crop.name(), registerBlock(crop.name(), Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MELON), true));
+            registeredBlocks.put(crop.name() + "_stem", registerBlock(crop.name() + "_stem", p -> new StemBlock(
+                    ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
+                    ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")),
+                    ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")),
+                    BlockTags.SUPPORTS_MELON_STEM,
+                    BlockTags.SUPPORTS_MELON_STEM_FRUIT,
+                    p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM), false));
+            registeredBlocks.put("attached_" + crop.name() + "_stem", registerBlock("attached_" + crop.name() + "_stem", p -> new AttachedStemBlock(
+                    ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem")),
+                    ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
+                    ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")),
+                    BlockTags.SUPPORTS_MELON_STEM,
+                    p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MELON_STEM), false));
+            CRATED_CROPS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
         });
         HERBS.forEach(crop -> {
-            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS).dynamicShape())));
+            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, p -> crop.supplier().create(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS).dynamicShape()));
             if (crop.food() != null) {
-                CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                CRATED_CROPS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             }
         });
         BERRIES.forEach(crop -> {
-            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.SWEET_BERRY_BUSH).dynamicShape())));
+            registeredBlocks.put(crop.name(), registerPlantableCrop(crop, p -> crop.supplier().create(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SWEET_BERRY_BUSH).dynamicShape()));
             if (crop.food() != null) {
-                CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                CRATED_CROPS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             }
         });
         SHROOMS.forEach(crop -> {
-            registerItem(crop.name(), () -> new CropBlockItem(registeredBlocks.get(crop.name() + "_growth").get(), cropProperties()));
+            registerItem(crop.name(), p -> new CropBlockItem(registeredBlocks.get(crop.name() + "_growth").get(), cropProperties(p)));
 //            registeredBlocks.put(crop.name(), registerBlock(crop.name(), () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape()), false));
-            registeredBlocks.put(crop.name() + "_growth", registerBlock(crop.name() + "_growth", () -> crop.supplier().create(crop, BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape()), false));
+            registeredBlocks.put(crop.name() + "_growth", registerBlock(crop.name() + "_growth", p -> crop.supplier().create(crop, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM).replaceable().dynamicShape(), false));
 
 //            if (crop.food() != null) {
-//                CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
 //            } TODO crated shrooms
         });
         FISHIES.forEach(fish -> {
@@ -455,60 +435,60 @@ public class FarmingRegistrator
                 registerFishEntity(fish.name(), fish.entitySupplier());
             }
             if (fish.hasBlock()) {
-                registeredBlocks.put(fish.name(), registerBlock(fish.name(), () -> new ClamBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BRAIN_CORAL)), true));
-                CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, fish.name()));
+                registeredBlocks.put(fish.name(), registerBlock(fish.name(), p -> new ClamBlock(p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BRAIN_CORAL), true));
+                CRATED_CROPS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, fish.name()));
             } else {
                 registerItem("raw_" + fish.name());
-                CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "raw_" + fish.name()));
+                CRATED_CROPS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "raw_" + fish.name()));
             }
             registerItem("cooked_" + fish.name());
-            CRATED_CROPS.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "cooked_" + fish.name()));
+            CRATED_CROPS.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "cooked_" + fish.name()));
         });
         CRATED_CROPS.forEach(crate -> {
-            registeredBlocks.put(crate.getPath() + "_crate", registerBlock(crate.getPath() + "_crate", () -> new CrateBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL)), true));
+            registeredBlocks.put(crate.getPath() + "_crate", registerBlock(crate.getPath() + "_crate", p -> new CrateBlock(p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL), true));
         });
         SEED_BAGS.forEach(seedName -> {
-            registerItem(seedName.getPath() + "_bag", () -> new SeedBagItem(seedName, new Item.Properties()));
+            registerItem(seedName.getPath() + "_bag", p -> new SeedBagItem(seedName, p));
         });
         FLOWERS.forEach(flowerConfig -> {
-            var flower = registerBlock(flowerConfig.name(), () -> flowerConfig.isDouble() ? new ColorfulTallFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ROSE_BUSH), flowerConfig.baseColor()) : new ColorfulFlowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY), flowerConfig.baseColor()), flowerConfig.isDouble() ? DoubleHighBlockItem::new : BlockItem::new);
+            var flower = registerBlock(flowerConfig.name(), p -> flowerConfig.isDouble() ? new ColorfulTallFlowerBlock(p, flowerConfig.baseColor()) : new ColorfulFlowerBlock(p, flowerConfig.baseColor()), () -> flowerConfig.isDouble() ? BlockBehaviour.Properties.ofFullCopy(Blocks.ROSE_BUSH) : BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY), flowerConfig.isDouble() ? ColorfulDoubleFlowerBlockItem::new : ColorfulFlowerBlockItem::new);
             registeredBlocks.put(flowerConfig.name(), flower);
             if (!flowerConfig.isDouble()) {
-                var pottedFlower = registerBlock("potted_" + flowerConfig.name(), () -> new ColorfulFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_OAK_SAPLING)), false);
+                var pottedFlower = registerBlock("potted_" + flowerConfig.name(), p -> new ColorfulFlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_OAK_SAPLING), false);
                 registeredBlocks.put("potted_" + flowerConfig.name(), pottedFlower);
-                ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flowerConfig.name()), pottedFlower);
+                ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, flowerConfig.name()), pottedFlower);
             }
         });
         VINES.forEach(flowerConfig -> {
-            var flower = registerBlock(flowerConfig.name(), () -> new ColorfulVineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.VINE), flowerConfig.baseColor()), true);
+            var flower = registerBlock(flowerConfig.name(), p -> new ColorfulVineBlock(p, flowerConfig.baseColor()), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.VINE), ColorfulFlowerBlockItem::new);
             registeredBlocks.put(flowerConfig.name(), flower);
         });
-        FENCED_VERTICAL_CROP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_crop", () -> BlockEntityType.Builder.of(FencedVerticalCropBlockEntity::new,
-                VERTICAL_TRELLIS.stream().map(cropConfig -> registeredBlocks.get(cropConfig.name()).get()).toList().toArray(new Block[0])
-        ).build(null));
-        FENCED_LEAVES_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_leaves", () -> BlockEntityType.Builder.of(FencedLeafBlockEntity::new,
-                Stream.concat(TRELLIS.stream(), GRAPES.stream()).map(cropConfig -> registeredBlocks.get(cropConfig.name() + "_leaves").get()).toList().toArray(new Block[0])
-        ).build(null));
-        FENCED_STEM_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_stem", () -> BlockEntityType.Builder.of(FencedStemBlockEntity::new,
-                Stream.concat(TRELLIS.stream(), GRAPES.stream()).map(cropConfig -> List.of(registeredBlocks.get("attached_" + cropConfig.name() + "_stem").get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0])
-        ).build(null));
+        FENCED_VERTICAL_CROP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_crop", () -> new BlockEntityType<>(FencedVerticalCropBlockEntity::new,
+                VERTICAL_TRELLIS.stream().map(cropConfig -> registeredBlocks.get(cropConfig.name()).get()).distinct().toArray(Block[]::new)
+        ));
+        FENCED_LEAVES_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_leaves", () -> new BlockEntityType<>(FencedLeafBlockEntity::new,
+                Stream.concat(TRELLIS.stream(), GRAPES.stream()).map(cropConfig -> registeredBlocks.get(cropConfig.name() + "_leaves").get()).distinct().toArray(Block[]::new)
+        ));
+        FENCED_STEM_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fenced_stem", () -> new BlockEntityType<>(FencedStemBlockEntity::new,
+                Stream.concat(TRELLIS.stream(), GRAPES.stream()).map(cropConfig -> List.of(registeredBlocks.get("attached_" + cropConfig.name() + "_stem").get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).distinct().toArray(Block[]::new)
+        ));
 
-        CROP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("crop", () -> BlockEntityType.Builder.of(SimpleCropBlockEntity::new,
-               Stream.concat(CROPS.stream(), Stream.concat(VANILLA_CROPS.stream(), Stream.concat(HERBS.stream(), BERRIES.stream()))).map(cropConfig -> List.of(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.get(cropConfig.name()).get())).flatMap(List::stream).toList().toArray(new Block[0])
-        ).build(null));
-        FLOWER_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("flower", () -> BlockEntityType.Builder.of(ColorfulFlowerBlockEntity::new,
+        CROP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("crop", () -> new BlockEntityType<>(SimpleCropBlockEntity::new,
+               Stream.concat(CROPS.stream(), Stream.concat(HERBS.stream(), BERRIES.stream())).map(cropConfig -> registeredBlocks.get(cropConfig.name()).get()).distinct().toArray(Block[]::new)
+        ));
+        FLOWER_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("flower", () -> new BlockEntityType<>(ColorfulFlowerBlockEntity::new,
                 getFlowers()
-        ).build(null));
-        FLOWER_POT_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("potted_flower", () -> BlockEntityType.Builder.of(ColorfulFlowerPotBlockEntity::new,
+        ));
+        FLOWER_POT_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("potted_flower", () -> new BlockEntityType<>(ColorfulFlowerPotBlockEntity::new,
                 getFlowerPots()
-        ).build(null));
-        MUSHROOM_GROWTH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("mushroom_growth", () -> BlockEntityType.Builder.of(MushroomGrowthCropBlockEntity::new,
+        ));
+        MUSHROOM_GROWTH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("mushroom_growth", () -> new BlockEntityType<>(MushroomGrowthCropBlockEntity::new,
                 getShrooms()
-        ).build(null));
+        ));
     }
 
     public static Block[] getAllCrops() {
-        return Stream.concat(GRAPES.stream(), Stream.concat(VERTICAL_TRELLIS.stream(), Stream.concat(TRELLIS.stream(), Stream.concat(BERRIES.stream(), Stream.concat(CROPS.stream(), Stream.concat(VANILLA_CROPS.stream(), HERBS.stream()))))))
+        return Stream.concat(GRAPES.stream(), Stream.concat(VERTICAL_TRELLIS.stream(), Stream.concat(TRELLIS.stream(), Stream.concat(BERRIES.stream(), Stream.concat(CROPS.stream(), HERBS.stream())))))
                 .map(cropConfig -> new ArrayList<>(Arrays.asList(registeredBlocks.get(cropConfig.name()).get(), registeredBlocks.getOrDefault(cropConfig.name() + "_leaves", () -> null).get()))).flatMap(List::stream).filter(Objects::nonNull).distinct().toList().toArray(new Block[0]);
     }
 
@@ -528,34 +508,36 @@ public class FarmingRegistrator
                 .map(cropConfig -> registeredBlocks.get("potted_" + cropConfig.name()).get()).toList().toArray(new Block[0]);
     }
 
-    public static final DataMapType<Item, CropTrait> CROP_TRAITS = DataMapType.builder(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "crop_traits"), Registries.ITEM, CropTrait.CODEC).synced(CropTrait.CODEC, false).build();
+    public static final DataMapType<Item, CropTrait> CROP_TRAITS = DataMapType.builder(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "crop_traits"), Registries.ITEM, CropTrait.CODEC).synced(CropTrait.CODEC, false).build();
+
+    public static final DataMapType<Item, Double> STAT_INCREASE_CHANCE = DataMapType.builder(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "stat_increase_chance"), Registries.ITEM, Codec.DOUBLE).build();
 
     // Non-crop items
-    public static final DeferredHolder<Item, Item> POLLEN = registerItem("pollen", () -> new PollenItem(new Item.Properties()));
+    public static final DeferredHolder<Item, Item> POLLEN = registerItem("pollen", p -> new PollenItem(p));
     public static final DeferredHolder<Item, Item> DRIED_LUFFA = registerItem("dried_luffa");
     public static final DeferredHolder<Item, Item> DRIED_TOBACCO = registerItem("dried_tobacco");
     public static final DeferredHolder<Item, Item> BLACK_TEA = registerItem("black_tea");
-    public static final DeferredHolder<Item, Item> CORN_COB_PIPE = registerItem("corn_cob_pipe", () -> new CornPipeItem(new Item.Properties().stacksTo(1).durability(200)));
+    public static final DeferredHolder<Item, Item> CORN_COB_PIPE = registerItem("corn_cob_pipe", p -> new CornPipeItem(p.stacksTo(1).durability(200)));
 //    public static final DeferredHolder<Item, Item> HOTDOG_ARMOR = registerItem("hotdog_armor", () -> new AnimalArmorItem(
 //            ArmorMaterials.ARMADILLO, AnimalArmorItem.BodyType.CANINE, true, new Item.Properties().durability(ArmorItem.Type.BODY.getDurability(4))
 //    ));
 
     // Machines
 //    public static final DeferredHolder<Block, Block> FISH_TRAP = registerBlock("fish_trap", () -> new FishTrapBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL)), true);
-//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FishTrapBlockEntity>> FISH_TRAP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fish_trap", () -> BlockEntityType.Builder.of(FishTrapBlockEntity::new, FISH_TRAP.get()).build(null));
-    public static final DeferredHolder<Block, Block> FARM_HATCH = registerBlock("farm_hatch", () -> new FarmHatch(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)), true);
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FarmHatchBlockEntity>> FARM_HATCH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("farm_hatch", () -> BlockEntityType.Builder.of(FarmHatchBlockEntity::new, FARM_HATCH.get()).build(null));
-    public static final DeferredHolder<Block, Block> FARM_CONTROLLER = registerBlock("farm_controller", () -> new FarmControllerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).noOcclusion()), true);
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FarmControllerBlockEntity>> FARM_CONTROLLER_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("farm_controller", () -> BlockEntityType.Builder.of(FarmControllerBlockEntity::new, FARM_CONTROLLER.get()).build(null));
-    public static final DeferredHolder<Block, Block> FEEDING_TROUGH = registerBlock("feeding_trough", () -> new FeedingTroughBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).noOcclusion()), true);
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FeedingTroughBlockEntity>> FEEDING_TROUGH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("feeding_trough", () -> BlockEntityType.Builder.of(FeedingTroughBlockEntity::new, FEEDING_TROUGH.get()).build(null));
-    public static final DeferredHolder<Block, Block> WATERING_TROUGH = registerBlock("watering_trough", () -> new WateringTroughBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).noOcclusion()), true);
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WateringTroughBlockEntity>> WATERING_TROUGH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("watering_trough", () -> BlockEntityType.Builder.of(WateringTroughBlockEntity::new, WATERING_TROUGH.get()).build(null));
+//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FishTrapBlockEntity>> FISH_TRAP_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("fish_trap", () -> new BlockEntityType<>(FishTrapBlockEntity::new, FISH_TRAP.get()));
+    public static final DeferredHolder<Block, Block> FARM_HATCH = registerBlock("farm_hatch", p -> new FarmHatch(p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS), true);
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FarmHatchBlockEntity>> FARM_HATCH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("farm_hatch", () -> new BlockEntityType<>(FarmHatchBlockEntity::new, FARM_HATCH.get()));
+    public static final DeferredHolder<Block, Block> FARM_CONTROLLER = registerBlock("farm_controller", p -> new FarmControllerBlock(p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).noOcclusion(), true);
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FarmControllerBlockEntity>> FARM_CONTROLLER_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("farm_controller", () -> new BlockEntityType<>(FarmControllerBlockEntity::new, FARM_CONTROLLER.get()));
+    public static final DeferredHolder<Block, Block> FEEDING_TROUGH = registerBlock("feeding_trough", p -> new FeedingTroughBlock(p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).noOcclusion(), FeedingTroughBlockItem::new);
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FeedingTroughBlockEntity>> FEEDING_TROUGH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("feeding_trough", () -> new BlockEntityType<>(FeedingTroughBlockEntity::new, FEEDING_TROUGH.get()));
+    public static final DeferredHolder<Block, Block> WATERING_TROUGH = registerBlock("watering_trough", p -> new WateringTroughBlock(p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON).noOcclusion(), true);
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WateringTroughBlockEntity>> WATERING_TROUGH_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("watering_trough", () -> new BlockEntityType<>(WateringTroughBlockEntity::new, WATERING_TROUGH.get()));
 //    public static final DeferredHolder<Block, Block> SALT_LICK = registerBlock("salt_lick", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()), true);
 //    public static final DeferredHolder<Block, Block> CHILD_SEPARATOR = registerBlock("child_separator", () -> new ChildSeparatorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()), true);
-//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ChildSeparatorBlockEntity>> CHILD_SEPARATOR_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("child_separator", () -> BlockEntityType.Builder.of(ChildSeparatorBlockEntity::new, CHILD_SEPARATOR.get()).build(null));
+//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ChildSeparatorBlockEntity>> CHILD_SEPARATOR_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("child_separator", () -> new BlockEntityType<>(ChildSeparatorBlockEntity::new, CHILD_SEPARATOR.get()));
 //    public static final DeferredHolder<Block, Block> SLAUGHTER_STATION = registerBlock("slaughter_station", () -> new SlaughterStationBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()), true);
-//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SlaughterStationBlockEntity>> SLAUGHTER_STATION_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("slaughter_station", () -> BlockEntityType.Builder.of(SlaughterStationBlockEntity::new, SLAUGHTER_STATION.get()).build(null));
+//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SlaughterStationBlockEntity>> SLAUGHTER_STATION_BLOCK_ENTITY = ProductiveFarming.BLOCK_ENTITIES.register("slaughter_station", () -> new BlockEntityType<>(SlaughterStationBlockEntity::new, SLAUGHTER_STATION.get()));
     // TODO drying rack with drying recipe
 
     public static final DeferredHolder<MenuType<?>, MenuType<FarmControllerContainer>> FARM_CONTROLLER_MENU = ProductiveFarming.CONTAINER_TYPES.register("farm_controller", () ->
@@ -572,21 +554,21 @@ public class FarmingRegistrator
 //    });
 
     // Recipes
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CROP_FRUITING = ProductiveFarming.RECIPE_SERIALIZERS.register("crop_fruiting", CropFruitingRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CropFruitingRecipe>> CROP_FRUITING = ProductiveFarming.RECIPE_SERIALIZERS.register("crop_fruiting", () -> CropFruitingRecipe.SERIALIZER);
     public static final DeferredHolder<RecipeType<?>, RecipeType<CropFruitingRecipe>> CROP_FRUITING_TYPE = ProductiveFarming.RECIPE_TYPES.register("crop_fruiting", () -> new RecipeType<>() {});
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CROP_MUTATION = ProductiveFarming.RECIPE_SERIALIZERS.register("crop_mutation", CropMutationRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CropMutationRecipe>> CROP_MUTATION = ProductiveFarming.RECIPE_SERIALIZERS.register("crop_mutation", () -> CropMutationRecipe.SERIALIZER);
     public static final DeferredHolder<RecipeType<?>, RecipeType<CropMutationRecipe>> CROP_MUTATION_TYPE = ProductiveFarming.RECIPE_TYPES.register("crop_mutation", () -> new RecipeType<>() {});
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> FLOWER_DYE_CRAFTING = ProductiveFarming.RECIPE_SERIALIZERS.register("flower_dye_crafting", FlowerDyeCraftingRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FlowerDyeCraftingRecipe>> FLOWER_DYE_CRAFTING = ProductiveFarming.RECIPE_SERIALIZERS.register("flower_dye_crafting", () -> FlowerDyeCraftingRecipe.SERIALIZER);
 
     // Fluids
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> NUTRIENT_WATER = registerFluid("nutrient_water");
 
     // Features
-//    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> CLAM_FEATURE = ProductiveFarming.FEATURES.register("clam", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "clam"))));
-//    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> OYSTER_FEATURE = ProductiveFarming.FEATURES.register("oyster", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "oyster"))));
-//    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> MUSSEL_FEATURE = ProductiveFarming.FEATURES.register("mussel", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "mussel"))));
+//    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> CLAM_FEATURE = ProductiveFarming.FEATURES.register("clam", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "clam"))));
+//    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> OYSTER_FEATURE = ProductiveFarming.FEATURES.register("oyster", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "oyster"))));
+//    public static final DeferredHolder<Feature<?>, Feature<CountConfiguration>> MUSSEL_FEATURE = ProductiveFarming.FEATURES.register("mussel", () -> new SeaFloorFeature(CountConfiguration.CODEC, () -> BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "mussel"))));
 
-    public static final ResourceKey<CreativeModeTab> TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, ProductiveFarming.MODID));
+    public static final ResourceKey<CreativeModeTab> TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, ProductiveFarming.MODID));
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = ProductiveFarming.CREATIVE_MODE_TABS.register(ProductiveFarming.MODID, () -> {
         return CreativeModeTab.builder()
                 .icon(() -> new ItemStack(FEEDING_TROUGH.get()))
@@ -594,53 +576,53 @@ public class FarmingRegistrator
                 .build();
     });
 
-    public static DeferredHolder<Block, Block> registerPlantableCrop(CropConfig crop, Supplier<Block> supplier) {
-        return registerPlantableCrop(crop, supplier, CropBlockItem::new);
+    public static DeferredHolder<Block, Block> registerPlantableCrop(CropConfig crop, Function<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> properties) {
+        return registerPlantableCrop(crop, factory, properties, CropBlockItem::new);
     }
 
-    public static DeferredHolder<Block, Block> registerPlantableCrop(CropConfig crop, Supplier<Block> supplier, ItemSupplier<BlockItem> item) {
-        var cropBlock = registerBlock(crop.name(), supplier, false);
+    public static DeferredHolder<Block, Block> registerPlantableCrop(CropConfig crop, Function<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> properties, ItemSupplier<BlockItem> item) {
+        var cropBlock = registerBlock(crop.name(), factory, properties, false);
         if (crop.hasSeed()) {
-            registerItem(crop.name() + "_seeds", () -> item.create(cropBlock.get(), cropProperties()));
+            registerItem(crop.name() + "_seeds", p -> item.create(cropBlock.get(), cropProperties(p)));
             if (crop.food() != null) {
                 registerFoodCropItem(crop.name(), crop.food());
             } else {
-                registerItem(crop.name(), () -> new CropItem(new Item.Properties()));
+                registerItem(crop.name(), p -> new CropItem(p));
             }
         } else {
             if (crop.food() != null) {
-                registerItem(crop.name(), () -> item.create(cropBlock.get(), cropProperties().food(crop.food())));
+                registerItem(crop.name(), p -> item.create(cropBlock.get(), cropProperties(p).food(crop.food())));
             } else {
-                registerItem(crop.name(), () -> item.create(cropBlock.get(), cropProperties()));
+                registerItem(crop.name(), p -> item.create(cropBlock.get(), cropProperties(p)));
             }
         }
         return cropBlock;
     }
 
     public static DeferredHolder<Item, Item> registerItem(String name) {
-        return registerItem(name, () -> new Item(new Item.Properties()));
+        return ProductiveFarming.ITEMS.registerItem(name, Item::new);
     }
 
     public static DeferredHolder<Item, Item> registerFoodItem(String name, FoodProperties food) {
-        return registerItem(name, () -> new Item(new Item.Properties().food(food)));
+        return registerItem(name, p -> new Item(p.food(food)));
     }
 
     public static DeferredHolder<Item, Item> registerFoodCropItem(String name, FoodProperties food) {
-        return registerItem(name, () -> new CropItem(new Item.Properties().food(food)));
+        return registerItem(name, p -> new CropItem(p.food(food)));
     }
 
-    public static DeferredHolder<Item, Item> registerItem(String name, Supplier<Item> supplier) {
-        return ProductiveFarming.ITEMS.register(name, supplier);
+    public static DeferredHolder<Item, Item> registerItem(String name, Function<Item.Properties, Item> factory) {
+        return ProductiveFarming.ITEMS.registerItem(name, factory);
     }
 
-    public static DeferredHolder<Block, Block> registerBlock(String name, Supplier<Block> supplier, boolean hasItem) {
-        return registerBlock(name, supplier, hasItem ? BlockItem::new : null);
+    public static DeferredHolder<Block, Block> registerBlock(String name, Function<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> properties, boolean hasItem) {
+        return registerBlock(name, factory, properties, hasItem ? BlockItem::new : null);
     }
 
-    public static DeferredHolder<Block, Block> registerBlock(String name, Supplier<Block> supplier, ItemSupplier<BlockItem> item) {
-        var block = ProductiveFarming.BLOCKS.register(name, supplier);
+    public static DeferredHolder<Block, Block> registerBlock(String name, Function<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> properties, ItemSupplier<BlockItem> item) {
+        var block = ProductiveFarming.BLOCKS.registerBlock(name, factory, properties);
         if (item != null) {
-            registerItem(name, () -> item.create(block.get(), new Item.Properties()));
+            registerItem(name, p -> item.create(block.get(), p.useBlockDescriptionPrefix()));
         }
         return block;
     }
@@ -652,9 +634,9 @@ public class FarmingRegistrator
     }
 
     public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerEntity(String name, EntityType.Builder<E> builder) {
-        var entity = ProductiveFarming.ENTITY_TYPES.register(name, () -> builder.build(ProductiveFarming.MODID + ":" + name));
-        registerItem(name + "_spawn_egg", () -> new DeferredSpawnEggItem(entity, 1510515, 1214544, new Item.Properties()));
-        registerItem(name + "_bucket", () -> new MobBucketItem(entity.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties()));
+        var entity = ProductiveFarming.ENTITY_TYPES.register(name, () -> builder.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, name))));
+        registerItem(name + "_spawn_egg", p -> new SpawnEggItem(p.spawnEgg(entity.get())));
+        registerItem(name + "_bucket", p -> new MobBucketItem(entity.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, p));
         return entity;
     }
 
@@ -675,17 +657,17 @@ public class FarmingRegistrator
         // flowing fluid
         ProductiveFarming.FLUIDS.register(String.format("flowing_%s", name), () -> new BaseFlowingFluid.Flowing(makeFluidProperties(TYPE, name)));
         // fluid bucket
-        registerItem(String.format("%s_bucket", name), () -> new BucketItem(FLUID.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+        registerItem(String.format("%s_bucket", name), p -> new BucketItem(FLUID.get(), p.craftRemainder(Items.BUCKET).stacksTo(1)));
         // fluid block
-        registerBlock(name, () -> new LiquidBlock(FLUID.get(), Block.Properties.of()
+        registerBlock(name, p -> new LiquidBlock(FLUID.get(), p), () -> Block.Properties.of()
                 .strength(100.0F)
-                .noCollission()
+                .noCollision()
                 .liquid()
                 .replaceable()
                 .pushReaction(PushReaction.DESTROY)
                 .noLootTable()
                 .sound(SoundType.EMPTY)
-        ), false);
+        , false);
 
         return FLUID;
     }
@@ -693,18 +675,18 @@ public class FarmingRegistrator
     static private BaseFlowingFluid.Properties makeFluidProperties(Supplier<? extends FluidType> fluidType, String name) {
         return new BaseFlowingFluid.Properties(
                 fluidType,
-                DeferredHolder.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, name)),
-                DeferredHolder.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, String.format("flowing_%s", name)))
+                DeferredHolder.create(Registries.FLUID, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, name)),
+                DeferredHolder.create(Registries.FLUID, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, String.format("flowing_%s", name)))
         )
-                .bucket(DeferredHolder.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, String.format("%s_bucket", name))))
-                .block(DeferredHolder.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, name)))
+                .bucket(DeferredHolder.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, String.format("%s_bucket", name))))
+                .block(DeferredHolder.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, name)))
                 .tickRate(30)
                 .slopeFindDistance(4)
                 .levelDecreasePerBlock(2);
     }
 
-    private static Item.Properties cropProperties() {
-        return new Item.Properties()
+    private static Item.Properties cropProperties(Item.Properties p) {
+        return p
                 .component(FarmingDataComponents.GROWTH, 0)
                 .component(FarmingDataComponents.YIELD, 0)
                 .component(FarmingDataComponents.RESISTANCE, 0)
@@ -712,7 +694,7 @@ public class FarmingRegistrator
     }
 
     @FunctionalInterface
-    public interface CropBlockSupplier<T extends BushBlock>
+    public interface CropBlockSupplier<T extends VegetationBlock>
     {
         T create(CropConfig crop, BlockBehaviour.Properties properties);
     }

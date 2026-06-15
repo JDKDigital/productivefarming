@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "productivefarming:farm_multiblock_harvests_crop_env",
+  "function": "productivefarming:farm_multiblock_harvests_crop",
+  "structure": "productivefarming:empty_9x9",
+  "max_ticks": 650,
+  "required": true,
+  "setup_ticks": 0
+}

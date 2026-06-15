@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "agritechevolved"
+    }
+  ],
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "productivefarming:soy_bean",
+      "max": 5,
+      "min": 2
+    }
+  ],
+  "seed": "productivefarming:soy_bean",
+  "soils": [
+    "#agritechevolved:farmland_soils"
+  ]
+}

@@ -1,0 +1,392 @@
+{
+  "values": [
+    {
+      "id": "productivefarming:farmer/level_1/arrowroot",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/arugula_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/green_bell_pepper",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/yellow_bell_pepper",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/red_bell_pepper",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/black_beans",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/bok_choy_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/broccoli_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/brussels_sprout_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/burdock_root",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/butterhead_lettuce_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/cabbage_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/catnip_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/cauliflower_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/caraway",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/celery_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/chard_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/chamomile_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/chili_pepper",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/collard_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/daikon_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/eddoe",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/eggplant",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/endive_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/flax_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/garlic",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/iceberg_lettuce_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/jalapeno",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/kale_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/kidney_beans",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/kohlrabi_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/leek_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/lima_beans",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/onion_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/parsnip_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/peas",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/pinto_beans",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/pineapple",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/radish_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/rhubarb",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/romain_lettuce_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/rutabaga_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/salsify_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/soy_bean",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/spinach_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/strawberry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/sugar_beet_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/sweet_marjoram_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/turnip_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/ulluco",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/wasabi_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/blue_borage_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/peanuts",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/ginger",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/green_bean",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/spring_onion_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/sweet_potato",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/lentils",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/chickpeas",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/mustard",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/tea_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/wintergreen",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/hops",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/rice_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/oats_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/barley_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/rye_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/teff_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/amaranth_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/sorghum_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/quinoa_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/agave",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/ferula_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/cardamon",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/cassava",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/pitaya",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/monstera_deliciosa",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/tobacco_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/black_pepper",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/jute_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/cotton_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/turmeric",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/yellow_dent_corn",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/tomatillo",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/huckleberry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/roma_tomato",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/cherry_tomato",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/sea_buckthorn",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/konjac",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/okra",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/asparagus",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/artichoke",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/malanga",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/yam",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/water_chestnut",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/watercress",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_1/water_caltrop",
+      "required": false
+    }
+  ]
+}

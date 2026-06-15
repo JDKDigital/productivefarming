@@ -2,12 +2,12 @@ package cy.jdkdigital.productivefarming.common.block.entity;
 
 import cy.jdkdigital.productivelib.common.block.entity.CapabilityBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 // TODO move into lib
 public abstract class TickingBlockEntity extends CapabilityBlockEntity
@@ -32,7 +32,7 @@ public abstract class TickingBlockEntity extends CapabilityBlockEntity
         tickCounter++;
         if (shouldTick()) {
             tickCounter = 0;
-            if (level.isClientSide) {
+            if (level.isClientSide()) {
                 tickClient(level, blockPos, blockState, blockEntity);
             } else {
                 tickServer((ServerLevel) level, blockPos, blockState, blockEntity);
@@ -45,16 +45,14 @@ public abstract class TickingBlockEntity extends CapabilityBlockEntity
     }
 
     @Override
-    public void savePacketNBT(CompoundTag tag, HolderLookup.Provider provider) {
-        super.savePacketNBT(tag, provider);
-        tag.putInt("tickCounter", tickCounter);
+    public void savePacketNBT(ValueOutput output) {
+        super.savePacketNBT(output);
+        output.putInt("tickCounter", tickCounter);
     }
 
     @Override
-    public void loadPacketNBT(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadPacketNBT(tag, provider);
-        if (tag.contains("tickCounter")) {
-            tickCounter = tag.getInt("tickCounter");
-        }
+    public void loadPacketNBT(ValueInput input) {
+        super.loadPacketNBT(input);
+        tickCounter = input.getIntOr("tickCounter", 0);
     }
 }

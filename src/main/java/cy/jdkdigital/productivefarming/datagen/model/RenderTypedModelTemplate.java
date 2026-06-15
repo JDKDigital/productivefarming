@@ -1,9 +1,12 @@
 package cy.jdkdigital.productivefarming.datagen.model;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.data.models.model.ModelTemplate;
-import net.minecraft.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.client.data.models.model.ModelTemplate;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.resources.Identifier;
 
 import java.util.Map;
 import java.util.Optional;
@@ -16,29 +19,31 @@ public class RenderTypedModelTemplate extends ModelTemplate
     public static final ModelTemplate CROSS = create("cross", "cutout", TextureSlot.CROSS);
     public static final ModelTemplate CROP = create("crop", "cutout", TextureSlot.CROP);
     public static final ModelTemplate[] STEMS = IntStream.range(0, 8)
-            .mapToObj(p_125729_ -> create("stem_growth" + p_125729_, "cutout", "_stage" + p_125729_, TextureSlot.STEM))
+            .mapToObj(p -> create("stem_growth" + p, "cutout", "_stage" + p, TextureSlot.STEM))
             .toArray(ModelTemplate[]::new);
 
-    private final ResourceLocation model;
+    private final Identifier model;
     private final String renderType;
 
-    public RenderTypedModelTemplate(ResourceLocation model, String renderType, String prefix, TextureSlot... requiredSlots) {
-        super(Optional.of(model), prefix.isEmpty() ? Optional.empty() : Optional.of(prefix), requiredSlots);
+    public RenderTypedModelTemplate(Identifier model, String renderType, String suffix, TextureSlot... requiredSlots) {
+        super(Optional.of(model), suffix.isEmpty() ? Optional.empty() : Optional.of(suffix), requiredSlots);
         this.model = model;
         this.renderType = renderType;
     }
 
     @Override
-    public JsonObject createBaseTemplate(ResourceLocation modelLocation, Map<TextureSlot, ResourceLocation> modelGetter) {
+    public JsonObject createBaseTemplate(Identifier target, Map<TextureSlot, Material> slots) {
         JsonObject jsonobject = new JsonObject();
         jsonobject.addProperty("parent", this.model.toString());
-        if (!modelGetter.isEmpty()) {
-            JsonObject jsonobject1 = new JsonObject();
-            modelGetter.forEach((p_176457_, p_176458_) -> jsonobject1.addProperty(p_176457_.getId(), p_176458_.toString()));
-            jsonobject.add("textures", jsonobject1);
+        if (!slots.isEmpty()) {
+            JsonObject textures = new JsonObject();
+            slots.forEach((slot, value) -> {
+                JsonElement valueJson = Material.CODEC.encodeStart(JsonOps.INSTANCE, value).getOrThrow();
+                textures.add(slot.getId(), valueJson);
+            });
+            jsonobject.add("textures", textures);
         }
         jsonobject.addProperty("render_type", renderType);
-
         return jsonobject;
     }
 
@@ -46,7 +51,7 @@ public class RenderTypedModelTemplate extends ModelTemplate
         return create(blockModelLocation, renderType, "", requiredSlots);
     }
 
-    private static ModelTemplate create(String blockModelLocation, String renderType, String prefix, TextureSlot... requiredSlots) {
-        return new RenderTypedModelTemplate(ResourceLocation.withDefaultNamespace("block/" + blockModelLocation), renderType, prefix, requiredSlots);
+    private static ModelTemplate create(String blockModelLocation, String renderType, String suffix, TextureSlot... requiredSlots) {
+        return new RenderTypedModelTemplate(Identifier.withDefaultNamespace("block/" + blockModelLocation), renderType, suffix, requiredSlots);
     }
 }

@@ -1,0 +1,43 @@
+package cy.jdkdigital.productivefarming.integrations.jade;
+
+import cy.jdkdigital.productivefarming.ProductiveFarming;
+import cy.jdkdigital.productivefarming.util.TraitsHelper;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
+
+public class AgriTechPlanterClientProvider implements IBlockComponentProvider
+{
+    public static final AgriTechPlanterClientProvider INSTANCE = new AgriTechPlanterClientProvider();
+
+    @Override
+    public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+        CropServerProvider.Data data = AgriTechPlanterServerProvider.INSTANCE.decodeFromData(accessor).orElse(null);
+        if (data == null || data.growth() < 0) {
+            return;
+        }
+        if (Minecraft.getInstance().player == null || Minecraft.getInstance().player.isShiftKeyDown()) {
+            tooltip.add(Component.translatable(ProductiveFarming.MODID + ".trait." + TraitsHelper.GROWTH, TraitsHelper.getValueName(TraitsHelper.GROWTH, data.growth())));
+            tooltip.add(Component.translatable(ProductiveFarming.MODID + ".trait." + TraitsHelper.YIELD, TraitsHelper.getValueName(TraitsHelper.YIELD, data.yield())));
+            tooltip.add(Component.translatable(ProductiveFarming.MODID + ".trait." + TraitsHelper.RESISTANCE, TraitsHelper.getValueName(TraitsHelper.RESISTANCE, data.resistance())));
+            tooltip.add(Component.translatable(ProductiveFarming.MODID + ".trait." + TraitsHelper.MUTABILITY, TraitsHelper.getValueName(TraitsHelper.MUTABILITY, data.mutability())));
+        } else {
+            tooltip.add(Component.translatable(ProductiveFarming.MODID + ".tooltip.extend").withStyle(ChatFormatting.DARK_GRAY));
+        }
+    }
+
+    @Override
+    public Identifier getUid() {
+        return AgriTechPlanterServerProvider.UID;
+    }
+
+    @Override
+    public int getDefaultPriority() {
+        return 5000;
+    }
+}

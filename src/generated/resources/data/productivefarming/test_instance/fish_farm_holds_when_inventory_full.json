@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "productivefarming:fish_farm_holds_when_inventory_full_env",
+  "function": "productivefarming:fish_farm_holds_when_inventory_full",
+  "structure": "productivefarming:empty_9x9",
+  "max_ticks": 100,
+  "required": true,
+  "setup_ticks": 0
+}

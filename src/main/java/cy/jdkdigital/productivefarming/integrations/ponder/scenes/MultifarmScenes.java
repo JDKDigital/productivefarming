@@ -8,7 +8,7 @@ import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -77,7 +77,7 @@ public class MultifarmScenes
         scene.world().replaceBlocks(util.select().position(3,0,1), FarmingRegistrator.FARM_CONTROLLER.get().defaultBlockState().setValue(BlockStateProperties.ATTACHED, true), false);
 
         scene.idle(10);
-        BlockState watercress = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "watercress")).defaultBlockState().setValue(ProductiveCropBlock.AGE_6, 6).setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER).setValue(BlockStateProperties.WATERLOGGED, true);
+        BlockState watercress = BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "watercress")).defaultBlockState().setValue(ProductiveCropBlock.AGE_6, 6).setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER).setValue(BlockStateProperties.WATERLOGGED, true);
         scene.world().setBlock(util.grid().at(4, 0, 3), watercress, false);
         for (int x = 2; x < 7; x++) {
             for (int z = 2; z < 5; z++) {

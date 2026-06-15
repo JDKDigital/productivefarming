@@ -1,11 +1,11 @@
 package cy.jdkdigital.productivefarming.common.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 abstract public class AuxiliaryFarmBlockEntity extends BlockEntity
 {
@@ -24,18 +24,16 @@ abstract public class AuxiliaryFarmBlockEntity extends BlockEntity
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        if (tag.contains("controller")) {
-            this.controllerPos = BlockPos.of(tag.getLong("controller"));
-        }
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        input.getLong("controller").ifPresent(l -> this.controllerPos = BlockPos.of(l));
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
         if (controllerPos != null) {
-            tag.putLong("controller", controllerPos.asLong());
+            output.putLong("controller", controllerPos.asLong());
         }
     }
 }

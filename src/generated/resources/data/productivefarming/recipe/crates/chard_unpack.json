@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:chard_crate"
-    }
+    "productivefarming:chard_crate"
   ],
   "result": {
     "count": 9,

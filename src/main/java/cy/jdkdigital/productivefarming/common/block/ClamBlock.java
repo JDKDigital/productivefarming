@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -115,8 +116,8 @@ public class ClamBlock extends FaceAttachedHorizontalDirectionalBlock implements
     }
 
     @Override
-    public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
-        super.entityInside(pState, pLevel, pPos, pEntity);
+    protected void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+        super.entityInside(pState, pLevel, pPos, pEntity, effectApplier, isPrecise);
         if (pState.getValue(BlockStateProperties.OPEN)) {
             pLevel.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.OPEN, false));
         }

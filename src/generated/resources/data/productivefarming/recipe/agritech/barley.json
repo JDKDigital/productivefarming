@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "agritechtwo"
+    }
+  ],
+  "type": "agritechtwo:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "productivefarming:barley",
+      "max": 1,
+      "min": 1
+    },
+    {
+      "chance": 0.5,
+      "item": "productivefarming:barley_seeds",
+      "max": 2,
+      "min": 1
+    }
+  ],
+  "seed": "productivefarming:barley_seeds",
+  "soils": [
+    "#agritechtwo:farmland_soils"
+  ]
+}

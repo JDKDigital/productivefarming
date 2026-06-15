@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "productivefarming:leek_seeds"
-    }
+    "#": "productivefarming:leek_seeds"
   },
   "pattern": [
     "###",
@@ -12,7 +10,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "productivefarming:leek_seeds_bag"
   }
 }

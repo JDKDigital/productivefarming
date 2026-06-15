@@ -1,0 +1,158 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:dual_noise_provider",
+      "noise": {
+        "amplitudes": [
+          1.0
+        ],
+        "firstOctave": -3
+      },
+      "scale": 1.0,
+      "seed": 2345,
+      "slow_noise": {
+        "amplitudes": [
+          1.0
+        ],
+        "firstOctave": -10
+      },
+      "slow_scale": 1.0,
+      "states": [
+        {
+          "Name": "productivefarming:rose_bush",
+          "Properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "Name": "productivefarming:lilac",
+          "Properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "Name": "productivefarming:peony",
+          "Properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "Name": "productivefarming:poppy"
+        },
+        {
+          "Name": "productivefarming:cornflower"
+        },
+        {
+          "Name": "productivefarming:alium"
+        },
+        {
+          "Name": "productivefarming:azure_bluet"
+        },
+        {
+          "Name": "productivefarming:blue_orchid"
+        },
+        {
+          "Name": "productivefarming:dandelion"
+        },
+        {
+          "Name": "productivefarming:lily_of_the_valley"
+        },
+        {
+          "Name": "productivefarming:oxeye_daisy"
+        },
+        {
+          "Name": "productivefarming:tulip"
+        },
+        {
+          "Name": "productivefarming:torchflower"
+        },
+        {
+          "Name": "productivefarming:wither_rose"
+        },
+        {
+          "Name": "productivefarming:amaryllis"
+        },
+        {
+          "Name": "productivefarming:anemone"
+        },
+        {
+          "Name": "productivefarming:balloon_flower"
+        },
+        {
+          "Name": "productivefarming:black_bearded_iris"
+        },
+        {
+          "Name": "productivefarming:cattail",
+          "Properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "Name": "productivefarming:cape_leadwort",
+          "Properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "Name": "productivefarming:chrysanthemum"
+        },
+        {
+          "Name": "productivefarming:dahlia"
+        },
+        {
+          "Name": "productivefarming:great_lobelia"
+        },
+        {
+          "Name": "productivefarming:hellebore"
+        },
+        {
+          "Name": "productivefarming:himalayan_poppy",
+          "Properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "Name": "productivefarming:hydrangea",
+          "Properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "Name": "productivefarming:motherwort",
+          "Properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "Name": "productivefarming:sea_holly"
+        },
+        {
+          "Name": "productivefarming:skullcap"
+        },
+        {
+          "Name": "productivefarming:stinging_nettle",
+          "Properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "Name": "productivefarming:valerian_root",
+          "Properties": {
+            "half": "lower"
+          }
+        },
+        {
+          "Name": "productivefarming:zinnia",
+          "Properties": {
+            "half": "lower"
+          }
+        }
+      ],
+      "variety": [
+        1,
+        3
+      ]
+    }
+  }
+}

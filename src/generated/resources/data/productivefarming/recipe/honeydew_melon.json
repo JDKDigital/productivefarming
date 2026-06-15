@@ -2,36 +2,17 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:honeydew_melon_slice"
-    },
-    {
-      "item": "productivefarming:honeydew_melon_slice"
-    },
-    {
-      "item": "productivefarming:honeydew_melon_slice"
-    },
-    {
-      "item": "productivefarming:honeydew_melon_slice"
-    },
-    {
-      "item": "productivefarming:honeydew_melon_slice"
-    },
-    {
-      "item": "productivefarming:honeydew_melon_slice"
-    },
-    {
-      "item": "productivefarming:honeydew_melon_slice"
-    },
-    {
-      "item": "productivefarming:honeydew_melon_slice"
-    },
-    {
-      "item": "productivefarming:honeydew_melon_slice"
-    }
+    "productivefarming:honeydew_melon_slice",
+    "productivefarming:honeydew_melon_slice",
+    "productivefarming:honeydew_melon_slice",
+    "productivefarming:honeydew_melon_slice",
+    "productivefarming:honeydew_melon_slice",
+    "productivefarming:honeydew_melon_slice",
+    "productivefarming:honeydew_melon_slice",
+    "productivefarming:honeydew_melon_slice",
+    "productivefarming:honeydew_melon_slice"
   ],
   "result": {
-    "count": 1,
     "id": "productivefarming:honeydew_melon"
   }
 }

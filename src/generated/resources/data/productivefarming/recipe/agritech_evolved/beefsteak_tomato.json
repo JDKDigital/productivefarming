@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "agritechevolved"
+    }
+  ],
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "productivefarming:beefsteak_tomato",
+      "max": 5,
+      "min": 2
+    }
+  ],
+  "seed": "productivefarming:beefsteak_tomato",
+  "soils": [
+    "#agritechevolved:farmland_soils"
+  ]
+}

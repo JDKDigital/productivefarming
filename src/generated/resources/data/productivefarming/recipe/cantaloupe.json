@@ -2,36 +2,17 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:cantaloupe_slice"
-    },
-    {
-      "item": "productivefarming:cantaloupe_slice"
-    },
-    {
-      "item": "productivefarming:cantaloupe_slice"
-    },
-    {
-      "item": "productivefarming:cantaloupe_slice"
-    },
-    {
-      "item": "productivefarming:cantaloupe_slice"
-    },
-    {
-      "item": "productivefarming:cantaloupe_slice"
-    },
-    {
-      "item": "productivefarming:cantaloupe_slice"
-    },
-    {
-      "item": "productivefarming:cantaloupe_slice"
-    },
-    {
-      "item": "productivefarming:cantaloupe_slice"
-    }
+    "productivefarming:cantaloupe_slice",
+    "productivefarming:cantaloupe_slice",
+    "productivefarming:cantaloupe_slice",
+    "productivefarming:cantaloupe_slice",
+    "productivefarming:cantaloupe_slice",
+    "productivefarming:cantaloupe_slice",
+    "productivefarming:cantaloupe_slice",
+    "productivefarming:cantaloupe_slice",
+    "productivefarming:cantaloupe_slice"
   ],
   "result": {
-    "count": 1,
     "id": "productivefarming:cantaloupe"
   }
 }

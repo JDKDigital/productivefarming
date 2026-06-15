@@ -1,0 +1,11 @@
+{
+  "values": {
+    "#productivefarming:stat_crops": 0.07,
+    "#productivefarming:mystical_tier_1": 0.06,
+    "#productivefarming:mystical_tier_2": 0.05,
+    "#productivefarming:mystical_tier_3": 0.04,
+    "#productivefarming:mystical_tier_4": 0.03,
+    "#productivefarming:mystical_tier_5": 0.02,
+    "#productivefarming:mystical_tier_6": 0.01
+  }
+}

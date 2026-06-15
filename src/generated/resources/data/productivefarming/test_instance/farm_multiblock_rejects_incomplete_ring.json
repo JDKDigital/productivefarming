@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "productivefarming:farm_multiblock_rejects_incomplete_ring_env",
+  "function": "productivefarming:farm_multiblock_rejects_incomplete_ring",
+  "structure": "productivefarming:empty_9x9",
+  "max_ticks": 100,
+  "required": true,
+  "setup_ticks": 0
+}

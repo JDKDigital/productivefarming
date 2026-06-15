@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:spring_onion_crate"
-    }
+    "productivefarming:spring_onion_crate"
   ],
   "result": {
     "count": 9,

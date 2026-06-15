@@ -5,23 +5,31 @@ import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivelib.common.block.entity.IUpgradeableBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
 import cy.jdkdigital.productivelib.registry.LibItems;
+import cy.jdkdigital.productivefarming.util.ModFluidTank;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import java.util.List;
 
 public class WateringTroughBlockEntity extends TickingBlockEntity implements IUpgradeableBlockEntity
 {
-    protected FluidTank fluidHandler = new FluidTank(10000, fluidStack -> fluidStack.is(Tags.Fluids.WATER));
+    protected ModFluidTank fluidHandler = new ModFluidTank(10000)
+    {
+        @Override
+        public boolean isFluidValid(FluidStack fluidStack) {
+            return fluidStack.is(Tags.Fluids.WATER);
+        }
+    };
 
-    protected IItemHandlerModifiable upgradeHandler = new InventoryHandlerHelper.UpgradeHandler(4, this, List.of(
+    protected InventoryHandlerHelper.UpgradeHandler upgradeHandler = new InventoryHandlerHelper.UpgradeHandler(4, this, List.of(
             LibItems.UPGRADE_RANGE.get(),
             LibItems.UPGRADE_TIME.get()
     ));
@@ -31,12 +39,12 @@ public class WateringTroughBlockEntity extends TickingBlockEntity implements IUp
     }
 
     @Override
-    public FluidTank getFluidHandler() {
+    public ResourceHandler<FluidResource> getFluidHandler() {
         return fluidHandler;
     }
 
     @Override
-    public IItemHandlerModifiable getUpgradeHandler() {
+    public ResourceHandler<ItemResource> getUpgradeHandler() {
         return upgradeHandler;
     }
 
@@ -49,14 +57,14 @@ public class WateringTroughBlockEntity extends TickingBlockEntity implements IUp
 
     @Override
     public void tickServer(ServerLevel level, BlockPos blockPos, BlockState blockState, TickingBlockEntity blockEntity) {
-        if (blockEntity instanceof WateringTroughBlockEntity wateringTroughBlockEntity && wateringTroughBlockEntity.getFluidHandler().getFluidAmount() > 100) {
+        if (blockEntity instanceof WateringTroughBlockEntity wateringTroughBlockEntity && wateringTroughBlockEntity.fluidHandler.getFluidAmount() > 100) {
             var range = 4d + (getUpgradeCount(LibItems.UPGRADE_RANGE.get()));
             List<Animal> entities = level.getEntitiesOfClass(Animal.class, (new AABB(blockPos).inflate(range, range - 3d, range))).stream().filter(animal -> !animal.isBaby() && animal.getAge() > 0).toList();
             if (!entities.isEmpty()) {
                 entities.forEach(animal -> {
-                    if (wateringTroughBlockEntity.getFluidHandler().getFluidAmount() > 100) {
+                    if (wateringTroughBlockEntity.fluidHandler.getFluidAmount() > 100) {
                         animal.setAge(Math.max(animal.getAge() - 200, 0));
-                        wateringTroughBlockEntity.getFluidHandler().drain(100, IFluidHandler.FluidAction.EXECUTE);
+                        wateringTroughBlockEntity.fluidHandler.drain(100, true);
                     }
                 });
             }

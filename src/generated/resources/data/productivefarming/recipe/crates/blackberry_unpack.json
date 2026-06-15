@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:blackberry_crate"
-    }
+    "productivefarming:blackberry_crate"
   ],
   "result": {
     "count": 9,

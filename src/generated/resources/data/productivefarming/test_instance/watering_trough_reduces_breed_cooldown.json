@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "productivefarming:watering_trough_reduces_breed_cooldown_env",
+  "function": "productivefarming:watering_trough_reduces_breed_cooldown",
+  "structure": "productivefarming:empty_9x9",
+  "max_ticks": 100,
+  "required": true,
+  "setup_ticks": 0
+}

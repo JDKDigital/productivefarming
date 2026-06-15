@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "productivefarming:farm_nutrient_water_bonemeals_crops_env",
+  "function": "productivefarming:farm_nutrient_water_bonemeals_crops",
+  "structure": "productivefarming:empty_9x9",
+  "max_ticks": 100,
+  "required": true,
+  "setup_ticks": 0
+}

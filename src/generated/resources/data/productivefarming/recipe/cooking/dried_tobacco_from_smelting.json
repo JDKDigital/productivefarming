@@ -3,11 +3,8 @@
   "category": "food",
   "cookingtime": 100,
   "experience": 0.35,
-  "ingredient": {
-    "item": "productivefarming:tobacco"
-  },
+  "ingredient": "productivefarming:tobacco",
   "result": {
-    "count": 1,
     "id": "productivefarming:dried_tobacco"
   }
 }

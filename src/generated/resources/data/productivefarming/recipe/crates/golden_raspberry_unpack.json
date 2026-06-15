@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:golden_raspberry_crate"
-    }
+    "productivefarming:golden_raspberry_crate"
   ],
   "result": {
     "count": 9,

@@ -1,135 +1,81 @@
 package cy.jdkdigital.productivefarming.event;
 
 import cy.jdkdigital.productivefarming.ProductiveFarming;
+import cy.jdkdigital.productivefarming.client.color.CropMutationTintSource;
+import cy.jdkdigital.productivefarming.client.color.FlowerColorTintSource;
+import cy.jdkdigital.productivefarming.client.color.FlowerItemTintSource;
+import cy.jdkdigital.productivefarming.client.color.PollenItemTintSource;
+import cy.jdkdigital.productivefarming.client.color.StemAgeTintSource;
 import cy.jdkdigital.productivefarming.client.render.block.FencedCropBlockEntityRenderer;
 import cy.jdkdigital.productivefarming.client.render.entity.layers.WolfHotdogLayer;
-import cy.jdkdigital.productivefarming.common.block.entity.ColorfulFlowerBlockEntity;
-import cy.jdkdigital.productivefarming.common.block.entity.ColorfulFlowerPotBlockEntity;
-import cy.jdkdigital.productivefarming.common.block.entity.CropBlockEntity;
-import cy.jdkdigital.productivefarming.common.item.PollenItem;
+import cy.jdkdigital.productivefarming.client.render.item.SeedBagItemRenderer;
 import cy.jdkdigital.productivefarming.inventory.screen.FarmControllerScreen;
 import cy.jdkdigital.productivefarming.inventory.screen.FeedingTroughScreen;
-import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
-import cy.jdkdigital.productivefarming.util.CropConfig;
 import cy.jdkdigital.productivelib.util.ColorUtil;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.WolfModel;
+import net.minecraft.client.color.block.BlockTintSources;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.entity.WolfRenderer;
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.core.BlockPos;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.StemBlock;
-import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.core.BlockPos;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
+import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
+
+import java.util.List;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.client.model.DynamicFluidContainerModel;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Vector4f;
 
 @EventBusSubscriber(modid = ProductiveFarming.MODID, value = Dist.CLIENT)
 public class ClientEventHandler
 {
-    @SubscribeEvent
-    public static void onClientSetup(final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            for (CropConfig crop: FarmingRegistrator.BERRIES) {
-                ItemProperties.register(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), ResourceLocation.withDefaultNamespace("count"), (stack, world, entity, i) -> stack.getCount());
-            }
-        });
-    }
+    private static final Material WATER_STILL = new Material(Identifier.withDefaultNamespace("block/water_still"));
+    private static final Material WATER_FLOWING = new Material(Identifier.withDefaultNamespace("block/water_flow"));
+    private static final Material WATER_OVERLAY = new Material(Identifier.withDefaultNamespace("block/water_overlay"));
 
     @SubscribeEvent
-    public static void registerBlockColors(final RegisterColorHandlersEvent.Block event) {
-        event.register((blockState, lightReader, pos, tintIndex) -> {
-            return lightReader != null && pos != null ? BiomeColors.getAverageWaterColor(lightReader, pos) : -1;
-        }, FarmingRegistrator.WATERING_TROUGH.get());
+    public static void registerBlockTintSources(RegisterColorHandlersEvent.BlockTintSources event) {
+        event.register(List.of(BlockTintSources.water()), FarmingRegistrator.WATERING_TROUGH.get());
 
         FarmingRegistrator.STEMS.forEach(crop -> {
-            event.register((blockState, lightReader, pos, tintIndex) -> -2046180, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")));
-            event.register((blockState, lightReader, pos, tintIndex) -> {
-                int i = blockState.getValue(StemBlock.AGE);
-                return FastColor.ARGB32.color(i * 32, 255 - i * 8, i * 4);
-            }, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem")));
+            Block stem = BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem"));
+            Block attached = BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem"));
+            event.register(List.of(StemAgeTintSource.INSTANCE), stem);
+            event.register(List.of(BlockTintSources.constant(-2046180)), attached);
         });
 
-        event.register((blockState, lightReader, pos, tintIndex) -> {
-            return lightReader != null && pos != null && lightReader.getBlockEntity(pos) instanceof CropBlockEntity cropBlockEntity ? cropBlockEntity.getMutationColor() : -1;
-        }, FarmingRegistrator.getAllCrops());
-
-        event.register((blockState, lightReader, pos, tintIndex) -> {
-            return lightReader != null && pos != null && lightReader.getBlockEntity(pos) instanceof ColorfulFlowerBlockEntity flowerBlockEntity ? flowerBlockEntity.getColor() : -1;
-        }, FarmingRegistrator.getFlowers());
-
-        event.register((blockState, lightReader, pos, tintIndex) -> {
-            return lightReader != null && pos != null && lightReader.getBlockEntity(pos) instanceof ColorfulFlowerPotBlockEntity flowerBlockEntity ? flowerBlockEntity.getColor() : -1;
-        }, FarmingRegistrator.getFlowerPots());
+        event.register(List.of(CropMutationTintSource.INSTANCE), FarmingRegistrator.getAllCrops());
+        event.register(List.of(FlowerColorTintSource.INSTANCE), FarmingRegistrator.getFlowers());
+        event.register(List.of(FlowerColorTintSource.INSTANCE), FarmingRegistrator.getFlowerPots());
     }
 
     @SubscribeEvent
-    public static void registerItemColors(final RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tintIndex) -> PollenItem.getColor(stack), FarmingRegistrator.POLLEN.get());
-
-        event.register((stack, tintIndex) -> {
-            return tintIndex == 1 ? stack.getOrDefault(FarmingDataComponents.COLOR, -1) : -1;
-        }, FarmingRegistrator.getFlowers());
-
-        event.register(new DynamicFluidContainerModel.Colors(), BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "nutrient_water_bucket")));
+    public static void registerItemTintSources(RegisterColorHandlersEvent.ItemTintSources event) {
+        event.register(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "pollen"), PollenItemTintSource.MAP_CODEC);
+        event.register(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "flower_color"), FlowerItemTintSource.MAP_CODEC);
     }
 
     @SubscribeEvent
-    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
-        event.registerFluidType(new IClientFluidTypeExtensions() {
-            private static final ResourceLocation UNDERWATER = ResourceLocation.withDefaultNamespace("textures/misc/underwater.png");
-            private static final ResourceLocation STILL = ResourceLocation.withDefaultNamespace("block/water_still");
-            private static final ResourceLocation FLOWING = ResourceLocation.withDefaultNamespace("block/water_flow");
-            private static final ResourceLocation OVERLAY = ResourceLocation.withDefaultNamespace("block/water_overlay");
-
-            @Override
-            public ResourceLocation getStillTexture() {
-                return STILL;
-            }
-
-            @Override
-            public ResourceLocation getFlowingTexture() {
-                return FLOWING;
-            }
-
-            @Override
-            public ResourceLocation getOverlayTexture() {
-                return OVERLAY;
-            }
-
-            @Override
-            public ResourceLocation getRenderOverlayTexture(Minecraft mc) {
-                return UNDERWATER;
-            }
-
-            @Override
-            public int getTintColor() {
-                return 0xFF3F76E4;
-            }
-
-            @Override
-            public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
-                return ColorUtil.darkenColor(BiomeColors.getAverageWaterColor(getter, pos), 0.4f) | 0xFF000000;
-            }
-        }, NeoForgeRegistries.FLUID_TYPES.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "nutrient_water")));
+    public static void registerSpecialModelRenderers(RegisterSpecialModelRendererEvent event) {
+        event.register(SeedBagItemRenderer.Unbaked.ID, SeedBagItemRenderer.Unbaked.MAP_CODEC);
     }
 
     @SubscribeEvent
@@ -139,17 +85,46 @@ public class ClientEventHandler
     }
 
     @SubscribeEvent
+    public static void registerFluidModels(RegisterFluidModelsEvent event) {
+        var model = new FluidModel.Unbaked(WATER_STILL, WATER_FLOWING, WATER_OVERLAY, BlockTintSources.constant(0xFF3F76E4));
+        event.register(model, FarmingRegistrator.NUTRIENT_WATER.get());
+        event.register(model, FarmingRegistrator.NUTRIENT_WATER.get().getFlowing());
+    }
+
+    @SubscribeEvent
+    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        event.registerFluidType(new IClientFluidTypeExtensions() {
+            private static final Identifier UNDERWATER = Identifier.withDefaultNamespace("textures/misc/underwater.png");
+
+            @Override
+            public Identifier getRenderOverlayTexture(Minecraft mc) {
+                return UNDERWATER;
+            }
+
+            @Override
+            public void modifyFogColor(@NotNull Camera camera, float partialTick, @NotNull ClientLevel level, int renderDistance, float darkenWorldAmount, @NotNull Vector4f fluidFogColor) {
+                BlockPos pos = camera.blockPosition();
+                int color = ColorUtil.darkenColor(BiomeColors.getAverageWaterColor(level, pos), 0.4f);
+                fluidFogColor.x = (color >> 16 & 255) / 255.0F;
+                fluidFogColor.y = (color >> 8 & 255) / 255.0F;
+                fluidFogColor.z = (color & 255) / 255.0F;
+            }
+        }, ProductiveFarming.FLUID_TYPES.getEntries().stream()
+                .filter(holder -> holder.getId().getPath().equals("nutrient_water"))
+                .findFirst().orElseThrow().get());
+    }
+
+    @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(FarmingRegistrator.FENCED_VERTICAL_CROP_BLOCK_ENTITY.get(), FencedCropBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(FarmingRegistrator.FENCED_LEAVES_BLOCK_ENTITY.get(), FencedCropBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(FarmingRegistrator.FENCED_STEM_BLOCK_ENTITY.get(), FencedCropBlockEntityRenderer::new);
 
         FarmingRegistrator.FISHIES.forEach(fishConfig -> {
-            if (fishConfig.entitySupplier() != null) {
-                var entityType = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, fishConfig.name()));
-                if (entityType != null) {
-                    event.registerEntityRenderer(entityType, fishConfig.entityRenderer());
-                }
+            if (fishConfig.entitySupplier() != null && fishConfig.entityRenderer() != null) {
+                BuiltInRegistries.ENTITY_TYPE.get(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, fishConfig.name()))
+                        .map(Holder::value)
+                        .ifPresent(entityType -> event.registerEntityRenderer(entityType, fishConfig.entityRenderer()));
             }
         });
     }
@@ -161,9 +136,8 @@ public class ClientEventHandler
 
     @SubscribeEvent
     public static void addLayers(EntityRenderersEvent.AddLayers event) {
-        var renderer = event.getRenderer(EntityType.WOLF);
-        if (renderer instanceof WolfRenderer wolfRenderer) {
-            wolfRenderer.addLayer(new WolfHotdogLayer((RenderLayerParent<Wolf, WolfModel<Wolf>>) renderer, event.getEntityModels()));
+        if (event.getRenderer(EntityType.WOLF) instanceof WolfRenderer wolfRenderer) {
+            wolfRenderer.addLayer(new WolfHotdogLayer(wolfRenderer, event.getEntityModels()));
         }
     }
 }

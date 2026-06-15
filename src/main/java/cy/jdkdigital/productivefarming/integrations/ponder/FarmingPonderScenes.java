@@ -3,13 +3,13 @@ package cy.jdkdigital.productivefarming.integrations.ponder;
 import cy.jdkdigital.productivefarming.integrations.ponder.scenes.MultifarmScenes;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class FarmingPonderScenes
 {
-    public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+    public static void register(PonderSceneRegistrationHelper<Identifier> helper) {
         PonderSceneRegistrationHelper<DeferredHolder<Block, Block>> HELPER = helper.withKeyFunction(DeferredHolder::getId);
 
         addBuilding(HELPER, FarmingRegistrator.FARM_CONTROLLER);

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:konjac_crate"
-    }
+    "productivefarming:konjac_crate"
   ],
   "result": {
     "count": 9,

@@ -6,8 +6,8 @@ import cy.jdkdigital.productivefarming.util.TraitsHelper;
 import cy.jdkdigital.productivelib.util.LangUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
+import cy.jdkdigital.productivefarming.common.item.CropBlockItem;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.MobBucketItem;
 
 import java.util.HashMap;
@@ -27,6 +27,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("jade." + ProductiveFarming.MODID + ".mutation", "Mutation: %s");
         add("jade." + ProductiveFarming.MODID + ".mutation_harvest", "Right click to safely harvest the mutated crop");
         add("config.jade.plugin_" + ProductiveFarming.MODID + ".crop", "Crops");
+        add("config.jade.plugin_" + ProductiveFarming.MODID + ".external_crop", "Modded & Vanilla Crops");
+        add("config.jade.plugin_" + ProductiveFarming.MODID + ".agritech_planter", "AgriTech Planters");
         add(ProductiveFarming.MODID + ".screen.progress", "Progress: %s");
         add(ProductiveFarming.MODID + ".message.farm_formed", "Farm structure assembled with height %s");
         add(ProductiveFarming.MODID + ".message.farm_invalid", "Farm structure invalid. %s");
@@ -65,7 +67,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         ProductiveFarming.ITEMS.getEntries().forEach(holder -> {
             if (holder.get() instanceof MobBucketItem) {
                 add(holder.get(), "Bucket of " + capName(BuiltInRegistries.ITEM.getKey(holder.get()).getPath().replace("_bucket", "")));
-            } else if (!(holder.get() instanceof BlockItem) || holder.get() instanceof ItemNameBlockItem) {
+            } else if (!(holder.get() instanceof BlockItem) || holder.get() instanceof CropBlockItem) {
                 var regName = BuiltInRegistries.ITEM.getKey(holder.get()).getPath();
                 if (regName.contains("grape_seeds")) {
                     add(holder.get(), LangUtil.capName(regName.replace("seeds", "propagule")));

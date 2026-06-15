@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "productivefarming:sungold_tomato"
-    }
+    "#": "productivefarming:sungold_tomato"
   },
   "pattern": [
     "###",
@@ -12,7 +10,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "productivefarming:sungold_tomato_crate"
   }
 }

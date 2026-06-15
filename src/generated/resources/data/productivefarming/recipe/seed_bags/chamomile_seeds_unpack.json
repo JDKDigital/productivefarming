@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:chamomile_seeds_bag"
-    }
+    "productivefarming:chamomile_seeds_bag"
   ],
   "result": {
     "count": 9,

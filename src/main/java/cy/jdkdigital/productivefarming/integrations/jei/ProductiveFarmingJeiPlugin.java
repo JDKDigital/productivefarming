@@ -12,26 +12,23 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.List;
 
 @JeiPlugin
 public class ProductiveFarmingJeiPlugin implements IModPlugin
 {
-    private static final ResourceLocation pluginId = ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, ProductiveFarming.MODID);
+    private static final Identifier pluginId = Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, ProductiveFarming.MODID);
 
     public static final RecipeType<RecipeHolder<CropFruitingRecipe>> CROP_FRUITING_TYPE = RecipeType.createRecipeHolderType(FarmingRegistrator.CROP_FRUITING_TYPE.getId());
     public static final RecipeType<RecipeHolder<CropMutationRecipe>> CROP_MUTATION_TYPE = RecipeType.createRecipeHolderType(FarmingRegistrator.CROP_MUTATION_TYPE.getId());
 
     @Nonnull
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return pluginId;
     }
 
@@ -51,26 +48,7 @@ public class ProductiveFarmingJeiPlugin implements IModPlugin
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-
-        // Crop fruiting recipes
-        List<RecipeHolder<CropFruitingRecipe>> fruitingRecipeList = new ArrayList<>();
-        FarmingRegistrator.CROPS.forEach(cropConfig -> {
-        });
-        FarmingRegistrator.HERBS.forEach(cropConfig -> {
-        });
-        FarmingRegistrator.BERRIES.forEach(cropConfig -> {
-        });
-        FarmingRegistrator.GRAPES.forEach(cropConfig -> {
-        });
-        FarmingRegistrator.STEMS.forEach(cropConfig -> {
-        });
-        FarmingRegistrator.TRELLIS.forEach(cropConfig -> {
-        });
-        FarmingRegistrator.VERTICAL_TRELLIS.forEach(cropConfig -> {
-        });
-        registration.addRecipes(CROP_FRUITING_TYPE, fruitingRecipeList);
-        registration.addRecipes(CROP_FRUITING_TYPE, recipeManager.getAllRecipesFor(FarmingRegistrator.CROP_FRUITING_TYPE.get()));
-        registration.addRecipes(CROP_MUTATION_TYPE, recipeManager.getAllRecipesFor(FarmingRegistrator.CROP_MUTATION_TYPE.get()));
+        registration.addRecipes(CROP_FRUITING_TYPE, new ArrayList<>(FarmingRecipeSync.byType(FarmingRegistrator.CROP_FRUITING_TYPE.get())));
+        registration.addRecipes(CROP_MUTATION_TYPE, new ArrayList<>(FarmingRecipeSync.byType(FarmingRegistrator.CROP_MUTATION_TYPE.get())));
     }
 }

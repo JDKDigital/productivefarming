@@ -7,7 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -44,7 +44,7 @@ public class ColorfulFlowerBlock extends FlowerBlock implements EntityBlock, ICo
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
         var stack = new ItemStack(this);
         if (level.getBlockEntity(pos) instanceof ColorfulFlowerBlockEntity flowerBlockEntity) {
             stack.set(FarmingDataComponents.COLOR, flowerBlockEntity.getColor());
@@ -52,9 +52,4 @@ public class ColorfulFlowerBlock extends FlowerBlock implements EntityBlock, ICo
         return stack;
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-        tooltipComponents.add(Component.translatable(FarmUtil.getDyeFromColor(stack.getOrDefault(FarmingDataComponents.COLOR, this.defaultColor)).getDescriptionId()).withColor(stack.getOrDefault(FarmingDataComponents.COLOR, this.defaultColor)).withStyle(ChatFormatting.ITALIC));
-    }
 }

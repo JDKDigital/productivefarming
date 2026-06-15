@@ -10,14 +10,12 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-
-import java.util.Arrays;
 
 public class CropMutationRecipeCategory extends AbstractRecipeCategory<RecipeHolder<CropMutationRecipe>>
 {
@@ -27,29 +25,29 @@ public class CropMutationRecipeCategory extends AbstractRecipeCategory<RecipeHol
         super(
                 ProductiveFarmingJeiPlugin.CROP_MUTATION_TYPE,
                 Component.translatable("jei.productivefarming.crop_mutation"),
-                guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "blue_beauty_tomato")))),
+                guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "blue_beauty_tomato")))),
                 130, 60
         );
-        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "textures/gui/jei/crop_mutation.png");
-        this.background = guiHelper.createDrawable(location, 0, 0, 130, 60);
+        Identifier location = Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "textures/gui/jei/crop_mutation.png");
+        this.background = guiHelper.drawableBuilder(location, 0, 0, 130, 60).setTextureSize(130, 60).build();
     }
 
     @Override
-    public void draw(RecipeHolder<CropMutationRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        this.background.draw(guiGraphics);
+    public void draw(RecipeHolder<CropMutationRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+        this.background.draw(guiGraphics, 0, 0);
     }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<CropMutationRecipe> recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 13, 27)
-                .addItemStacks(Arrays.asList(BuiltInRegistries.ITEM.get(recipe.value().pollenCrop()).getDefaultInstance()))
+                .addItemStack(BuiltInRegistries.ITEM.getValue(recipe.value().pollenCrop()).getDefaultInstance())
                 .setSlotName("pollenCrop");
         builder.addSlot(RecipeIngredientRole.INPUT, 56, 27)
-                .addItemStacks(Arrays.asList(BuiltInRegistries.ITEM.get(recipe.value().targetCrop()).getDefaultInstance()))
+                .addItemStack(BuiltInRegistries.ITEM.getValue(recipe.value().targetCrop()).getDefaultInstance())
                 .setSlotName("targetCrop");
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 109, 27)
-                .addItemStacks(Arrays.asList(BuiltInRegistries.ITEM.get(recipe.value().mutation()).getDefaultInstance()))
+                .addItemStack(BuiltInRegistries.ITEM.getValue(recipe.value().mutation()).getDefaultInstance())
                 .setSlotName("result");
     }
 }

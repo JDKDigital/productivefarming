@@ -10,11 +10,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -43,9 +43,10 @@ public class FencedStemBlock extends StemBlock implements IAgeableCropBlock, Ent
 
     public FencedStemBlock(CropConfig crop, Properties properties) {
         super(
-                ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_leaves")),
-                ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")),
-                ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")), properties);
+                ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_leaves")),
+                ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")),
+                ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds")),
+                ModTags.Blocks.FARMLAND, ModTags.Blocks.FARMLAND, properties);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class FencedStemBlock extends StemBlock implements IAgeableCropBlock, Ent
                         BlockState fenceBlockState = level.getBlockState(leafPos);
                         BlockState farmlandBlockState = level.getBlockState(pos.below());
                         if (fenceBlockState.is(Tags.Blocks.FENCES) && farmlandBlockState.is(ModTags.Blocks.FARMLAND)) {
-                            Registry<Block> registry = level.registryAccess().registryOrThrow(Registries.BLOCK);
+                            Registry<Block> registry = level.registryAccess().lookupOrThrow(Registries.BLOCK);
                             Optional<Block> fruitBlock = registry.getOptional(this.fruit);
                             Optional<Block> attachedStemBlock = registry.getOptional(this.attachedStem);
                             if (fruitBlock.isPresent() && attachedStemBlock.isPresent()) {
@@ -114,20 +115,20 @@ public class FencedStemBlock extends StemBlock implements IAgeableCropBlock, Ent
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (stack.is(Tags.Items.FENCES) && stack.getItem() instanceof BlockItem blockItem && level.getBlockEntity(pos) instanceof FencedStemBlockEntity fencedStemBlockEntity && fencedStemBlockEntity.getFence() == null) {
             fencedStemBlockEntity.setFence(blockItem.getBlock().defaultBlockState());
-            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        // check if state has changed, and it's not changed to the attached stem state
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        BlockState newState = level.getBlockState(pos);
         if (!state.is(newState.getBlock()) && !(newState.getBlock() instanceof AttachedFencedStemBlock) && level.getBlockEntity(pos) instanceof FencedCropBlockEntity fencedCropBlockEntity && fencedCropBlockEntity.getFence() != null) {
             level.setBlockAndUpdate(pos, fencedCropBlockEntity.getFence());
         }
-        super.onRemove(state, level, pos, newState, movedByPiston);
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
     }
 }

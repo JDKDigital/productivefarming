@@ -1,0 +1,120 @@
+{
+  "values": [
+    {
+      "id": "productivefarming:farmer/level_2/basil_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/chives_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/coriander",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/cumin",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/dill_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/fat_hen_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/fenugreek_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/spearmint_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/peppermint_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/watermint_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/lemon_balm_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/lemongrass_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/oregano_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/parsley_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/rosemary_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/sage_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/thyme_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/ostrich_fiddlehead_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/kadsura",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/blackberry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/blackcurrant",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/blueberry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/boysenberry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/cloudberry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/cranberry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/gooseberry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/lingoberry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/raspberry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_2/redcurrant",
+      "required": false
+    }
+  ]
+}

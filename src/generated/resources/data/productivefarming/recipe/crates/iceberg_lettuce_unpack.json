@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:iceberg_lettuce_crate"
-    }
+    "productivefarming:iceberg_lettuce_crate"
   ],
   "result": {
     "count": 9,

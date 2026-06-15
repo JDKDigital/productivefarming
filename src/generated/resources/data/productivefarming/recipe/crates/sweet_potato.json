@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "productivefarming:sweet_potato"
-    }
+    "#": "productivefarming:sweet_potato"
   },
   "pattern": [
     "###",
@@ -12,7 +10,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "productivefarming:sweet_potato_crate"
   }
 }

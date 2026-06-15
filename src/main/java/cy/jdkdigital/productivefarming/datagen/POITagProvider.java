@@ -4,14 +4,13 @@ import cy.jdkdigital.productivefarming.ProductiveFarming;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.PoiTypeTagsProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
 public class POITagProvider extends PoiTypeTagsProvider
 {
-    public POITagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
-        super(output, future, ProductiveFarming.MODID, helper);
+    public POITagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+        super(output, future, ProductiveFarming.MODID);
     }
 
     @Override

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "productivefarming:blue_borage_seeds"
-    }
+    "#": "productivefarming:blue_borage_seeds"
   },
   "pattern": [
     "###",
@@ -12,7 +10,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "productivefarming:blue_borage_seeds_bag"
   }
 }

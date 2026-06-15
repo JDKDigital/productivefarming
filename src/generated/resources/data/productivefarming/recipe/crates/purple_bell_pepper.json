@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "productivefarming:purple_bell_pepper"
-    }
+    "#": "productivefarming:purple_bell_pepper"
   },
   "pattern": [
     "###",
@@ -12,7 +10,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "productivefarming:purple_bell_pepper_crate"
   }
 }

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:parsnip_seeds_bag"
-    }
+    "productivefarming:parsnip_seeds_bag"
   ],
   "result": {
     "count": 9,

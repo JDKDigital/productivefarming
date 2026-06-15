@@ -6,14 +6,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
 public class BiomeTagProvider extends BiomeTagsProvider
 {
-    public BiomeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
-        super(output, future, ProductiveFarming.MODID, helper);
+    public BiomeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+        super(output, future, ProductiveFarming.MODID);
     }
 
     @Override

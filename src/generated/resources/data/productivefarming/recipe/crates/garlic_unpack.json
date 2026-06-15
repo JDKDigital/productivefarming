@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:garlic_crate"
-    }
+    "productivefarming:garlic_crate"
   ],
   "result": {
     "count": 9,

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "productivefarming:agritech_planter_initializes_statless_seed_env",
+  "function": "productivefarming:agritech_planter_initializes_statless_seed",
+  "structure": "productivefarming:empty_9x9",
+  "max_ticks": 100,
+  "required": true,
+  "setup_ticks": 0
+}

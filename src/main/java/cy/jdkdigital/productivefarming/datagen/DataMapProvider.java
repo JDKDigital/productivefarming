@@ -5,7 +5,7 @@ import cy.jdkdigital.productivefarming.common.datamap.CropTrait;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.datamaps.builtin.Compostable;
@@ -23,18 +23,11 @@ public class DataMapProvider extends net.neoforged.neoforge.common.data.DataMapP
     protected void gather(HolderLookup.Provider provider) {
         final var traits = builder(FarmingRegistrator.CROP_TRAITS);
 
-        traits.add(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "blue_jade_corn"), new CropTrait(0, 2, 0, 0), false);
+        traits.add(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "blue_jade_corn"), new CropTrait(0, 2, 0, 0), false);
 
         final var compostables = builder(NeoForgeDataMaps.COMPOSTABLES);
-        ProductiveFarming.ITEMS.getEntries().forEach(holder -> {
-            var stack = holder.get().getDefaultInstance();
-            
-            if (stack.getFoodProperties(null) != null) {
-                compostables.add(holder, new Compostable(0.65f, false), true);
-            }
-        });
-        compostables.add(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "crops")), new Compostable(0.5f, false), false);
-        compostables.add(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "herbs")), new Compostable(0.5f, false), false);
+        compostables.add(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops")), new Compostable(0.5f, false), false);
+        compostables.add(ItemTags.create(Identifier.fromNamespaceAndPath("c", "herbs")), new Compostable(0.5f, false), false);
         compostables.add(Tags.Items.SEEDS, new Compostable(0.3f, true), false);
         compostables.add(Tags.Items.MUSHROOMS, new Compostable(0.65f, false), false);
     }

@@ -6,8 +6,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class CropItem extends Item
 {
@@ -16,8 +17,8 @@ public class CropItem extends Item
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        tooltipComponents.add(Component.translatable(FarmUtil.getLatinTranslationKey(this)).withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.ITALIC));
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        tooltipComponents.accept(Component.translatable(FarmUtil.getLatinTranslationKey(this)).withStyle(ChatFormatting.DARK_GREEN).withStyle(ChatFormatting.ITALIC));
+        super.appendHoverText(stack, context, display, tooltipComponents, tooltipFlag);
     }
 }

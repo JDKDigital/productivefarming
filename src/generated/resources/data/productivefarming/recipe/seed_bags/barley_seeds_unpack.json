@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:barley_seeds_bag"
-    }
+    "productivefarming:barley_seeds_bag"
   ],
   "result": {
     "count": 9,

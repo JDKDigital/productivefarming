@@ -7,7 +7,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -56,12 +55,12 @@ public class ColorfulFlowerPotBlock extends FlowerPotBlock implements EntityBloc
 
             level.setBlock(pos, this.getEmptyPot().defaultBlockState(), 3);
             level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
         var stack = new ItemStack(flower.get());
         if (level.getBlockEntity(pos) instanceof ColorfulFlowerPotBlockEntity flowerBlockEntity) {
             stack.set(FarmingDataComponents.COLOR, flowerBlockEntity.getColor());

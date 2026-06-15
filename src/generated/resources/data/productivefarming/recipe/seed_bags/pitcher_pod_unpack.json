@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:pitcher_pod_bag"
-    }
+    "productivefarming:pitcher_pod_bag"
   ],
   "result": {
     "count": 9,

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:sugar_beet_crate"
-    }
+    "productivefarming:sugar_beet_crate"
   ],
   "result": {
     "count": 9,

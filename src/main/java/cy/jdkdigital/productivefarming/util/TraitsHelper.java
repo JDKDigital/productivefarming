@@ -8,8 +8,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +25,8 @@ public class TraitsHelper
     public static final String YIELD = "yield"; // how many crops you get when harvested
     public static final String RESISTANCE = "resistance"; // increases chance of dropping seeds with improved stats
     public static final String MUTABILITY = "mutability"; // affects how easily the crop can be mutated, max stat can make the crop mutate spontaneously
+
+    public static final String[] STAT_NAMES = {GROWTH, YIELD, RESISTANCE, MUTABILITY};
 
     static Map<String, List<String>> TRAIT_VALUES = new HashMap<>() {{
         put(GROWTH, List.of("low", "medium", "high", "very_high"));
@@ -55,10 +60,10 @@ public class TraitsHelper
     }
 
     public static void setDefaultsOnStack(ItemStack stack) {
-        stack.set(FarmingDataComponents.GROWTH, getDefaultTrait(stack.getItemHolder(), FarmingDataComponents.GROWTH));
-        stack.set(FarmingDataComponents.YIELD, getDefaultTrait(stack.getItemHolder(), FarmingDataComponents.YIELD));
-        stack.set(FarmingDataComponents.RESISTANCE, getDefaultTrait(stack.getItemHolder(), FarmingDataComponents.RESISTANCE));
-        stack.set(FarmingDataComponents.MUTABILITY, getDefaultTrait(stack.getItemHolder(), FarmingDataComponents.MUTABILITY));
+        stack.set(FarmingDataComponents.GROWTH, getDefaultTrait(stack.typeHolder(), FarmingDataComponents.GROWTH));
+        stack.set(FarmingDataComponents.YIELD, getDefaultTrait(stack.typeHolder(), FarmingDataComponents.YIELD));
+        stack.set(FarmingDataComponents.RESISTANCE, getDefaultTrait(stack.typeHolder(), FarmingDataComponents.RESISTANCE));
+        stack.set(FarmingDataComponents.MUTABILITY, getDefaultTrait(stack.typeHolder(), FarmingDataComponents.MUTABILITY));
     }
 
     public static void copyTraitsToStack(ItemStack in, ItemStack stack) {
@@ -66,6 +71,34 @@ public class TraitsHelper
         stack.set(FarmingDataComponents.YIELD, in.getOrDefault(FarmingDataComponents.YIELD, 0));
         stack.set(FarmingDataComponents.RESISTANCE, in.getOrDefault(FarmingDataComponents.RESISTANCE, 0));
         stack.set(FarmingDataComponents.MUTABILITY, in.getOrDefault(FarmingDataComponents.MUTABILITY, 0));
+    }
+
+    public static String rollIncreasedStat(RandomSource random, Holder<Item> seed) {
+        if (random.nextFloat() >= getIncreaseChance(seed)) {
+            return null;
+        }
+        return STAT_NAMES[random.nextInt(STAT_NAMES.length)];
+    }
+
+    public static double getIncreaseChance(Holder<Item> seed) {
+        Double chance = seed == null ? null : seed.getData(FarmingRegistrator.STAT_INCREASE_CHANCE);
+        return chance != null ? chance : 0.0;
+    }
+
+    public static ItemStack applyTraits(ItemStack stack, int growth, int yield, int resistance, int mutability) {
+        stack.set(FarmingDataComponents.GROWTH, growth);
+        stack.set(FarmingDataComponents.YIELD, yield);
+        stack.set(FarmingDataComponents.RESISTANCE, resistance);
+        stack.set(FarmingDataComponents.MUTABILITY, mutability);
+        return stack;
+    }
+
+    public static ItemStack mutatedSeed(Identifier mutation) {
+        ItemStack seed = BuiltInRegistries.ITEM.getValue(mutation.withPath(p -> p + "_seeds")).getDefaultInstance();
+        if (seed.is(Items.AIR)) {
+            seed = BuiltInRegistries.ITEM.getValue(mutation).getDefaultInstance();
+        }
+        return seed;
     }
 
     public static int getDefaultTrait(Holder<Item> item, Supplier<DataComponentType<Integer>> trait) {

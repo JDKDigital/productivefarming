@@ -1,9 +1,9 @@
 package cy.jdkdigital.productivefarming.client.render.entity.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
-import net.minecraft.client.model.WolfModel;
+import net.minecraft.client.model.animal.wolf.AdultWolfModel;
+import net.minecraft.client.model.animal.wolf.WolfModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.PartPose;
@@ -11,54 +11,31 @@ import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.renderer.entity.state.WolfRenderState;
+import net.minecraft.resources.Identifier;
 
-public class WolfHotdogLayer extends RenderLayer<Wolf, WolfModel<Wolf>>
+import javax.annotation.Nonnull;
+
+public class WolfHotdogLayer extends RenderLayer<WolfRenderState, WolfModel>
 {
-    public static final ModelLayerLocation HOTDOG_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "hotdog"), "hotdog");
+    public static final ModelLayerLocation HOTDOG_LAYER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "hotdog"), "hotdog");
 
-    private static final ResourceLocation HOTDOG_TEXTURE = ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "textures/entity/wolf/hotdog.png");
+    @SuppressWarnings("unused")
+    private static final Identifier HOTDOG_TEXTURE = Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "textures/entity/wolf/hotdog.png");
 
-    private final WolfModel<Wolf> model;
+    @SuppressWarnings("unused")
+    private final WolfModel model;
 
-    public WolfHotdogLayer(RenderLayerParent<Wolf, WolfModel<Wolf>> renderer, EntityModelSet models) {
+    public WolfHotdogLayer(RenderLayerParent<WolfRenderState, WolfModel> renderer, EntityModelSet models) {
         super(renderer);
-        this.model = new WolfModel<>(models.bakeLayer(WolfHotdogLayer.HOTDOG_LAYER));
+        this.model = new AdultWolfModel(models.bakeLayer(WolfHotdogLayer.HOTDOG_LAYER));
     }
 
-    public void render(
-            PoseStack poseStack,
-            MultiBufferSource bufferSource,
-            int packedLight,
-            Wolf livingEntity,
-            float limbSwing,
-            float limbSwingAmount,
-            float partialTick,
-            float ageInTicks,
-            float netHeadYaw,
-            float headPitch
-    ) {
-        if (livingEntity.hasArmor()) {
-//            ItemStack stack = livingEntity.getBodyArmorItem();
-//            if (stack.is(FarmingRegistrator.HOTDOG_ARMOR)) {
-//                this.getParentModel().copyPropertiesTo(this.model);
-//                this.model.prepareMobModel(livingEntity, limbSwing, limbSwingAmount, partialTick);
-//                this.model.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-//                this.maybeRenderHotdogLayer(poseStack, bufferSource, packedLight, stack);
-//            }
-        }
-    }
-
-    private void maybeRenderHotdogLayer(PoseStack poseStack, MultiBufferSource buffer, int packedLight, ItemStack armorStack) {
-        VertexConsumer vertexconsumer = buffer.getBuffer(RenderType.entityTranslucent(HOTDOG_TEXTURE));
-        this.model.renderToBuffer(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY);
+    @Override
+    public void submit(@Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector collector, int packedLight, @Nonnull WolfRenderState state, float yRot, float xRot) {
     }
 
     public static MeshDefinition createMeshDefinition(CubeDeformation cubeDeformation) {

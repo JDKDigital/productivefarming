@@ -14,7 +14,7 @@ public final class CropConfig
     private final int cropColor;
 
     public CropConfig(String name, boolean hasSeed, FoodProperties food) {
-        this(name, hasSeed, food, FoliageColor.getDefaultColor());
+        this(name, hasSeed, food, FoliageColor.FOLIAGE_DEFAULT);
     }
 
     public CropConfig(String name, boolean hasSeed, FoodProperties food, int cropColor) {
@@ -22,7 +22,7 @@ public final class CropConfig
     }
 
     public CropConfig(String name, boolean hasSeed, FoodProperties food, FarmingRegistrator.CropBlockSupplier supplier) {
-        this(name, hasSeed, food, supplier, FoliageColor.getDefaultColor());
+        this(name, hasSeed, food, supplier, FoliageColor.FOLIAGE_DEFAULT);
     }
 
     public CropConfig(String name, boolean hasSeed, FoodProperties food, FarmingRegistrator.CropBlockSupplier supplier, int cropColor) {

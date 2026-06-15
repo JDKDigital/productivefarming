@@ -1,72 +1,40 @@
-1.21.1-0.5.2
+26.1.2-0.9.0
 
-- Fixed flowers in flower pots
-- Updated ponder
-
-
-1.21.1-0.5.1
-
-- Fixed double flowers growing through blocks and added griefing permission checks
-- Fixed mushroom growths not being harvestable
-- Fixed herb crop loot tables not dropping seeds
-- Fixed seed duplication for som crops when destroyed
-- Fixed some crops not being compostable
-- Fixed traded seeds and crops not being stackable with harvested seeds and crops
+- Added AgriTech and AgriTech: Evolved compat
+- Crop stat increase chance is now fully data-driven through the stat_increase_chance datamap replacing the config
+- Mystical Agriculture seeds are grouped into mystical_tier_1 through mystical_tier_5 tags, with higher tiers given a lower stat increase chance (0.05 down to 0.01)
+- Fixed Mystical Agriculture seeds not keeping their crop stats when harvested
+- Harvested vanilla and modded crop seeds now always carry crop stats
+- Fixed only one input slot being usable in the Farm Controller
 
 
-1.21.1-0.5.0
+26.1.2-0.8.0
 
-- Upgrade item tooltip updates
-- Added support for speed and stability upgrades in multiblock farms. Stability upgrades will strip stats off of any collected crops.
-
-
-1.21.1-0.4.1
-
-- Fixed crop mutations not working for grape crops
-+ Fixed some crop mutation inputs not showing in JEI
-- Fixed crates not dropping when mined (Destiny Rose)
-- Updated PT_BR translation (PrincessStellar)
+- Added AgriTech and AgriTech: Evolved compat: crops can be grown in their planters
+- Crop stats now apply in AgriTech planters: growth speeds up processing, yield grows the output, and harvested seeds keep their stats
+- Fixed Mystical Agriculture fertilizer no longer working on crops
+- Bone meal is now consumed when used on vanilla and modded crops
+- Fixed crop stats tooltip being shown twice on seeds
+- Fish farms now cull overpopulated fish and breed reliably
+- Fish farm entities no longer despawn
 
 
-1.21.1-0.4.0
+26.1.2-0.7.0
 
-- Added shrooms to villager trades
-- Fixed incompatibility with FTB Ultimine causing mutated crops to not drop
-- Whitelisted more biomes for flower spawns
-- Corrected config names
-- Exposed fluid handler for watering trough
-- Fixed not being able to manually insert into a feeding trough
-
-
-1.21.1-0.3.1
-
-- Added crop block tag to crops
-- Added fence tag to fence growing crops
-- Updated PT_BR translation (PrincessStellar)
+- Crop stats now apply to Mystical Agriculture, Croptopia and Silent Gear crops when those mods are installed
+- Added tag for crop stat mod compatibility
+- Renamed the traitsOnVanillaCrops config option to statsOnExternalCrops, covering all non-Productive Farming crops
+- Added flowers to the BEE_FOOD tag
+- Fixed seed bags rendering
+- Fixed flowing nutrient water and the nutrient water bucket failing to render
+- Fixed the feeding trough not working
 
 
-1.21.1-0.3.0
+26.1.2-0.6.1
 
-- Added ponders for farm multiblock
-- Added config to turn off farm villager trades
-- Fixed feeding trough not allowing manual item insertion
-- Added more shrooms
-- Added PT_BR translation (PrincessStellar)
-- Cleaned up tag structure and added tags for Farmers Delight compatibility
+- Bump lib version
 
 
-1.21.1-0.2.0
+26.1.2-0.6.0
 
-- Increased farm controller inventory
-- Display crop stats and latin name on shrooms
-- Shroom growths on composters can now be harvested
-- Limit flowers gained from bonemealing to modded flowers only
-- Fish farms have increased entity limit and increased nutrient rich water production
-- Allowed glass blocks in farm multiblock structure
-- Fixed farm controller, feeding trough and watering trough loot tables
-- Changed farm right clicker for better compatibility with other mods crops
-
-
-1.21.1-0.1.1
-
-- Removed some debug out
+- Port to 26.1.2

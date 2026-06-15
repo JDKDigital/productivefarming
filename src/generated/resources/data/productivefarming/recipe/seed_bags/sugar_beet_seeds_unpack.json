@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:sugar_beet_seeds_bag"
-    }
+    "productivefarming:sugar_beet_seeds_bag"
   ],
   "result": {
     "count": 9,

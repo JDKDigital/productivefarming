@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "productivefarming:block/feeding_trough/empty"
+  }
+}

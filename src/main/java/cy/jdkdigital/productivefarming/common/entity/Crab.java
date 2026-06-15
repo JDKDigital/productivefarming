@@ -2,7 +2,7 @@ package cy.jdkdigital.productivefarming.common.entity;
 
 import com.mojang.serialization.Codec;
 import cy.jdkdigital.productivefarming.registry.ModTags;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -15,8 +15,8 @@ import net.minecraft.util.ByIdMap;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.VariantHolder;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
@@ -25,13 +25,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.function.IntFunction;
 
-public class Crab extends Animal implements VariantHolder<Crab.Variant>, ProductiveFish
+public class Crab extends Animal implements ProductiveFish
 {
     private static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(Crab.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Crab.class, EntityDataSerializers.BOOLEAN);
@@ -79,13 +81,13 @@ public class Crab extends Animal implements VariantHolder<Crab.Variant>, Product
     @Override
     public void loadFromBucketTag(CompoundTag tag) {
         Bucketable.loadDefaultDataFromBucketTag(this, tag);
-        this.setVariant(Crab.Variant.byId(tag.getInt("Variant")));
+        this.setVariant(Crab.Variant.byId(tag.getIntOr("Variant", 0)));
         if (tag.contains("Age")) {
-            this.setAge(tag.getInt("Age"));
+            this.setAge(tag.getIntOr("Age", 0));
         }
 
         if (tag.contains("HuntingCooldown")) {
-            this.getBrain().setMemoryWithExpiry(MemoryModuleType.HAS_HUNTING_COOLDOWN, true, tag.getLong("HuntingCooldown"));
+            this.getBrain().setMemoryWithExpiry(MemoryModuleType.HAS_HUNTING_COOLDOWN, true, tag.getLongOr("HuntingCooldown", 0L));
         }
     }
 
@@ -102,13 +104,13 @@ public class Crab extends Animal implements VariantHolder<Crab.Variant>, Product
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
-        var entity = this.getType().create(pLevel);
+        var entity = this.getType().create(pLevel, EntitySpawnReason.BREEDING);
         if (entity instanceof Crab crab) {
             Crab.Variant variant;
-            if (this.random.nextInt(1200) == 0) {
-                variant = Crab.Variant.getRareSpawnVariant(this.random);
+            if (this.getRandom().nextInt(1200) == 0) {
+                variant = Crab.Variant.getRareSpawnVariant(this.getRandom());
             } else {
-                variant = this.random.nextBoolean() ? this.getVariant() : ((Crab)pOtherParent).getVariant();
+                variant = this.getRandom().nextBoolean() ? this.getVariant() : ((Crab)pOtherParent).getVariant();
             }
 
             crab.setVariant(variant);
@@ -124,28 +126,26 @@ public class Crab extends Animal implements VariantHolder<Crab.Variant>, Product
         return false;
     }
 
-    @Override
     public void setVariant(Variant pVariant) {
         this.entityData.set(DATA_VARIANT, pVariant.getId());
     }
 
-    @Override
     public Variant getVariant() {
         return Crab.Variant.byId(this.entityData.get(DATA_VARIANT));
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag pCompound) {
-        super.addAdditionalSaveData(pCompound);
-        pCompound.putInt("Variant", this.getVariant().getId());
-        pCompound.putBoolean("FromBucket", this.fromBucket());
+    public void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        output.putInt("Variant", this.getVariant().getId());
+        output.putBoolean("FromBucket", this.fromBucket());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag pCompound) {
-        super.readAdditionalSaveData(pCompound);
-        this.setVariant(Crab.Variant.byId(pCompound.getInt("Variant")));
-        this.setFromBucket(pCompound.getBoolean("FromBucket"));
+    public void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
+        this.setVariant(Crab.Variant.byId(input.getIntOr("Variant", 0)));
+        this.setFromBucket(input.getBooleanOr("FromBucket", false));
     }
 
     @Override

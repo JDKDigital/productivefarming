@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:luffa_crate"
-    }
+    "productivefarming:luffa_crate"
   ],
   "result": {
     "count": 9,

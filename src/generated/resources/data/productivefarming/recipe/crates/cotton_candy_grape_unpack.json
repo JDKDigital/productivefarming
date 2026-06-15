@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:cotton_candy_grape_crate"
-    }
+    "productivefarming:cotton_candy_grape_crate"
   ],
   "result": {
     "count": 9,

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:red_bell_pepper_crate"
-    }
+    "productivefarming:red_bell_pepper_crate"
   ],
   "result": {
     "count": 9,

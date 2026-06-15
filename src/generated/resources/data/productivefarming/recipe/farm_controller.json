@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "tag": "minecraft:stone_bricks"
-    },
-    "C": {
-      "item": "minecraft:comparator"
-    },
-    "D": {
-      "item": "minecraft:daylight_detector"
-    },
-    "P": {
-      "item": "minecraft:composter"
-    }
+    "B": "#minecraft:stone_bricks",
+    "C": "minecraft:comparator",
+    "D": "minecraft:daylight_detector",
+    "P": "minecraft:composter"
   },
   "pattern": [
     "BDB",
@@ -21,7 +13,6 @@
     "BCB"
   ],
   "result": {
-    "count": 1,
     "id": "productivefarming:farm_controller"
   }
 }

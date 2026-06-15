@@ -56,7 +56,7 @@ public class ColorfulTallFlowerBlock extends TallFlowerBlock implements EntityBl
 
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (player.isCreative()) {
                 preventDropFromBottomPart(level, pos, state, player);
             } else {
@@ -68,7 +68,7 @@ public class ColorfulTallFlowerBlock extends TallFlowerBlock implements EntityBl
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
         return getDrop(level, pos);
     }
 
@@ -85,9 +85,4 @@ public class ColorfulTallFlowerBlock extends TallFlowerBlock implements EntityBl
         return stack;
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-        tooltipComponents.add(Component.translatable(FarmUtil.getDyeFromColor(stack.getOrDefault(FarmingDataComponents.COLOR, this.defaultColor)).getDescriptionId()).withColor(stack.getOrDefault(FarmingDataComponents.COLOR, this.defaultColor)).withStyle(ChatFormatting.ITALIC));
-    }
 }

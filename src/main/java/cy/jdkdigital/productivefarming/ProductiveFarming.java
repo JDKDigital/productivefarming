@@ -1,28 +1,30 @@
 package cy.jdkdigital.productivefarming;
 
 import com.mojang.logging.LogUtils;
-import cy.jdkdigital.productivefarming.integrations.ponder.FarmingPonderPlugin;
+import com.mojang.serialization.MapCodec;
+import cy.jdkdigital.productivefarming.gametest.ProductiveFarmingGameTests;
+import cy.jdkdigital.productivefarming.gametest.TestFunctions;
+import cy.jdkdigital.productivefarming.registry.FarmingAttachments;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
-import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import cy.jdkdigital.productivefarming.loot.CropTraitsLootModifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -41,10 +43,10 @@ public class ProductiveFarming
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static ResourceLocation EMPTY_RL = ResourceLocation.fromNamespaceAndPath(MODID, "");
+    public static Identifier EMPTY_RL = Identifier.fromNamespaceAndPath(MODID, "");
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(BuiltInRegistries.BLOCK, MODID);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, MODID);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(BuiltInRegistries.FLUID, MODID);
     public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, MODID);
@@ -55,10 +57,15 @@ public class ProductiveFarming
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, MODID);
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(BuiltInRegistries.FEATURE, MODID);
     public static final DeferredRegister<TreeDecoratorType<?>> TREE_DECORATORS = DeferredRegister.create(BuiltInRegistries.TREE_DECORATOR_TYPE, MODID);
-    public static final DeferredRegister<LootPoolEntryType> LOOT_POOL_ENTRIES = DeferredRegister.create(Registries.LOOT_POOL_ENTRY_TYPE, MODID);
+    public static final DeferredRegister<MapCodec<? extends LootPoolEntryContainer>> LOOT_POOL_ENTRIES = DeferredRegister.create(Registries.LOOT_POOL_ENTRY_TYPE, MODID);
     public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, MODID);
+    public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, MODID);
+
+    static {
+        LOOT_MODIFIERS.register("external_crop_traits", () -> CropTraitsLootModifier.CODEC);
+    }
 
     public ProductiveFarming(IEventBus modEventBus, ModContainer modContainer)
     {
@@ -78,6 +85,8 @@ public class ProductiveFarming
         TREE_DECORATORS.register(modEventBus);
         POI_TYPES.register(modEventBus);
         DATA_COMPONENTS.register(modEventBus);
+        LOOT_MODIFIERS.register(modEventBus);
+        FarmingAttachments.ATTACHMENT_TYPES.register(modEventBus);
 
         FarmingRegistrator.init();
         FarmingDataComponents.init();
@@ -85,8 +94,8 @@ public class ProductiveFarming
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
         modContainer.registerConfig(ModConfig.Type.STARTUP, Config.STARTUP_CONFIG);
 
-        if(FMLEnvironment.dist.isClient()) {
-            PonderIndex.addPlugin(new FarmingPonderPlugin());
-        }
+        @SuppressWarnings("unused")
+        Object forceTestsLoad = ProductiveFarmingGameTests.MAX_TICKS;
+        TestFunctions.init();
     }
 }

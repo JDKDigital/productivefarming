@@ -7,23 +7,22 @@ import cy.jdkdigital.productivefarming.util.TraitsHelper;
 import cy.jdkdigital.productivelib.common.block.entity.AbstractBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
 public abstract class CropBlockEntity extends AbstractBlockEntity
 {
-    private ResourceLocation mutation;
+    private Identifier mutation;
     private int growth;
     private int yield;
     private int resistance;
@@ -33,15 +32,15 @@ public abstract class CropBlockEntity extends AbstractBlockEntity
         super(blockEntityType, blockPos, blockState);
     }
 
-    public ResourceLocation getMutation() {
+    public Identifier getMutation() {
         return this.mutation;
     }
 
-    public void setMutation(ResourceLocation mutation) {
+    public void setMutation(Identifier mutation) {
         setMutation(mutation, false);
     }
 
-    public void setMutation(ResourceLocation mutation, boolean isFromLoop) {
+    public void setMutation(Identifier mutation, boolean isFromLoop) {
         this.mutation = mutation;
         this.setChanged();
         if (this.level != null) {
@@ -94,37 +93,35 @@ public abstract class CropBlockEntity extends AbstractBlockEntity
 
     public int getMutationColor() {
         if (hasMutation()) {
-            return PollenItem.getColor(BuiltInRegistries.ITEM.get(this.mutation).getDefaultInstance());
+            return PollenItem.getColor(BuiltInRegistries.ITEM.getValue(this.mutation).getDefaultInstance());
         }
         return -1;
     }
 
     @Override
-    public void loadPacketNBT(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadPacketNBT(tag, provider);
-        if (tag.contains("mutation")) {
-            this.mutation = ResourceLocation.parse(tag.getString("mutation"));
-        }
-        this.setGrowth(tag.contains(TraitsHelper.GROWTH) ? tag.getInt(TraitsHelper.GROWTH) : 0);;
-        this.setYield(tag.contains(TraitsHelper.YIELD) ? tag.getInt(TraitsHelper.YIELD) : 0);;
-        this.setResistance(tag.contains(TraitsHelper.RESISTANCE) ? tag.getInt(TraitsHelper.RESISTANCE) : 0);;
-        this.setMutability(tag.contains(TraitsHelper.MUTABILITY) ? tag.getInt(TraitsHelper.MUTABILITY) : 0);;
+    public void loadPacketNBT(ValueInput input) {
+        super.loadPacketNBT(input);
+        input.getString("mutation").ifPresent(s -> this.mutation = Identifier.parse(s));
+        this.setGrowth(input.getIntOr(TraitsHelper.GROWTH, 0));
+        this.setYield(input.getIntOr(TraitsHelper.YIELD, 0));
+        this.setResistance(input.getIntOr(TraitsHelper.RESISTANCE, 0));
+        this.setMutability(input.getIntOr(TraitsHelper.MUTABILITY, 0));
     }
 
     @Override
-    public void savePacketNBT(CompoundTag tag, HolderLookup.Provider provider) {
-        super.savePacketNBT(tag, provider);
+    public void savePacketNBT(ValueOutput output) {
+        super.savePacketNBT(output);
         if (this.hasMutation()) {
-            tag.putString("mutation", this.mutation.toString());
+            output.putString("mutation", this.mutation.toString());
         }
-        tag.putInt(TraitsHelper.GROWTH, this.growth);
-        tag.putInt(TraitsHelper.YIELD, this.yield);
-        tag.putInt(TraitsHelper.RESISTANCE, this.resistance);
-        tag.putInt(TraitsHelper.MUTABILITY, this.mutability);
+        output.putInt(TraitsHelper.GROWTH, this.growth);
+        output.putInt(TraitsHelper.YIELD, this.yield);
+        output.putInt(TraitsHelper.RESISTANCE, this.resistance);
+        output.putInt(TraitsHelper.MUTABILITY, this.mutability);
     }
 
     @Override
-    protected void applyImplicitComponents(BlockEntity.DataComponentInput componentInput) {
+    protected void applyImplicitComponents(DataComponentGetter componentInput) {
         super.applyImplicitComponents(componentInput);
         this.setGrowth(componentInput.getOrDefault(FarmingDataComponents.GROWTH, 0));
         this.setYield(componentInput.getOrDefault(FarmingDataComponents.YIELD, 0));
@@ -148,19 +145,20 @@ public abstract class CropBlockEntity extends AbstractBlockEntity
         this.setMutability(cropBlockEntity.getMutability());
     }
 
-    public ItemStack getMutatedSeedStack(ResourceLocation mutation) {
-        var seed = BuiltInRegistries.ITEM.get(mutation.withPath(p -> p + "_seeds")).getDefaultInstance();
-        if (seed.is(Items.AIR)) {
-            seed = BuiltInRegistries.ITEM.get(mutation).getDefaultInstance();
-        }
-        return applyComponentsToItemStack(seed);
+    public ItemStack getMutatedSeedStack(Identifier mutation) {
+        return applyComponentsToItemStack(TraitsHelper.mutatedSeed(mutation));
     }
 
     public ItemStack applyComponentsToItemStack(ItemStack stack) {
-        stack.set(FarmingDataComponents.GROWTH, this.getGrowth());
-        stack.set(FarmingDataComponents.YIELD, this.getYield());
-        stack.set(FarmingDataComponents.RESISTANCE, this.getResistance());
-        stack.set(FarmingDataComponents.MUTABILITY, this.getMutability());
-        return stack;
+        return TraitsHelper.applyTraits(stack, getGrowth(), getYield(), getResistance(), getMutability());
+    }
+
+    public void increaseStat(String trait) {
+        switch (trait) {
+            case TraitsHelper.GROWTH -> setGrowth(getGrowth() + 1);
+            case TraitsHelper.YIELD -> setYield(getYield() + 1);
+            case TraitsHelper.RESISTANCE -> setResistance(getResistance() + 1);
+            case TraitsHelper.MUTABILITY -> setMutability(getMutability() + 1);
+        }
     }
 }

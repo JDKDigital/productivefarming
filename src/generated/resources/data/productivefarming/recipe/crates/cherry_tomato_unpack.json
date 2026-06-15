@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:cherry_tomato_crate"
-    }
+    "productivefarming:cherry_tomato_crate"
   ],
   "result": {
     "count": 9,

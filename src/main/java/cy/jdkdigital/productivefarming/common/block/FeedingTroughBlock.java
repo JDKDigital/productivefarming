@@ -6,6 +6,7 @@ import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -70,32 +71,28 @@ public class FeedingTroughBlock extends BaseEntityBlock
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, FarmingRegistrator.FEEDING_TROUGH_BLOCK_ENTITY.get(), FeedingTroughBlockEntity::tick);
+        return level.isClientSide() ? null : createTickerHelper(blockEntityType, FarmingRegistrator.FEEDING_TROUGH_BLOCK_ENTITY.get(), FeedingTroughBlockEntity::tick);
     }
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.getBlockEntity(pos) instanceof FeedingTroughBlockEntity feedingTroughBlockEntity) {
             player.openMenu(feedingTroughBlockEntity, packetBuffer -> packetBuffer.writeBlockPos(feedingTroughBlockEntity.getBlockPos()));
-            return InteractionResult.SUCCESS_NO_ITEM_USED;
+            return InteractionResult.SUCCESS;
         }
 
         return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof FeedingTroughBlockEntity feedingTroughBlockEntity) {
-            for (int i = 0; i < feedingTroughBlockEntity.getItemHandler().getSlots(); i++) {
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), feedingTroughBlockEntity.getItemHandler().getStackInSlot(i));
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        if (level.getBlockEntity(pos) instanceof FeedingTroughBlockEntity feedingTroughBlockEntity) {
+            var itemHandler = feedingTroughBlockEntity.getItemHandler();
+            for (int i = 0; i < itemHandler.size(); i++) {
+                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getResource(i).toStack(itemHandler.getAmountAsInt(i)));
             }
         }
-        super.onRemove(state, level, pos, newState, movedByPiston);
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-        tooltipComponents.add(Component.translatable(this.getDescriptionId() + ".tooltip").withStyle(ChatFormatting.BLUE));
-    }
 }

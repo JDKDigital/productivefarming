@@ -8,7 +8,7 @@ import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import cy.jdkdigital.productivefarming.util.FishConfig;
 import cy.jdkdigital.productivefarming.util.FlowerConfig;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -17,7 +17,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
@@ -36,6 +36,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -69,12 +70,12 @@ public class LootDataProvider implements DataProvider
     }
 
     private CompletableFuture<?> run(CachedOutput pOutput, HolderLookup.Provider pProvider) {
-        final Map<ResourceLocation, LootTable> map = Maps.newHashMap();
+        final Map<Identifier, LootTable> map = Maps.newHashMap();
         this.subProviders.forEach((providerEntry) -> {
             providerEntry.provider().apply(pProvider).generate((resourceKey, builder) -> {
-                builder.setRandomSequence(resourceKey.location());
-                if (map.put(resourceKey.location(), builder.setParamSet(providerEntry.paramSet()).build()) != null) {
-                    throw new IllegalStateException("Duplicate loot table " + resourceKey.location());
+                builder.setRandomSequence(resourceKey.identifier());
+                if (map.put(resourceKey.identifier(), builder.setParamSet(providerEntry.paramSet()).build()) != null) {
+                    throw new IllegalStateException("Duplicate loot table " + resourceKey.identifier());
                 }
             });
         });
@@ -102,13 +103,6 @@ public class LootDataProvider implements DataProvider
             dropSelf(FarmingRegistrator.FEEDING_TROUGH.get());
             dropSelf(FarmingRegistrator.WATERING_TROUGH.get());
 
-            for (CropConfig crop : FarmingRegistrator.VANILLA_CROPS) {
-                if (crop.hasSeed()) {
-                    dropSeedCrop(crop);
-                } else {
-                    dropSeedlessCrop(crop);
-                }
-            }
             for (CropConfig crop : FarmingRegistrator.CROPS) {
                 if (crop.hasSeed()) {
                     dropSeedCrop(crop);
@@ -132,26 +126,26 @@ public class LootDataProvider implements DataProvider
                 } else {
                     dropSeedlessCrop(crop);
                 }
-                var seed = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + (crop.hasSeed() ? "_seeds" : "")));
-                this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), block -> this.createStemDrops(block, seed));
-                this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedStemDrops(block, seed));
+                var seed = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + (crop.hasSeed() ? "_seeds" : "")));
+                this.add(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), block -> this.createStemDrops(block, seed));
+                this.add(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedStemDrops(block, seed));
             }
             for (CropConfig crop : FarmingRegistrator.GRAPES) {
                 dropSeedlessCrop(crop);
-                var seed = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + (crop.hasSeed() ? "_seeds" : "")));
-                this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), block -> this.createStemDrops(block, seed));
-                this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedVineStemDrops(block, seed));
+                var seed = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + (crop.hasSeed() ? "_seeds" : "")));
+                this.add(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), block -> this.createStemDrops(block, seed));
+                this.add(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedVineStemDrops(block, seed));
             }
             for (CropConfig crop : FarmingRegistrator.STEMS) {
-                this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem")), block -> this.createStemDrops(block, BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"))));
-                this.add(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedStemDrops(block, BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"))));
+                this.add(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_stem")), block -> this.createStemDrops(block, BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"))));
+                this.add(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedStemDrops(block, BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"))));
                 this.add(
-                        BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
+                        BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
                         block -> this.createSilkTouchDispatchTable(
                                 block,
                                 this.applyExplosionDecay(
                                         block,
-                                        LootItem.lootTableItem(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_slice")))
+                                        LootItem.lootTableItem(BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_slice")))
                                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 7.0F)))
                                                 .apply(ApplyBonusCount.addUniformBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))
                                                 .apply(LimitCount.limitCount(IntRange.upperBound(9)))
@@ -161,7 +155,7 @@ public class LootDataProvider implements DataProvider
             }
             for (FishConfig fish : FarmingRegistrator.FISHIES) {
                 if (fish.hasBlock()) {
-                    dropSelf(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, fish.name())));
+                    dropSelf(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, fish.name())));
                 }
             }
             for (FlowerConfig flower : FarmingRegistrator.FLOWERS) {
@@ -174,7 +168,7 @@ public class LootDataProvider implements DataProvider
                 createFlowerDrops(flower);
             }
             FarmingRegistrator.CRATED_CROPS.forEach(cratePath -> {
-                dropSelf(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID,
+                dropSelf(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID,
                         cratePath.withPath(p -> p + "_crate").getPath())));
             });
         }
@@ -195,14 +189,14 @@ public class LootDataProvider implements DataProvider
         }
 
         protected void dropSeedCrop(CropConfig crop) {
-            var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+            var block = BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             if (block instanceof CropBlock cropBlock) {
-                var cropItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
-                var seedItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"));
+                var cropItem = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                var seedItem = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_seeds"));
                 if (cropItem.equals(Items.AIR)) {
-                    cropItem = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(crop.name()));
+                    cropItem = BuiltInRegistries.ITEM.getValue(Identifier.withDefaultNamespace(crop.name()));
                 }if (seedItem.equals(Items.AIR)) {
-                    seedItem = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(crop.name() + "_seeds"));
+                    seedItem = BuiltInRegistries.ITEM.getValue(Identifier.withDefaultNamespace(crop.name() + "_seeds"));
                 }
                 LootItemCondition.Builder builder = LootItemBlockStatePropertyCondition
                         .hasBlockStateProperties(cropBlock)
@@ -223,11 +217,11 @@ public class LootDataProvider implements DataProvider
         }
 
         protected void dropSeedlessCrop(CropConfig crop) {
-            var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+            var block = BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
             if (block instanceof CropBlock cropBlock) {
-                var cropItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
+                var cropItem = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name()));
                 if (cropItem.equals(Items.AIR)) {
-                    cropItem = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(crop.name()));
+                    cropItem = BuiltInRegistries.ITEM.getValue(Identifier.withDefaultNamespace(crop.name()));
                 }
                 LootItemCondition.Builder builder = LootItemBlockStatePropertyCondition
                         .hasBlockStateProperties(cropBlock)
@@ -321,7 +315,7 @@ public class LootDataProvider implements DataProvider
         }
 
         private static LootItemFunction.Builder cropComponents() {
-            return CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+            return CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
                     .include(FarmingDataComponents.GROWTH.get())
                     .include(FarmingDataComponents.YIELD.get())
                     .include(FarmingDataComponents.RESISTANCE.get())
@@ -329,13 +323,13 @@ public class LootDataProvider implements DataProvider
         }
 
         private void createFlowerDrops(FlowerConfig flower) {
-            var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flower.name()));
+            var block = BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, flower.name()));
             if (flower.isDouble()) {
                 // handled in code because double plants don't get components applied correctly, thanks Mojang
 //                this.add(block, createSinglePropConditionTable(block, DoublePlantBlock.HALF, DoubleBlockHalf.LOWER));
             } else {
                 LootPoolEntryContainer.Builder<?> builder = LootItem.lootTableItem(block)
-                        .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(FarmingDataComponents.COLOR.get()))
+                        .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(FarmingDataComponents.COLOR.get()))
                         .when(ExplosionCondition.survivesExplosion());
 
                 this.add(block, LootTable.lootTable().withPool(
@@ -345,11 +339,11 @@ public class LootDataProvider implements DataProvider
         }
 
         private void createFlowerPotDrops(FlowerConfig flower) {
-            var block = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "potted_" + flower.name()));
-            var flowerItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, flower.name()));
+            var block = BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "potted_" + flower.name()));
+            var flowerItem = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, flower.name()));
             if (!flower.isDouble()) {
                 LootPoolEntryContainer.Builder<?> builder = LootItem.lootTableItem(flowerItem)
-                        .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(FarmingDataComponents.COLOR.get()))
+                        .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(FarmingDataComponents.COLOR.get()))
                         .when(ExplosionCondition.survivesExplosion());
 
                 this.add(block, LootTable.lootTable()
@@ -369,7 +363,7 @@ public class LootDataProvider implements DataProvider
             return LootTable.lootTable().withPool(this.applyExplosionCondition(block,
                     LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(block)
-                            .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                            .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
                                     .include(FarmingDataComponents.COLOR.get()))
                             .when(
                                     LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)

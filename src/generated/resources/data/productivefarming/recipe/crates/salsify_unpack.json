@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:salsify_crate"
-    }
+    "productivefarming:salsify_crate"
   ],
   "result": {
     "count": 9,

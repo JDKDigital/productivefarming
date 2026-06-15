@@ -12,13 +12,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class AttachedFencedStemBlock extends BushBlock implements EntityBlock
+public class AttachedFencedStemBlock extends VegetationBlock implements EntityBlock
 {
     public static final MapCodec<AttachedFencedStemBlock> CODEC = RecordCodecBuilder.mapCodec(
             p_308799_ -> p_308799_.group(
@@ -49,9 +50,9 @@ public class AttachedFencedStemBlock extends BushBlock implements EntityBlock
 
     public AttachedFencedStemBlock(CropConfig crop, Properties properties) {
         this(
-            ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_leaves")),
-            ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
-            ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
+            ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + "_leaves")),
+            ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
+            ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())),
             properties
         );
     }
@@ -65,7 +66,7 @@ public class AttachedFencedStemBlock extends BushBlock implements EntityBlock
     }
 
     @Override
-    protected MapCodec<? extends BushBlock> codec() {
+    protected MapCodec<? extends VegetationBlock> codec() {
         return CODEC;
     }
 
@@ -81,20 +82,20 @@ public class AttachedFencedStemBlock extends BushBlock implements EntityBlock
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
-        return new ItemStack(DataFixUtils.orElse(level.registryAccess().registryOrThrow(Registries.ITEM).getOptional(this.seed), this));
+    protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
+        return new ItemStack(DataFixUtils.orElse(level.registryAccess().lookupOrThrow(Registries.ITEM).getOptional(this.seed), this));
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
-        if (!facingState.is(this.fruit) && facing.equals(Direction.UP)) {
-            Optional<Block> optional = level.registryAccess().registryOrThrow(Registries.BLOCK).getOptional(this.stem);
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random) {
+        if (!neighbourState.is(this.fruit) && directionToNeighbour.equals(Direction.UP)) {
+            Optional<Block> optional = level.registryAccess().lookupOrThrow(Registries.BLOCK).getOptional(this.stem);
             if (optional.isPresent()) {
                 return optional.get().defaultBlockState().trySetValue(BlockStateProperties.AGE_7, 7);
             }
         }
 
-        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
     @Override
@@ -109,11 +110,11 @@ public class AttachedFencedStemBlock extends BushBlock implements EntityBlock
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        // check if state has changed, and it's not changed to the growing stem state
-        if (!state.is(newState.getBlock()) && !(newState.getBlock() instanceof StemBlock) && !state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof FencedCropBlockEntity fencedCropBlockEntity && fencedCropBlockEntity.getFence() != null) {
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        BlockState newState = level.getBlockState(pos);
+        if (!state.is(newState.getBlock()) && !(newState.getBlock() instanceof StemBlock) && level.getBlockEntity(pos) instanceof FencedCropBlockEntity fencedCropBlockEntity && fencedCropBlockEntity.getFence() != null) {
             level.setBlockAndUpdate(pos, fencedCropBlockEntity.getFence());
         }
-        super.onRemove(state, level, pos, newState, movedByPiston);
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
     }
 }

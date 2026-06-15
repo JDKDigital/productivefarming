@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "agritechtwo"
+    }
+  ],
+  "type": "agritechtwo:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "productivefarming:honeydew_melon_slice",
+      "max": 7,
+      "min": 3
+    }
+  ],
+  "seed": "productivefarming:honeydew_melon_seeds",
+  "soils": [
+    "#agritechtwo:farmland_soils"
+  ]
+}

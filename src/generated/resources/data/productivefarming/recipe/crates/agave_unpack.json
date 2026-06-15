@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:agave_crate"
-    }
+    "productivefarming:agave_crate"
   ],
   "result": {
     "count": 9,

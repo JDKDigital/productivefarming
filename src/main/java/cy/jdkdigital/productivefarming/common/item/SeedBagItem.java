@@ -1,11 +1,10 @@
 package cy.jdkdigital.productivefarming.common.item;
 
-import cy.jdkdigital.productivefarming.client.render.item.SeedBagItemRenderer;
 import cy.jdkdigital.productivefarming.registry.ModTags;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -14,17 +13,17 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 public class SeedBagItem extends Item
 {
-    private final ResourceLocation seed;
+    private final Identifier seed;
 
-    public SeedBagItem(ResourceLocation seed, Properties pProperties) {
+    public SeedBagItem(Identifier seed, Properties pProperties) {
         super(pProperties);
         this.seed = seed;
     }
@@ -32,7 +31,7 @@ public class SeedBagItem extends Item
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
         if (pContext.getPlayer() != null && pContext.getLevel().getBlockState(pContext.getClickedPos()).is(ModTags.Blocks.FARMLAND)) {
-            var seedItem = BuiltInRegistries.ITEM.get(seed);
+            Item seedItem = BuiltInRegistries.ITEM.get(seed).map(Holder::value).orElse(null);
             if (seedItem instanceof BlockItem seedBlock) {
                 // Plant in a 3x3 area
                 var area = (new AABB(pContext.getClickedPos())).setMinX(pContext.getClickedPos().getX()-1).setMinZ(pContext.getClickedPos().getZ()-1);
@@ -45,12 +44,12 @@ public class SeedBagItem extends Item
                     }
                 });
                 if (plantedSeeds.get() < 9) {
-                    var iItemHandler = pContext.getPlayer().getCapability(Capabilities.ItemHandler.ENTITY);
-                    if (iItemHandler != null) {
-                        var leftOver = ItemHandlerHelper.insertItemStacked(iItemHandler, new ItemStack(seedItem, 9 - plantedSeeds.get()), false);
-                        if (!leftOver.isEmpty()) {
-                            Block.popResource(pContext.getLevel(), pContext.getClickedPos().above(), leftOver);
-                        }
+                    ResourceHandler<ItemResource> itemHandler = pContext.getPlayer().getCapability(Capabilities.Item.ENTITY);
+                    int toReturn = 9 - plantedSeeds.get();
+                    int inserted = itemHandler == null ? 0 : ResourceHandlerUtil.insertStacking(itemHandler, ItemResource.of(seedItem), toReturn, null);
+                    int leftOver = toReturn - inserted;
+                    if (leftOver > 0) {
+                        Block.popResource(pContext.getLevel(), pContext.getClickedPos().above(), new ItemStack(seedItem, leftOver));
                     }
                 }
                 if (plantedSeeds.get() > 0 && !pContext.getPlayer().isCreative()) {
@@ -64,21 +63,8 @@ public class SeedBagItem extends Item
         return super.useOn(pContext);
     }
 
-    public ResourceLocation getSeed() {
+    public Identifier getSeed() {
         return seed;
     }
 
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions()
-        {
-            final BlockEntityWithoutLevelRenderer myRenderer = new SeedBagItemRenderer();
-
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer()
-            {
-                return myRenderer;
-            }
-        });
-    }
 }

@@ -5,7 +5,7 @@ import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.util.TraitsHelper;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.Supplier;
 
@@ -22,7 +22,7 @@ public class FarmingDataComponents
     public static final Supplier<DataComponentType<Integer>> MUTABILITY = ProductiveFarming.DATA_COMPONENTS.register(TraitsHelper.MUTABILITY, () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 
     // pollen
-    public static final Supplier<DataComponentType<ResourceLocation>> POLLEN_BLOCK_COMPONENT = ProductiveFarming.DATA_COMPONENTS.register("pollen_block", () -> DataComponentType.<ResourceLocation>builder().persistent(ResourceLocation.CODEC).networkSynchronized(ResourceLocation.STREAM_CODEC).build());
+    public static final Supplier<DataComponentType<Identifier>> POLLEN_BLOCK_COMPONENT = ProductiveFarming.DATA_COMPONENTS.register("pollen_block", () -> DataComponentType.<Identifier>builder().persistent(Identifier.CODEC).networkSynchronized(Identifier.STREAM_CODEC).build());
 
     // flowers
     public static final Supplier<DataComponentType<Integer>> COLOR = ProductiveFarming.DATA_COMPONENTS.register("color", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());

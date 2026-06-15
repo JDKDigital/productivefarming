@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:tobacco_seeds_bag"
-    }
+    "productivefarming:tobacco_seeds_bag"
   ],
   "result": {
     "count": 9,

@@ -1,0 +1,14 @@
+{
+  "required": false,
+  "package": "cy.jdkdigital.productivefarming.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "MixinAgriTechPlanter",
+    "MixinAgriTechEvolvedPlanter"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "productivefarming.refmap.json",
+  "minVersion": "0.8.5"
+}

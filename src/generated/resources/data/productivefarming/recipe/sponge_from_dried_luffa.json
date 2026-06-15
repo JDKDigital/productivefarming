@@ -2,36 +2,17 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:dried_luffa"
-    },
-    {
-      "item": "productivefarming:dried_luffa"
-    },
-    {
-      "item": "productivefarming:dried_luffa"
-    },
-    {
-      "item": "productivefarming:dried_luffa"
-    },
-    {
-      "item": "productivefarming:dried_luffa"
-    },
-    {
-      "item": "productivefarming:dried_luffa"
-    },
-    {
-      "item": "productivefarming:dried_luffa"
-    },
-    {
-      "item": "productivefarming:dried_luffa"
-    },
-    {
-      "item": "productivefarming:dried_luffa"
-    }
+    "productivefarming:dried_luffa",
+    "productivefarming:dried_luffa",
+    "productivefarming:dried_luffa",
+    "productivefarming:dried_luffa",
+    "productivefarming:dried_luffa",
+    "productivefarming:dried_luffa",
+    "productivefarming:dried_luffa",
+    "productivefarming:dried_luffa",
+    "productivefarming:dried_luffa"
   ],
   "result": {
-    "count": 1,
     "id": "minecraft:sponge"
   }
 }

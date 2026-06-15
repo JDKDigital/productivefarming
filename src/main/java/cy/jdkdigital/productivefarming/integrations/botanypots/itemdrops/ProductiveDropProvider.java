@@ -13,7 +13,7 @@ import net.darkhax.botanypots.common.api.data.itemdrops.ItemDropProviderType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public record ProductiveDropProvider(List<ProductiveDrop> drops) implements ItemDropProvider
 {
-    public static final Supplier<ItemDropProviderType<?>> TYPE = ItemDropProviderType.getLazy(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "productive_drop"));
+    public static final Supplier<ItemDropProviderType<?>> TYPE = ItemDropProviderType.getLazy(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "productive_drop"));
 
     public static final MapCodec<ProductiveDropProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ProductiveDrop.CODEC.listOf().fieldOf("items").forGetter(ProductiveDropProvider::drops)

@@ -8,15 +8,14 @@ import cy.jdkdigital.productivefarming.common.block.ColorfulTallFlowerBlock;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.util.FarmUtil;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
@@ -30,6 +29,19 @@ public class FlowerDyeCraftingRecipe implements CraftingRecipe
         this.count = count;
     }
 
+    public static final MapCodec<FlowerDyeCraftingRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(
+            builder -> builder.group(
+                            Codec.INT.fieldOf("count").orElse(1).forGetter(recipe -> recipe.count)
+                    )
+                    .apply(builder, FlowerDyeCraftingRecipe::new)
+    );
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, FlowerDyeCraftingRecipe> STREAM_CODEC = StreamCodec.of(
+            FlowerDyeCraftingRecipe::toNetwork, FlowerDyeCraftingRecipe::fromNetwork
+    );
+
+    public static final RecipeSerializer<FlowerDyeCraftingRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+
     @Override
     public boolean matches(CraftingInput input, Level level) {
         return input.ingredientCount() == 1 && input.getItem(0).has(FarmingDataComponents.COLOR) && input.getItem(0).getItem() instanceof BlockItem blockItem && (blockItem.getBlock() instanceof ColorfulFlowerBlock || blockItem.getBlock() instanceof ColorfulTallFlowerBlock);
@@ -41,7 +53,7 @@ public class FlowerDyeCraftingRecipe implements CraftingRecipe
     }
 
     @Override
-    public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
+    public ItemStack assemble(CraftingInput input) {
         var stack = input.getItem(0);
         if (stack.has(FarmingDataComponents.COLOR)) {
             var output = FarmUtil.getDyeFromColor(stack.get(FarmingDataComponents.COLOR));
@@ -54,25 +66,8 @@ public class FlowerDyeCraftingRecipe implements CraftingRecipe
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return Items.WHITE_DYE.getDefaultInstance();
-    }
-
-//    @Override
-//    public NonNullList<Ingredient> getIngredients() {
-//        NonNullList<Ingredient> nonnulllist = NonNullList.create();
-//        nonnulllist.add(Ingredient.of(ItemTags.FLOWERS));
-//        return nonnulllist;
-//    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return FarmingRegistrator.FLOWER_DYE_CRAFTING.get();
+    public RecipeSerializer<FlowerDyeCraftingRecipe> getSerializer() {
+        return SERIALIZER;
     }
 
     @Override
@@ -80,35 +75,26 @@ public class FlowerDyeCraftingRecipe implements CraftingRecipe
         return CraftingBookCategory.MISC;
     }
 
-    public static class Serializer implements RecipeSerializer<FlowerDyeCraftingRecipe>
-    {
-        private static final MapCodec<FlowerDyeCraftingRecipe> CODEC = RecordCodecBuilder.mapCodec(
-                builder -> builder.group(
-                                Codec.INT.fieldOf("count").orElse(1).forGetter(recipe -> recipe.count)
-                        )
-                        .apply(builder, FlowerDyeCraftingRecipe::new)
-        );
+    @Override
+    public String group() {
+        return "";
+    }
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, FlowerDyeCraftingRecipe> STREAM_CODEC = StreamCodec.of(
-                FlowerDyeCraftingRecipe.Serializer::toNetwork, FlowerDyeCraftingRecipe.Serializer::fromNetwork
-        );
+    @Override
+    public boolean showNotification() {
+        return true;
+    }
 
-        @Override
-        public MapCodec<FlowerDyeCraftingRecipe> codec() {
-            return CODEC;
-        }
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, FlowerDyeCraftingRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
+    public static FlowerDyeCraftingRecipe fromNetwork(@Nonnull RegistryFriendlyByteBuf buffer) {
+        return new FlowerDyeCraftingRecipe(buffer.readInt());
+    }
 
-        public static FlowerDyeCraftingRecipe fromNetwork(@Nonnull RegistryFriendlyByteBuf buffer) {
-            return new FlowerDyeCraftingRecipe(buffer.readInt());
-        }
-
-        public static void toNetwork(@Nonnull RegistryFriendlyByteBuf buffer, FlowerDyeCraftingRecipe recipe) {
-            buffer.writeInt(recipe.count);
-        }
+    public static void toNetwork(@Nonnull RegistryFriendlyByteBuf buffer, FlowerDyeCraftingRecipe recipe) {
+        buffer.writeInt(recipe.count);
     }
 }

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:tomatillo_crate"
-    }
+    "productivefarming:tomatillo_crate"
   ],
   "result": {
     "count": 9,

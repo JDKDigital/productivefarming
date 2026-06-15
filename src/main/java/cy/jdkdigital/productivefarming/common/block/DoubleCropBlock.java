@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.neoforged.neoforge.common.CommonHooks;
 
 import javax.annotation.Nullable;
 
@@ -37,7 +38,7 @@ public class DoubleCropBlock extends ProductiveCropBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         // verify that the block space on top is available
-        return context.getClickedPos().getY() < context.getLevel().getMaxBuildHeight() - 1 && context.getLevel().getBlockState(context.getClickedPos().above()).canBeReplaced(context) ? super.getStateForPlacement(context) : null;
+        return context.getClickedPos().getY() < context.getLevel().getMaxY() && context.getLevel().getBlockState(context.getClickedPos().above()).canBeReplaced(context) ? super.getStateForPlacement(context) : null;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class DoubleCropBlock extends ProductiveCropBlock
         if (state.is(this)) {
             if (state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF).equals(DoubleBlockHalf.LOWER)) {
                 this.growCrops(level, pos, state);
-                net.neoforged.neoforge.common.CommonHooks.fireCropGrowPost(level, pos, state);
+                CommonHooks.fireCropGrowPost(level, pos, state);
             } else {
                 performBonemeal(level, random, pos.below(), level.getBlockState(pos.below()));
             }

@@ -5,8 +5,9 @@ import cy.jdkdigital.productivefarming.common.block.entity.MushroomGrowthCropBlo
 import cy.jdkdigital.productivefarming.util.CropConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -132,9 +133,9 @@ public class MushroomGrowthBlock extends ProductiveCropBlock
 
     @Override
     protected ItemLike getBaseSeedId() {
-        var item = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, getCropConfig().name()));
-        if (item.getDefaultInstance().isEmpty()) {
-            item = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(getCropConfig().name()));
+        var item = BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, getCropConfig().name())).map(Holder::value).orElse(null);
+        if (item == null || item.getDefaultInstance().isEmpty()) {
+            item = BuiltInRegistries.ITEM.get(Identifier.withDefaultNamespace(getCropConfig().name())).map(Holder::value).orElse(null);
         }
         return item;
     }

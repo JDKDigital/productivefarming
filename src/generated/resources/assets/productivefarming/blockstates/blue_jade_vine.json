@@ -10,38 +10,12 @@
     },
     {
       "apply": {
-        "model": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine"
-      },
-      "when": {
-        "east": "false",
-        "north": "false",
-        "south": "false",
-        "up": "false",
-        "west": "false"
-      }
-    },
-    {
-      "apply": {
         "model": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine",
         "uvlock": true,
         "y": 90
       },
       "when": {
         "east": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine",
-        "uvlock": true,
-        "y": 90
-      },
-      "when": {
-        "east": "false",
-        "north": "false",
-        "south": "false",
-        "up": "false",
-        "west": "false"
       }
     },
     {
@@ -58,20 +32,6 @@
       "apply": {
         "model": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine",
         "uvlock": true,
-        "y": 180
-      },
-      "when": {
-        "east": "false",
-        "north": "false",
-        "south": "false",
-        "up": "false",
-        "west": "false"
-      }
-    },
-    {
-      "apply": {
-        "model": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine",
-        "uvlock": true,
         "y": 270
       },
       "when": {
@@ -82,38 +42,10 @@
       "apply": {
         "model": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine",
         "uvlock": true,
-        "y": 270
-      },
-      "when": {
-        "east": "false",
-        "north": "false",
-        "south": "false",
-        "up": "false",
-        "west": "false"
-      }
-    },
-    {
-      "apply": {
-        "model": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine",
-        "uvlock": true,
         "x": 270
       },
       "when": {
         "up": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "productivefarming:block/flowers/blue_jade_vine/blue_jade_vine",
-        "uvlock": true,
-        "x": 270
-      },
-      "when": {
-        "east": "false",
-        "north": "false",
-        "south": "false",
-        "up": "false",
-        "west": "false"
       }
     }
   ]

@@ -9,20 +9,21 @@ import cy.jdkdigital.productivelib.common.block.entity.IMultiBlockControllerBloc
 import cy.jdkdigital.productivelib.common.block.entity.IUpgradeableBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
 import cy.jdkdigital.productivelib.registry.LibItems;
+import cy.jdkdigital.productivefarming.util.ModFluidTank;
 import cy.jdkdigital.productivelib.util.MultiBlockDetector;
 import cy.jdkdigital.productivelib.util.harvest.HarvestCompatHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.animal.fish.AbstractFish;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -37,10 +38,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,10 +54,15 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
 {
     private MultiBlockDetector.MultiBlockData farmConfig;
 
-    public final IItemHandlerModifiable inventoryHandler = new InventoryHandlerHelper.BlockEntityItemStackHandler(27, this)
+    public final InventoryHandlerHelper.BlockEntityItemStackHandler inventoryHandler = new InventoryHandlerHelper.BlockEntityItemStackHandler(27, this)
     {
         @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+        public boolean isItemValid(int slot, @NotNull ItemStack stack, boolean fromAutomation) {
+            return true;
+        }
+
+        @Override
+        public boolean isInputSlotItem(int slot, @NotNull ItemStack item) {
             return true;
         }
 
@@ -74,9 +81,15 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
             return new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26};
         }
     };
-    private final IFluidHandler fluidHandler = new FluidTank(10000, fluidStack -> fluidStack.getFluid().isSame(FarmingRegistrator.NUTRIENT_WATER.get()));
+    private final ModFluidTank fluidHandler = new ModFluidTank(10000)
+    {
+        @Override
+        public boolean isFluidValid(FluidStack fluidStack) {
+            return fluidStack.getFluid().isSame(FarmingRegistrator.NUTRIENT_WATER.get());
+        }
+    };
 
-    protected IItemHandlerModifiable upgradeHandler = new InventoryHandlerHelper.UpgradeHandler(4, this, List.of(
+    protected InventoryHandlerHelper.UpgradeHandler upgradeHandler = new InventoryHandlerHelper.UpgradeHandler(4, this, List.of(
             LibItems.UPGRADE_TIME.get(),
             LibItems.UPGRADE_TIME_2.get(),
             LibItems.UPGRADE_STABILITY.get()
@@ -106,22 +119,17 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
     @Override
     public void tickServer(ServerLevel level, BlockPos blockPos, BlockState blockState, TickingBlockEntity blockEntity) {
         if (blockEntity instanceof FarmControllerBlockEntity farmControllerBlockEntity) {
-            // Only harvest when there's an empty slot in the inventory
+            var farmConfig = farmControllerBlockEntity.farmConfig;
+            var cropPositions = BlockPos.betweenClosedStream(farmConfig.topCorners().getFirst(), farmConfig.topCorners().getSecond()).map(BlockPos::above).collect(Collectors.toCollection(ArrayList::new));
+
             boolean canHarvest = false;
-            for (int slot = 0; slot < farmControllerBlockEntity.getItemHandler().getSlots(); slot++) {
-                if (farmControllerBlockEntity.getItemHandler().getStackInSlot(slot).isEmpty()) {
+            for (int slot = 0; slot < farmControllerBlockEntity.inventoryHandler.size(); slot++) {
+                if (farmControllerBlockEntity.inventoryHandler.getStackInSlot(slot).isEmpty()) {
                     canHarvest = true;
                 }
             }
 
             if (canHarvest) {
-                var farmConfig = farmControllerBlockEntity.farmConfig;
-                var cropPositions = BlockPos.betweenClosedStream(farmConfig.topCorners().getFirst(), farmConfig.topCorners().getSecond()).map(BlockPos::above).collect(Collectors.toCollection(ArrayList::new));
-
-                if (farmConfig.height() > 1) {
-                    farmControllerBlockEntity.processFishFarm(cropPositions);
-                }
-
                 // do crop farming
                 // initiate worker for harvesting crops
                 processCropFarm(cropPositions);
@@ -136,10 +144,14 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
                         itemEntity.getItem().remove(FarmingDataComponents.RESISTANCE);
                         itemEntity.getItem().remove(FarmingDataComponents.MUTABILITY);
                     }
-                    if (inventoryHandler instanceof InventoryHandlerHelper.BlockEntityItemStackHandler handler && handler.addOutput(itemEntity.getItem()).isEmpty()) {
-                        itemEntity.kill();
+                    if (inventoryHandler.addOutput(itemEntity.getItem()).isEmpty()) {
+                        itemEntity.kill(level);
                     }
                 });
+            }
+
+            if (farmConfig.height() > 1) {
+                farmControllerBlockEntity.processFishFarm(cropPositions, canHarvest);
             }
         }
     }
@@ -151,44 +163,50 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
     }
 
     @Override
-    public IItemHandler getItemHandler() {
+    public ResourceHandler<ItemResource> getItemHandler() {
         return inventoryHandler;
     }
 
     @Override
-    public IFluidHandler getFluidHandler() {
+    public ResourceHandler<FluidResource> getFluidHandler() {
         return fluidHandler;
     }
 
     @Override
-    public IItemHandlerModifiable getUpgradeHandler() {
+    public ResourceHandler<ItemResource> getUpgradeHandler() {
         return upgradeHandler;
     }
 
     @Override
-    public void savePacketNBT(CompoundTag tag, HolderLookup.Provider provider) {
-        super.savePacketNBT(tag, provider);
+    public void savePacketNBT(ValueOutput output) {
+        super.savePacketNBT(output);
 
         if (this.getMultiblockData() != null) {
-            tag.put("multiData", this.getMultiblockData().serializeNBT(provider));
+            this.getMultiblockData().serialize(output.child("multiData"));
         }
     }
 
     @Override
-    public void loadPacketNBT(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadPacketNBT(tag, provider);
+    public void loadPacketNBT(ValueInput input) {
+        super.loadPacketNBT(input);
 
-        if (tag.contains("multiData")) {
+        input.child("multiData").ifPresent(multiData -> {
             var data = new MultiBlockDetector.MultiBlockData(null, null, List.of(), 0, 0);
-            data.deserializeNBT(provider, Objects.requireNonNull(tag.get("multiData")));
+            data.deserialize(multiData);
             setMultiBlockData(data);
-        }
+        });
     }
 
-    private void processFishFarm(List<BlockPos> cropPositions) {
+    private void processFishFarm(List<BlockPos> cropPositions, boolean canHarvest) {
         if (level instanceof ServerLevel serverLevel) {
-            List<LivingEntity> entities = serverLevel.getEntitiesOfClass(LivingEntity.class, (new AABB(farmConfig.topCorners().getFirst().below(farmConfig.height()).getCenter(), farmConfig.topCorners().getSecond().getCenter()))).stream().filter(e -> e.getType().is(ModTags.FISH_FARM_ENTITIES) || e instanceof AbstractFish).toList();
-            if (entities.size() > 1) {
+            AABB interior = AABB.encapsulatingFullBlocks(farmConfig.topCorners().getFirst().below(farmConfig.height()), farmConfig.topCorners().getSecond());
+            List<LivingEntity> entities = serverLevel.getEntitiesOfClass(LivingEntity.class, interior).stream().filter(e -> BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(e.getType()).is(ModTags.FISH_FARM_ENTITIES) || e instanceof AbstractFish).toList();
+            entities.forEach(e -> {
+                if (e instanceof Mob mob) {
+                    mob.setPersistenceRequired();
+                }
+            });
+            if (canHarvest && entities.size() > 1) {
                 // Entity count map
                 Map<EntityType<?>, Integer> entityCount = new HashMap<>();
                 entities.forEach(livingEntity -> {
@@ -208,7 +226,7 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
                     AtomicInteger toKill = new AtomicInteger(entities.size() - maxAllowedEntities);
                     entities.forEach(entity -> {
                         if (toKill.getAndDecrement() >= 0 && entityCount.get(entity.getType()) > 2) {
-                            entity.kill();
+                            entity.kill(serverLevel);
                             entityCount.put(entity.getType(), entityCount.get(entity.getType()) - 1);
                         }
                     });
@@ -221,9 +239,9 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
                     var count = entityCount.get(livingEntity.getType());
                     if (count >= 2 && !bredSpecies.contains(livingEntity.getType())) {
                         bredSpecies.add(livingEntity.getType());
-                        var newBreeds = serverLevel.random.nextInt(count / 2);
+                        var newBreeds = serverLevel.getRandom().nextInt(count / 2 + 1);
                         for (int i = 0; i < newBreeds; i++) {
-                            if (serverLevel.random.nextBoolean()) {
+                            if (serverLevel.getRandom().nextBoolean()) {
                                 if (livingEntity instanceof Animal animal) {
                                     var offSpring = animal.getBreedOffspring(serverLevel, animal);
                                     if (offSpring != null) {
@@ -231,7 +249,7 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
                                         serverLevel.addFreshEntity(offSpring);
                                     }
                                 } else {
-                                    livingEntity.getType().spawn(serverLevel, middle.relative(Direction.fromYRot(serverLevel.random.nextInt(360))), MobSpawnType.BREEDING);
+                                    livingEntity.getType().spawn(serverLevel, middle.relative(Direction.fromYRot(serverLevel.getRandom().nextInt(360))), EntitySpawnReason.BREEDING);
                                 }
                             }
                         }
@@ -253,19 +271,19 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
             List<Direction> directions = Arrays.asList(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
             for (Map.Entry<BlockPos, BlockState> clamPos : clamMap.entrySet()) {
                 var state = clamPos.getValue();
-                if (serverLevel.random.nextFloat() < clamChance) {
+                if (serverLevel.getRandom().nextFloat() < clamChance) {
                     var hasPropagated = false;
                     Collections.shuffle(directions);
                     for (Direction dir : directions) {
                         if (hasPropagated) continue;
                         var neighborState = serverLevel.getBlockState(clamPos.getKey().relative(dir));
-                        if (neighborState.getFluidState().is(FluidTags.WATER) && serverLevel.random.nextBoolean()) {
+                        if (neighborState.getFluidState().is(FluidTags.WATER) && serverLevel.getRandom().nextBoolean()) {
                             serverLevel.setBlockAndUpdate(clamPos.getKey().relative(dir), state.getBlock().defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, true));
                             hasPropagated = true;
                         }
                     }
                     // Harvest the clam
-                    if (hasPropagated && serverLevel.random.nextBoolean()) {
+                    if (hasPropagated && serverLevel.getRandom().nextBoolean()) {
                         serverLevel.destroyBlock(clamPos.getKey(), true);
                     }
                 }
@@ -273,7 +291,7 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
 
             // Calculate nutrient water production
             int sludge = Math.max(entities.size() * 50 - clamMap.size() * 5, 0);
-            fluidHandler.fill(new FluidStack(FarmingRegistrator.NUTRIENT_WATER.get(), sludge), IFluidHandler.FluidAction.EXECUTE);
+            fluidHandler.fill(new FluidStack(FarmingRegistrator.NUTRIENT_WATER.get(), sludge), true);
         }
     }
 
@@ -286,9 +304,9 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
 
                     if (fluidHandler.getFluidInTank(0).getAmount() >= 100) {
                         var state = serverLevel.getBlockState(pos);
-                        if (state.getBlock() instanceof BonemealableBlock bonemealableBlock) {
-                            bonemealableBlock.performBonemeal(serverLevel, serverLevel.random, pos, state);
-                            fluidHandler.drain(100, IFluidHandler.FluidAction.EXECUTE);
+                        if (state.getBlock() instanceof BonemealableBlock bonemealableBlock && bonemealableBlock.isValidBonemealTarget(serverLevel, pos, state)) {
+                            bonemealableBlock.performBonemeal(serverLevel, serverLevel.getRandom(), pos, state);
+                            fluidHandler.drain(100, true);
                             level.levelEvent(1505, pos, 15);
                         }
                     }

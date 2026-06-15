@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "productivefarming:item/pollen",
+    "tints": [
+      {
+        "type": "productivefarming:pollen"
+      }
+    ]
+  }
+}

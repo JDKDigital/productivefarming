@@ -43,11 +43,10 @@ public class Config
 
         public final ModConfigSpec.DoubleValue clamSpreadChance;
         public final ModConfigSpec.DoubleValue flowerPropagationChance;
-        public final ModConfigSpec.DoubleValue traitIncreaseChance;
         public final ModConfigSpec.DoubleValue speedUpgradeModifier;
         public final ModConfigSpec.IntValue pollenChanceFromSieve; // TODO 1.22 change to double
 
-        public final ModConfigSpec.BooleanValue traitsOnVanillaCrops;
+        public final ModConfigSpec.BooleanValue statsOnExternalCrops;
         public final ModConfigSpec.BooleanValue spawnFlowersWithBonemeal;
 
         public Server(ModConfigSpec.Builder builder) {
@@ -89,10 +88,6 @@ public class Config
                     .comment("Chance for flowers to propagate near hives")
                     .defineInRange("flowerPropagationChance", 0.15, 0, 1);
 
-            traitIncreaseChance = builder
-                    .comment("Chance for crops to increase traits when growing")
-                    .defineInRange("traitIncreaseChance", 0.05, 0, 1);
-
             speedUpgradeModifier = builder
                     .comment("Tick speed bonus from using speed upgrades in the farm")
                     .defineInRange("speedUpgradeModifier", 0.12, 0, 1);
@@ -101,9 +96,9 @@ public class Config
                     .comment("Chance to get a pollen when using sieve upgrades in hives")
                     .defineInRange("pollenChanceFromSieve", 2, 1, 100);
 
-            traitsOnVanillaCrops = builder
-                    .comment("Add traits to vanilla crops. This will add components to vanilla crop items and the crop block will be overwritten.")
-                    .define("traitsOnVanillaCrops", true);
+            statsOnExternalCrops = builder
+                    .comment("Add crop stats to crops from outside productivefarming (vanilla and other mods) that are tagged productivefarming:external_stat_crops")
+                    .define("statsOnExternalCrops", true);
 
             spawnFlowersWithBonemeal = builder
                     .comment("Spawn productive farming flowers when using bonemeal on grass blocks")

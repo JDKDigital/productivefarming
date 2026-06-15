@@ -21,8 +21,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,16 +35,21 @@ public class FeedingTroughBlockEntity extends TickingBlockEntity implements Menu
 {
     static final UUID PLAYER_UUID = UUID.nameUUIDFromBytes("feeding_trough".getBytes(StandardCharsets.UTF_8));
 
-    protected final IItemHandlerModifiable inventoryHandler = new InventoryHandlerHelper.BlockEntityItemStackHandler(9, this)
+    protected final InventoryHandlerHelper.BlockEntityItemStackHandler inventoryHandler = new InventoryHandlerHelper.BlockEntityItemStackHandler(9, this)
     {
         @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+        public boolean isItemValid(int slot, @NotNull ItemStack stack, boolean fromAutomation) {
             return true;
         }
 
         @Override
         public boolean isInsertableSlot(int slot) {
             return true;
+        }
+
+        @Override
+        public boolean isInputSlot(int slot) {
+            return false;
         }
 
         @Override
@@ -58,10 +63,10 @@ public class FeedingTroughBlockEntity extends TickingBlockEntity implements Menu
         }
 
         @Override
-        protected void onContentsChanged(int slot) {
-            super.onContentsChanged(slot);
+        protected void onContentsChanged(int slot, ItemStack previousContents) {
+            super.onContentsChanged(slot, previousContents);
             int itemCount = 0;
-            for (int i = 0; i < getSlots(); i++) {
+            for (int i = 0; i < size(); i++) {
                 var stack = getStackInSlot(i);
                 if (!stack.isEmpty()) {
                     itemCount += stack.getCount();
@@ -77,7 +82,7 @@ public class FeedingTroughBlockEntity extends TickingBlockEntity implements Menu
         }
     };
 
-    protected IItemHandlerModifiable upgradeHandler = new InventoryHandlerHelper.UpgradeHandler(4, this, List.of(
+    protected InventoryHandlerHelper.UpgradeHandler upgradeHandler = new InventoryHandlerHelper.UpgradeHandler(4, this, List.of(
             LibItems.UPGRADE_RANGE.get(),
             LibItems.UPGRADE_CHILD.get(),
             LibItems.UPGRADE_TIME.get()
@@ -88,12 +93,12 @@ public class FeedingTroughBlockEntity extends TickingBlockEntity implements Menu
     }
 
     @Override
-    public IItemHandler getItemHandler() {
+    public ResourceHandler<ItemResource> getItemHandler() {
         return inventoryHandler;
     }
 
     @Override
-    public IItemHandlerModifiable getUpgradeHandler() {
+    public ResourceHandler<ItemResource> getUpgradeHandler() {
         return upgradeHandler;
     }
 
@@ -107,7 +112,7 @@ public class FeedingTroughBlockEntity extends TickingBlockEntity implements Menu
     @Override
     public void tickServer(ServerLevel level, BlockPos blockPos, BlockState blockState, TickingBlockEntity blockEntity) {
         List<ItemStack> stacks = new ArrayList<>();
-        for (int i = 0; i < inventoryHandler.getSlots(); i++) {
+        for (int i = 0; i < inventoryHandler.size(); i++) {
             var stack = inventoryHandler.getStackInSlot(i);
             if (!stack.isEmpty()) {
                 stacks.add(stack);
@@ -123,7 +128,7 @@ public class FeedingTroughBlockEntity extends TickingBlockEntity implements Menu
                     for (ItemStack stack : stacks) {
                         if (!stack.isEmpty() && animal.isFood(stack) && (hasChildUpgrade || !animal.isBaby())) {
                             fakePlayer.setItemInHand(InteractionHand.MAIN_HAND, stack);
-                            if (animal.mobInteract(fakePlayer, InteractionHand.MAIN_HAND).equals(InteractionResult.SUCCESS)) {
+                            if (animal.mobInteract(fakePlayer, InteractionHand.MAIN_HAND).consumesAction()) {
                                 break;
                             }
                         }

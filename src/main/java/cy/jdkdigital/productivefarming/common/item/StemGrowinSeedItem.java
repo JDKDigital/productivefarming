@@ -34,8 +34,8 @@ public class StemGrowinSeedItem extends CropBlockItem
         InteractionResult interactionresult = this.place(new FenceCropBlockPlaceContext(context));
         if (!interactionresult.consumesAction() && context.getItemInHand().has(DataComponents.FOOD)) {
             // If fail, eat instead
-            InteractionResult interactionResult = super.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
-            return interactionResult == InteractionResult.CONSUME ? InteractionResult.CONSUME_PARTIAL : interactionResult;
+            InteractionResult interactionResult = super.use(context.getLevel(), context.getPlayer(), context.getHand());
+            return interactionResult;
         }
         // Set fence state on the crop
         if (!level.isClientSide() && level.getBlockEntity(context.getClickedPos().above()) instanceof FencedCropBlockEntity fencedCropBlockEntity) {

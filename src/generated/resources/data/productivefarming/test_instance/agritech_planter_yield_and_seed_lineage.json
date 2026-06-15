@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "productivefarming:agritech_planter_yield_and_seed_lineage_env",
+  "function": "productivefarming:agritech_planter_yield_and_seed_lineage",
+  "structure": "productivefarming:empty_9x9",
+  "max_ticks": 100,
+  "required": true,
+  "setup_ticks": 0
+}

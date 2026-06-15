@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:eggplant_crate"
-    }
+    "productivefarming:eggplant_crate"
   ],
   "result": {
     "count": 9,

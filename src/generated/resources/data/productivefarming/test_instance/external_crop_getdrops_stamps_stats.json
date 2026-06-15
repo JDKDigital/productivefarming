@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "productivefarming:external_crop_getdrops_stamps_stats_env",
+  "function": "productivefarming:external_crop_getdrops_stamps_stats",
+  "structure": "productivefarming:empty_9x9",
+  "max_ticks": 100,
+  "required": true,
+  "setup_ticks": 0
+}

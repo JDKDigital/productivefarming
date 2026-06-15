@@ -1,7 +1,7 @@
 package cy.jdkdigital.productivefarming.common.entity;
 
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Cod;
+import net.minecraft.world.entity.animal.fish.Cod;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 

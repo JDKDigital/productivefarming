@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "agritechtwo"
+    }
+  ],
+  "type": "agritechtwo:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "productivefarming:dill",
+      "max": 1,
+      "min": 1
+    },
+    {
+      "chance": 0.5,
+      "item": "productivefarming:dill_seeds",
+      "max": 2,
+      "min": 1
+    }
+  ],
+  "seed": "productivefarming:dill_seeds",
+  "soils": [
+    "#agritechtwo:farmland_soils"
+  ]
+}

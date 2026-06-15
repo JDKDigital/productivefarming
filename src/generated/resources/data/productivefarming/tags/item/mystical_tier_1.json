@@ -1,0 +1,28 @@
+{
+  "values": [
+    {
+      "id": "mysticalagriculture:deepslate_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:dirt_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:ice_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:inferium_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:stone_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:wood_seeds",
+      "required": false
+    }
+  ]
+}

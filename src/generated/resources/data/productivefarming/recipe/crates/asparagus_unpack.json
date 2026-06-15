@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:asparagus_crate"
-    }
+    "productivefarming:asparagus_crate"
   ],
   "result": {
     "count": 9,

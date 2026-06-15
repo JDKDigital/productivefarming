@@ -1,0 +1,56 @@
+{
+  "values": [
+    {
+      "id": "productivefarming:farmer/level_3/black_truffle",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/chanterelle",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/laetiporus",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/lions_mane",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/morel",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/oyster_mushroom",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/porcini",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/portobello",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/shiitake",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/red_grape_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/green_grape_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/cantaloupe_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_3/honeydew_melon_seeds",
+      "required": false
+    }
+  ]
+}

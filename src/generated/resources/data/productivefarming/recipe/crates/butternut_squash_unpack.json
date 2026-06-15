@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:butternut_squash_crate"
-    }
+    "productivefarming:butternut_squash_crate"
   ],
   "result": {
     "count": 9,

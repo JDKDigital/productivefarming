@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:sweet_potato_crate"
-    }
+    "productivefarming:sweet_potato_crate"
   ],
   "result": {
     "count": 9,

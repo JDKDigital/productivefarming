@@ -1,0 +1,44 @@
+{
+  "values": [
+    {
+      "id": "productivefarming:farmer/level_4/kiwi",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_4/goji_berry",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_4/butternut_squash",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_4/spoon_gourd",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_4/luffa",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_4/cucumber",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_4/vanilla_seeds",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_4/zucchini",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_4/akebia",
+      "required": false
+    },
+    {
+      "id": "productivefarming:farmer/level_4/sarsaparilla_seeds",
+      "required": false
+    }
+  ]
+}

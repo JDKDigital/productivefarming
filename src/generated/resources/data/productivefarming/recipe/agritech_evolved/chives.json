@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "agritechevolved"
+    }
+  ],
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "productivefarming:chives",
+      "max": 1,
+      "min": 1
+    },
+    {
+      "chance": 0.5,
+      "item": "productivefarming:chives_seeds",
+      "max": 2,
+      "min": 1
+    }
+  ],
+  "seed": "productivefarming:chives_seeds",
+  "soils": [
+    "#agritechevolved:farmland_soils"
+  ]
+}

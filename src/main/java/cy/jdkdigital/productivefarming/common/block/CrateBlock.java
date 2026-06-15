@@ -3,9 +3,10 @@ package cy.jdkdigital.productivefarming.common.block;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -22,7 +23,8 @@ public class CrateBlock extends Block
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (state.is(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ProductiveFarming.MODID, "ink_sac_crate")))) {
+        Block inkSacCrate = BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "ink_sac_crate")).map(Holder::value).orElse(null);
+        if (inkSacCrate != null && state.is(inkSacCrate)) {
             for (int i = 0; i < random.nextInt(1) + 1; i++) {
                 this.trySpawnDripParticles(level, pos, state);
             }
@@ -31,7 +33,7 @@ public class CrateBlock extends Block
     }
 
     private void trySpawnDripParticles(Level level, BlockPos pos, BlockState state) {
-        if (state.getFluidState().isEmpty() && !(level.random.nextFloat() < 0.3F)) {
+        if (state.getFluidState().isEmpty() && !(level.getRandom().nextFloat() < 0.3F)) {
             VoxelShape voxelshape = state.getCollisionShape(level, pos);
             double d0 = voxelshape.max(Direction.Axis.Y);
             if (d0 >= 1.0 && !state.is(BlockTags.IMPERMEABLE)) {
@@ -65,9 +67,9 @@ public class CrateBlock extends Block
     private void spawnFluidParticle(Level particleData, double x1, double x2, double z1, double z2, double y) {
         particleData.addParticle(
                 ParticleTypes.DRIPPING_OBSIDIAN_TEAR,
-                Mth.lerp(particleData.random.nextDouble(), x1, x2),
+                Mth.lerp(particleData.getRandom().nextDouble(), x1, x2),
                 y,
-                Mth.lerp(particleData.random.nextDouble(), z1, z2),
+                Mth.lerp(particleData.getRandom().nextDouble(), z1, z2),
                 0.0,
                 0.0,
                 0.0

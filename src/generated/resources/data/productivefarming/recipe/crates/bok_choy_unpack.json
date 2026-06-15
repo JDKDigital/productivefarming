@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "productivefarming:bok_choy_crate"
-    }
+    "productivefarming:bok_choy_crate"
   ],
   "result": {
     "count": 9,

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "productivefarming:stat_increase_chance_falls_back_to_config_env",
+  "function": "productivefarming:stat_increase_chance_falls_back_to_config",
+  "structure": "productivefarming:empty_9x9",
+  "max_ticks": 100,
+  "required": true,
+  "setup_ticks": 0
+}
