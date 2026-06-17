@@ -35,6 +35,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -106,7 +107,9 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
                     cropStack = cropBlockEntity.getMutatedSeedStack(cropBlockEntity.getMutation());
                     cropBlockEntity.setMutation(null);
                 }
-                cropStack.grow(cropBlockEntity.getYield());
+                if (!cropStack.is(Tags.Items.SEEDS)) {
+                    cropStack.grow(cropBlockEntity.getYield());
+                }
                 popResource(level, pos.relative(hitResult.getDirection()), cropStack);
                 // TODO get sound event method
                 level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.getRandom().nextFloat() * 0.4F);
@@ -195,7 +198,9 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
                 if (cropBlockEntity.hasMutation()) {
                     cropStack = cropBlockEntity.getMutatedSeedStack(cropBlockEntity.getMutation());
                 }
-                cropStack.grow(cropBlockEntity.getYield());
+                if (!cropStack.is(Tags.Items.SEEDS)) {
+                    cropStack.grow(cropBlockEntity.getYield());
+                }
                 newDrops.add(cropStack);
             });
             cropBlockEntity.setMutation(null);

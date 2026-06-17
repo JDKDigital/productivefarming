@@ -1,3 +1,40 @@
 {
-  "values": []
+  "values": [
+    {
+      "id": "mysticalagriculture:allthemodium_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:awakened_draconium_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:dragon_egg_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:gaia_spirit_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:nether_star_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:neutronium_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:nitro_crystal_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:unobtainium_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:vibranium_seeds",
+      "required": false
+    }
+  ]
 }

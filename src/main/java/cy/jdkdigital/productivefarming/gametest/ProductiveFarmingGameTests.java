@@ -53,7 +53,6 @@ import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.item.ItemResource;
-import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.ArrayList;
@@ -87,6 +86,8 @@ public class ProductiveFarmingGameTests
         register("mystical_tier_stat_increase_chance", ProductiveFarmingGameTests::testMysticalTierIncreaseChance);
         register("farm_nutrient_water_bonemeals_crops", ProductiveFarmingGameTests::testNutrientWaterBonemeal);
         register("crop_mutation_via_pollination", ProductiveFarmingGameTests::testCropMutation);
+        register("grape_mutation_safe_harvest", ProductiveFarmingGameTests::testGrapeMutationSafeHarvest);
+        register("vertical_trellis_harvest_drops_stat_seed", ProductiveFarmingGameTests::testVerticalTrellisStatHarvest);
         register("flower_spread_mixes_colors", ProductiveFarmingGameTests::testFlowerSpreadMixesColors);
         register("flower_spread_from_beehive", ProductiveFarmingGameTests::testBeeFlowerSpread);
         register("external_crop_stat_increase", ProductiveFarmingGameTests::testExternalCropStatIncrease);
@@ -328,6 +329,82 @@ public class ProductiveFarmingGameTests
         ItemStack mutatedSeed = be.getMutatedSeedStack(mutation);
         if (mutatedSeed.isEmpty() || !BuiltInRegistries.ITEM.getKey(mutatedSeed.getItem()).getPath().contains("beefsteak_tomato")) {
             helper.fail("mutated harvest did not yield beefsteak_tomato (got " + (mutatedSeed.isEmpty() ? "empty" : BuiltInRegistries.ITEM.getKey(mutatedSeed.getItem())) + ")", relPos);
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Issue #24: a mutated grape (a FencedPlantLeafBlock, which overrides getHarvestItemStack to return the fruit)
+    // safe-harvested with an empty hand should drop the mutation's seed (concord_grape_seeds), not the normal fruit
+    // (red_grape). Reproduces the "safe harvest does not return the mutation result" report against 26.1.2.
+    private static void testGrapeMutationSafeHarvest(GameTestHelper helper) {
+        BlockPos rel = new BlockPos(2, 2, 2);
+        ServerLevel level = helper.getLevel();
+        Block leaves = BuiltInRegistries.BLOCK.getValue(rl("red_grape_leaves"));
+        helper.setBlock(rel, leaves.defaultBlockState().setValue(ProductiveCropBlock.AGE_6, 6));
+        CropBlockEntity be = helper.getBlockEntity(rel, CropBlockEntity.class);
+
+        var recipe = RecipeHelper.getPollinationRecipe(level, rl("red_grape"), rl("green_grape"));
+        if (recipe == null) {
+            helper.fail("no pollination recipe found for red_grape + green_grape (recipe lookup broken)", rel);
+            return;
+        }
+        Identifier mutation = recipe.value().mutation();
+        be.setMutation(mutation);
+        if (!be.hasMutation()) {
+            helper.fail("mutation was not stored on the grape", rel);
+            return;
+        }
+
+        helper.useBlock(rel);
+
+        BlockPos abs = helper.absolutePos(rel);
+        boolean foundMutatedSeed = false;
+        boolean foundFruit = false;
+        for (ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class, new AABB(abs).inflate(3))) {
+            Identifier id = BuiltInRegistries.ITEM.getKey(itemEntity.getItem().getItem());
+            if (id.equals(rl("concord_grape_seeds"))) foundMutatedSeed = true;
+            if (id.equals(rl("red_grape"))) foundFruit = true;
+        }
+        if (foundFruit && !foundMutatedSeed) {
+            helper.fail("grape safe harvest dropped the normal fruit (red_grape) instead of the mutated seed (concord_grape_seeds) — issue #24", rel);
+            return;
+        }
+        if (!foundMutatedSeed) {
+            helper.fail("grape safe harvest did not drop the mutated seed (concord_grape_seeds)", rel);
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Issue #25: a VERTICAL_TRELLIS crop (e.g. vanilla) with stored stats, broken at max age, should drop its
+    // stat-bearing seed. LootProvider.generate() iterates CROPS/HERBS/BERRIES/TRELLIS/GRAPES/STEMS but omits
+    // VERTICAL_TRELLIS, so these blocks have no loot table — break-harvest drops nothing and stats are never
+    // stamped (the loot table's cropComponents() is the stamping mechanism). Reproduces "crops not increasing stats".
+    private static void testVerticalTrellisStatHarvest(GameTestHelper helper) {
+        BlockPos rel = new BlockPos(2, 2, 2);
+        ServerLevel level = helper.getLevel();
+        Block vanilla = BuiltInRegistries.BLOCK.getValue(rl("vanilla"));
+        helper.setBlock(rel, vanilla.defaultBlockState().setValue(ProductiveCropBlock.AGE_6, 6));
+        CropBlockEntity be = helper.getBlockEntity(rel, CropBlockEntity.class);
+        be.increaseStat(TraitsHelper.GROWTH);
+
+        BlockPos abs = helper.absolutePos(rel);
+        level.destroyBlock(abs, true);
+
+        ItemStack seed = ItemStack.EMPTY;
+        for (ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class, new AABB(abs).inflate(3))) {
+            if (itemEntity.getItem().is(BuiltInRegistries.ITEM.getValue(rl("vanilla_seeds")))) {
+                seed = itemEntity.getItem();
+                break;
+            }
+        }
+        if (seed.isEmpty()) {
+            helper.fail("vertical-trellis crop (vanilla) dropped no vanilla_seeds on harvest — missing loot table, issue #25", rel);
+            return;
+        }
+        if (seed.getOrDefault(FarmingDataComponents.GROWTH, 0) <= 0) {
+            helper.fail("harvested vanilla_seeds did not carry the stored growth stat (loot table not stamping components) — issue #25", rel);
             return;
         }
         helper.succeed();
@@ -1219,12 +1296,14 @@ public class ProductiveFarmingGameTests
 
         int produceCount = 0;
         int seedYield = -1;
+        int seedCount = -1;
         for (ItemStack stack : drops) {
             if (stack.is(produce)) {
                 produceCount = stack.getCount();
             }
             if (stack.is(seedItem)) {
                 seedYield = stack.getOrDefault(FarmingDataComponents.YIELD, -1);
+                seedCount = stack.getCount();
             }
         }
         if (produceCount != 3) {
@@ -1235,6 +1314,10 @@ public class ProductiveFarmingGameTests
             helper.fail("harvested seed should inherit the parent yield stat (2), got " + seedYield, rel);
             return;
         }
+        if (seedCount != 1) {
+            helper.fail("yield must not grow the harvested seed drop (expected count 1, got " + seedCount + ")", rel);
+            return;
+        }
         helper.succeed();
     }
 
@@ -1243,14 +1326,12 @@ public class ProductiveFarmingGameTests
         Item seedItem = BuiltInRegistries.ITEM.getValue(rl("arugula_seeds"));
         ItemStack seed = new ItemStack(seedItem);
         TraitsHelper.applyTraits(seed, 0, 0, 0, 0);
-        ItemStacksResourceHandler inventory = new ItemStacksResourceHandler(15);
-        inventory.set(0, ItemResource.of(seed), 1);
         RandomSource random = helper.getLevel().getRandom();
 
         boolean increased = false;
         for (int i = 0; i < 3000 && !increased; i++) {
-            AgriTechStatsHelper.increaseInputStat(inventory, inventory.getResource(0).toStack(1), random);
-            if (agritechSeedStatTotal(inventory.getResource(0).toStack(1)) > 0) {
+            AgriTechStatsHelper.increaseInputStat(seed, random);
+            if (agritechSeedStatTotal(seed) > 0) {
                 increased = true;
             }
         }
@@ -1265,15 +1346,12 @@ public class ProductiveFarmingGameTests
         BlockPos rel = new BlockPos(1, 2, 1);
         Item seedItem = BuiltInRegistries.ITEM.getValue(Identifier.withDefaultNamespace("wheat_seeds"));
         ItemStack seed = new ItemStack(seedItem);
-        ItemStacksResourceHandler inventory = new ItemStacksResourceHandler(15);
-        inventory.set(0, ItemResource.of(seed), 1);
         RandomSource random = helper.getLevel().getRandom();
 
         boolean gained = false;
         for (int i = 0; i < 3000 && !gained; i++) {
-            AgriTechStatsHelper.increaseInputStat(inventory, inventory.getResource(0).toStack(1), random);
-            ItemStack current = inventory.getResource(0).toStack(1);
-            if (current.has(FarmingDataComponents.GROWTH) && agritechSeedStatTotal(current) > 0) {
+            AgriTechStatsHelper.increaseInputStat(seed, random);
+            if (seed.has(FarmingDataComponents.GROWTH) && agritechSeedStatTotal(seed) > 0) {
                 gained = true;
             }
         }

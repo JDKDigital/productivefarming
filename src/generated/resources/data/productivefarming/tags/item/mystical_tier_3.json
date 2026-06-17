@@ -9,7 +9,15 @@
       "required": false
     },
     {
+      "id": "mysticalagriculture:azure_silver_seeds",
+      "required": false
+    },
+    {
       "id": "mysticalagriculture:basalz_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:black_quartz_seeds",
       "required": false
     },
     {
@@ -46,6 +54,14 @@
     },
     {
       "id": "mysticalagriculture:creeper_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:crimson_iron_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:darkstone_seeds",
       "required": false
     },
     {
@@ -138,6 +154,10 @@
     },
     {
       "id": "mysticalagriculture:tin_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:xychorium_gem_seeds",
       "required": false
     },
     {

@@ -8,8 +8,7 @@ import cy.jdkdigital.productivefarming.util.ExternalCropStats;
 import cy.jdkdigital.productivefarming.util.TraitsHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.transfer.item.ItemResource;
-import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class AgriTechStatsHelper
         }
         int yield = seed.getOrDefault(FarmingDataComponents.YIELD, 0);
         for (ItemStack drop : drops) {
-            if (yield > 0) {
+            if (yield > 0 && !drop.is(Tags.Items.SEEDS)) {
                 drop.grow(yield);
             }
             if (drop.is(seed.getItem())) {
@@ -41,23 +40,18 @@ public class AgriTechStatsHelper
         return drops;
     }
 
-    public static void increaseInputStat(ItemStacksResourceHandler inventory, ItemStack seed, RandomSource random) {
+    public static void increaseInputStat(ItemStack seed, RandomSource random) {
         if (seed.isEmpty() || !isStatSeed(seed)) {
             return;
         }
-        boolean initialized = false;
         if (!hasTraits(seed)) {
             TraitsHelper.applyTraits(seed, 0, 0, 0, 0);
-            initialized = true;
         }
         String stat = TraitsHelper.rollIncreasedStat(random, seed.typeHolder());
         if (stat != null) {
             CropTraitState increased = ExternalCropStats.fromSeedStack(seed).increase(stat);
             TraitsHelper.applyTraits(seed, increased.growth(), increased.yield(), increased.resistance(), increased.mutability());
-        } else if (!initialized) {
-            return;
         }
-        inventory.set(0, ItemResource.of(seed), seed.getCount());
     }
 
     private static boolean isStatSeed(ItemStack seed) {

@@ -1,3 +1,13 @@
+26.1.2-0.10.0
+
+- Reworked the AgriTech and AgriTech: Evolved integration to use AgriTech's official events instead of mixins
+- Crop stats now show in Jade for AgriTech: Evolved's Advanced Planter
+- The yield stat no longer inflates seed drops
+- Fixed vertical trellis crops (vanilla, cucumber, zucchini, luffa and more) dropping nothing and not gaining stats when harvested
+- Fixed the Farm Controller's brick faces not lining up with the multiblock when rotated
+- Fixed the Crop Mutation and Crop Fruiting JEI recipe backgrounds rendering squished in the corner
+
+
 26.1.2-0.9.0
 
 - Added AgriTech and AgriTech: Evolved compat

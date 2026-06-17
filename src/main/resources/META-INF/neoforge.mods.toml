@@ -17,9 +17,6 @@ license="${mod_license}"
     config="${mod_id}.mixin.json"
 
 [[mixins]]
-    config="${mod_id}.agritech.mixins.json"
-
-[[mixins]]
     config="${mod_id}.compat.mixins.json"
 
 [[mods]]

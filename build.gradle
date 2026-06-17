@@ -149,12 +149,13 @@ dependencies {
     // restoring the matching integrations/** sources. Commented until each publishes a 26.1.2 build.
     implementation "curse.maven:jade-324717:8068368"  // Jade-mc26.1-NeoForge-26.1.1 (supports 26.1.2)
 
-    implementation "curse.maven:agritech-1485550:8241714"  // agritechtwo-1.2.0+neoforge-mc-26.1.2
-    implementation "curse.maven:agritech-evolved-1287394:8241737"  // agritechevolved-2.1.0+neoforge-mc26.1.2
+    implementation "curse.maven:agritech-1485550:8261458"  // agritechtwo-1.2.2.1+neoforge-mc-26.1.2
+    implementation "curse.maven:agritech-evolved-1287394:8261464"  // agritechevolved-2.1.2.1+neoforge-mc26.1.2
 
-    // Mystical Agriculture (+ its hard dep Cucumber) — dev-runtime only.
+    // Mystical Agriculture (+ its hard dep Cucumber, + Agradditions for the Insanium tier-6 seeds) — dev-runtime only.
     localRuntime "curse.maven:mystical-agriculture-246640:8130326"  // MysticalAgriculture-26.1.2-9.0.3
     localRuntime "curse.maven:cucumber-272335:8178456"              // Cucumber-26.1.2-9.0.3
+    localRuntime "curse.maven:mystical-agradditions-256247:8078671" // MysticalAgradditions-26.1.2-9.0.0
 
     // Croptopia (+ its hard dep EpheroLib) — dev-runtime only.
     localRuntime "curse.maven:croptopia-415438:8085081"  // croptopia-neoforge-26.1.2-4.3.1

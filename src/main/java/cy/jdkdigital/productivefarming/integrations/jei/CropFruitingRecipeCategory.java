@@ -29,7 +29,7 @@ public class CropFruitingRecipeCategory extends AbstractRecipeCategory<RecipeHol
                 130, 60
         );
         Identifier location = Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "textures/gui/jei/crop_fruiting.png");
-        this.background = guiHelper.drawableBuilder(location, 0, 0, 130, 60).setTextureSize(130, 60).build();
+        this.background = guiHelper.drawableBuilder(location, 0, 0, 130, 60).setTextureSize(256, 256).build();
     }
 
     @Override

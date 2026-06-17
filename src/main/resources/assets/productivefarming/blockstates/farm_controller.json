@@ -2,33 +2,41 @@
   "variants": {
     "attached=false,facing=east": {
       "model": "productivefarming:block/farm_controller_off",
-      "y": 90
+      "y": 90,
+      "uvlock": true
     },
     "attached=false,facing=north": {
-      "model": "productivefarming:block/farm_controller_off"
+      "model": "productivefarming:block/farm_controller_off",
+      "uvlock": true
     },
     "attached=false,facing=south": {
       "model": "productivefarming:block/farm_controller_off",
-      "y": 180
+      "y": 180,
+      "uvlock": true
     },
     "attached=false,facing=west": {
       "model": "productivefarming:block/farm_controller_off",
-      "y": 270
+      "y": 270,
+      "uvlock": true
     },
     "attached=true,facing=east": {
       "model": "productivefarming:block/farm_controller",
-      "y": 90
+      "y": 90,
+      "uvlock": true
     },
     "attached=true,facing=north": {
-      "model": "productivefarming:block/farm_controller"
+      "model": "productivefarming:block/farm_controller",
+      "uvlock": true
     },
     "attached=true,facing=south": {
       "model": "productivefarming:block/farm_controller",
-      "y": 180
+      "y": 180,
+      "uvlock": true
     },
     "attached=true,facing=west": {
       "model": "productivefarming:block/farm_controller",
-      "y": 270
+      "y": 270,
+      "uvlock": true
     }
   }
 }

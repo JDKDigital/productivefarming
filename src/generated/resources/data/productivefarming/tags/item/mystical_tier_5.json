@@ -25,6 +25,10 @@
       "required": false
     },
     {
+      "id": "mysticalagriculture:entro_seeds",
+      "required": false
+    },
+    {
       "id": "mysticalagriculture:flux_infused_gem_seeds",
       "required": false
     },
@@ -58,6 +62,10 @@
     },
     {
       "id": "mysticalagriculture:rock_crystal_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:sky_steel_seeds",
       "required": false
     },
     {

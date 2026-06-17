@@ -16,6 +16,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -40,7 +41,9 @@ public record ProductiveDropProvider(List<ProductiveDrop> drops) implements Item
         this.drops.forEach(drop -> {
             if (MathsHelper.percentChance(drop.chance())) {
                 var dropCopy = drop.drop().copy();
-                dropCopy.grow(context.getSeedItem().getOrDefault(FarmingDataComponents.YIELD, 0));
+                if (!dropCopy.is(Tags.Items.SEEDS)) {
+                    dropCopy.grow(context.getSeedItem().getOrDefault(FarmingDataComponents.YIELD, 0));
+                }
                 if (dropCopy.is(context.getSeedItem().getItem())) {
                     TraitsHelper.copyTraitsToStack(context.getSeedItem(), dropCopy);
                 }

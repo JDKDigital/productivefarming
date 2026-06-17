@@ -130,6 +130,13 @@ public class LootDataProvider implements DataProvider
                 this.add(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name())), block -> this.createStemDrops(block, seed));
                 this.add(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, "attached_" + crop.name() + "_stem")), block -> this.createAttachedStemDrops(block, seed));
             }
+            for (CropConfig crop : FarmingRegistrator.VERTICAL_TRELLIS) {
+                if (crop.hasSeed()) {
+                    dropSeedCrop(crop);
+                } else {
+                    dropSeedlessCrop(crop);
+                }
+            }
             for (CropConfig crop : FarmingRegistrator.GRAPES) {
                 dropSeedlessCrop(crop);
                 var seed = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, crop.name() + (crop.hasSeed() ? "_seeds" : "")));

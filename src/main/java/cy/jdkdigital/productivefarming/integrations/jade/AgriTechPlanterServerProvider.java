@@ -1,5 +1,6 @@
 package cy.jdkdigital.productivefarming.integrations.jade;
 
+import com.misterd.agritechevolved.blockentity.custom.AdvancedPlanterBlockEntity;
 import com.misterd.agritechtwo.blockentity.custom.PlanterBlockEntity;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
@@ -41,6 +42,9 @@ public class AgriTechPlanterServerProvider implements StreamServerDataProvider<B
             return planter.getStack(0);
         }
         if (blockEntity instanceof com.misterd.agritechevolved.blockentity.custom.PlanterBlockEntity planter) {
+            return planter.getStack(0);
+        }
+        if (blockEntity instanceof AdvancedPlanterBlockEntity planter) {
             return planter.getStack(0);
         }
         return ItemStack.EMPTY;

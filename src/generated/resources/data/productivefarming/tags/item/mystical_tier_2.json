@@ -53,6 +53,10 @@
       "required": false
     },
     {
+      "id": "mysticalagriculture:kivi_seeds",
+      "required": false
+    },
+    {
       "id": "mysticalagriculture:limestone_seeds",
       "required": false
     },
@@ -110,6 +114,10 @@
     },
     {
       "id": "mysticalagriculture:turtle_seeds",
+      "required": false
+    },
+    {
+      "id": "mysticalagriculture:unexplored_wood_seeds",
       "required": false
     }
   ]

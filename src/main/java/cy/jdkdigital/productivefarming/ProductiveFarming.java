@@ -4,6 +4,8 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import cy.jdkdigital.productivefarming.gametest.ProductiveFarmingGameTests;
 import cy.jdkdigital.productivefarming.gametest.TestFunctions;
+import cy.jdkdigital.productivefarming.integrations.agritech.AgriTechEventHandler;
+import cy.jdkdigital.productivefarming.integrations.agritech.AgriTechEvolvedEventHandler;
 import cy.jdkdigital.productivefarming.registry.FarmingAttachments;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
@@ -27,6 +29,7 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import cy.jdkdigital.productivefarming.loot.CropTraitsLootModifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -90,6 +93,13 @@ public class ProductiveFarming
 
         FarmingRegistrator.init();
         FarmingDataComponents.init();
+
+        if (ModList.get().isLoaded("agritechtwo")) {
+            AgriTechEventHandler.register();
+        }
+        if (ModList.get().isLoaded("agritechevolved")) {
+            AgriTechEvolvedEventHandler.register();
+        }
 
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
         modContainer.registerConfig(ModConfig.Type.STARTUP, Config.STARTUP_CONFIG);

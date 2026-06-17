@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.Collections;
 import java.util.List;
@@ -113,7 +114,7 @@ public class ExternalCropStats
     public static void applyToLoot(ServerLevel level, BlockPos pos, BlockState state, List<ItemStack> loot) {
         CropTraitState trait = getTrait(level, pos, state);
         for (ItemStack stack : loot) {
-            if (trait.yield() > 0) {
+            if (trait.yield() > 0 && !stack.is(Tags.Items.SEEDS)) {
                 stack.grow(trait.yield());
             }
             if (stack.is(ModTags.Items.EXTERNAL_SEEDS)) {
