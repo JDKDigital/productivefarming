@@ -1,7 +1,5 @@
 package cy.jdkdigital.productivefarming.integrations.jade;
 
-import com.misterd.agritechevolved.blockentity.custom.AdvancedPlanterBlockEntity;
-import com.misterd.agritechtwo.blockentity.custom.PlanterBlockEntity;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -9,6 +7,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.fml.ModList;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.StreamServerDataProvider;
 
@@ -38,14 +37,17 @@ public class AgriTechPlanterServerProvider implements StreamServerDataProvider<B
     }
 
     private static ItemStack readSeed(BlockEntity blockEntity) {
-        if (blockEntity instanceof PlanterBlockEntity planter) {
-            return planter.getStack(0);
+        if (ModList.get().isLoaded("agritechtwo")) {
+            ItemStack seed = AgriTechTwoPlanterReader.readSeed(blockEntity);
+            if (!seed.isEmpty()) {
+                return seed;
+            }
         }
-        if (blockEntity instanceof com.misterd.agritechevolved.blockentity.custom.PlanterBlockEntity planter) {
-            return planter.getStack(0);
-        }
-        if (blockEntity instanceof AdvancedPlanterBlockEntity planter) {
-            return planter.getStack(0);
+        if (ModList.get().isLoaded("agritechevolved")) {
+            ItemStack seed = AgriTechEvolvedPlanterReader.readSeed(blockEntity);
+            if (!seed.isEmpty()) {
+                return seed;
+            }
         }
         return ItemStack.EMPTY;
     }
