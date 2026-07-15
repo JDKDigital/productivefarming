@@ -145,6 +145,10 @@ dependencies {
     // productivebees' own hard dep — needed at dev-runtime so its entities/recipes initialize.
     localRuntime "curse.maven:geckolib-388172:7913641"
 
+    // productivetrees: local 26.1 build in libs/ (compile + dev-runtime for the fruit-tree harvest integration).
+    compileOnly "local.libs:productivetrees-${pt_version}"
+    localRuntime "local.libs:productivetrees-${pt_version}"
+
     // Mod-compat dependencies — file IDs must be resolved against MC 26.1.2 on CurseForge before
     // restoring the matching integrations/** sources. Commented until each publishes a 26.1.2 build.
     implementation "curse.maven:jade-324717:8068368"  // Jade-mc26.1-NeoForge-26.1.1 (supports 26.1.2)

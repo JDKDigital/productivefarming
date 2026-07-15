@@ -210,9 +210,20 @@ public class FarmUtil
                     targetPos = cropMap.get(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, pickedRecipe.value().targetCrop().getPath()));
                 }
 
-                if (targetPos != null && level.getRandom().nextFloat() <= (pickedRecipe.value().chance() * (isSpecialPollinator ? 5 : 1))) {
+                if (targetPos != null) {
+                    var targetState = level.getBlockState(targetPos);
+                    Identifier mutation = pickedRecipe.value().mutation();
+                    float base = pickedRecipe.value().chance();
+                    int special = isSpecialPollinator ? 5 : 1;
                     if (level.getBlockEntity(targetPos) instanceof CropBlockEntity cropBlockEntity) {
-                        cropBlockEntity.setMutation(pickedRecipe.value().mutation());
+                        if (level.getRandom().nextFloat() <= TraitsHelper.mutationChance(base, cropBlockEntity.getMutability()) * special) {
+                            cropBlockEntity.setMutation(mutation);
+                        }
+                    } else if (ExternalCropStats.isEnabled() && ExternalCropStats.isEligible(targetState)) {
+                        int mutability = ExternalCropStats.getTrait(level, targetPos, targetState).mutability();
+                        if (level.getRandom().nextFloat() <= TraitsHelper.mutationChance(base, mutability) * special) {
+                            ExternalCropStats.setMutation(level, targetPos, targetState, mutation);
+                        }
                     }
                 }
             }

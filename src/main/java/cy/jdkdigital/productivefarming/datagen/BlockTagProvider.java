@@ -150,7 +150,7 @@ public class BlockTagProvider extends BlockTagsProvider
         FarmingRegistrator.VINES.forEach(flowerConfig -> {
             tag(BlockTags.FLOWERS).add(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, flowerConfig.name())));
         });
-        tag(ModTags.Blocks.POLLINATABLE).addTag(BlockTags.FLOWERS).addTag(BlockTags.CROPS);
+        tag(ModTags.Blocks.POLLINATABLE).addTag(BlockTags.FLOWERS).addTag(BlockTags.CROPS).addTag(ModTags.Blocks.EXTERNAL_STAT_CROPS);
 
         tag(ModTags.Blocks.EXTERNAL_STAT_CROPS)
                 .add(Blocks.WHEAT, Blocks.CARROTS, Blocks.POTATOES, Blocks.BEETROOTS)

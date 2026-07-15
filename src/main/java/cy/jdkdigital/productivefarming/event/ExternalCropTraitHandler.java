@@ -6,6 +6,7 @@ import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.util.ExternalCropStats;
 import cy.jdkdigital.productivefarming.util.RecipeHelper;
+import cy.jdkdigital.productivefarming.util.TraitsHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -131,11 +132,14 @@ public class ExternalCropTraitHandler
             return;
         }
         if (!level.isClientSide()) {
-            ExternalCropStats.setMutation(level, pos, state, recipe.value().mutation());
+            int mutability = ExternalCropStats.getTrait(level, pos, state).mutability();
+            if (level.getRandom().nextFloat() <= TraitsHelper.mutationChance(recipe.value().chance(), mutability)) {
+                ExternalCropStats.setMutation(level, pos, state, recipe.value().mutation());
+                level.levelEvent(2005, pos, 0);
+            }
             if (event.getPlayer() == null || !event.getPlayer().hasInfiniteMaterials()) {
                 stack.shrink(1);
             }
-            level.levelEvent(2005, pos, 0);
         }
         event.cancelWithResult(InteractionResult.SUCCESS);
     }

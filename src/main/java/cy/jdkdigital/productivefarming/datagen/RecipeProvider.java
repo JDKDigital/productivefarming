@@ -144,53 +144,53 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider
 
     private void buildMutationRecipes(RecipeOutput recipeOutput) {
         // Corn mutations
-        CropMutationRecipeBuilder.direct(rL("yellow_dent_corn"), Identifier.withDefaultNamespace("cornflower"), rL("blue_jade_corn"), 1.0f)
+        CropMutationRecipeBuilder.direct(rL("yellow_dent_corn"), Identifier.withDefaultNamespace("cornflower"), rL("blue_jade_corn"), 0.5f)
                 .save(recipeOutput, rL("pollination/blue_jade_corn"));
-        CropMutationRecipeBuilder.direct(rL("yellow_dent_corn"), rL("blue_jade_corn"), rL("black_aztec_corn"), 0.8f)
+        CropMutationRecipeBuilder.direct(rL("yellow_dent_corn"), rL("blue_jade_corn"), rL("black_aztec_corn"), 0.4f)
                 .save(recipeOutput, rL( "pollination/black_aztec_corn"));
-        CropMutationRecipeBuilder.direct(rL("blue_jade_corn"), rL("black_aztec_corn"), rL("sugar_pearl_corn"), 0.8f)
+        CropMutationRecipeBuilder.direct(rL("blue_jade_corn"), rL("black_aztec_corn"), rL("sugar_pearl_corn"), 0.4f)
                 .save(recipeOutput, rL( "pollination/sugar_pearl_corn"));
-        CropMutationRecipeBuilder.direct(rL("black_aztec_corn"), rL("sugar_pearl_corn"), rL("rainbow_corn"), 0.8f)
+        CropMutationRecipeBuilder.direct(rL("black_aztec_corn"), rL("sugar_pearl_corn"), rL("rainbow_corn"), 0.4f)
                 .save(recipeOutput, rL( "pollination/rainbow_corn"));
 
         // Tomato mutations
-        CropMutationRecipeBuilder.direct(rL("roma_tomato"), Identifier.withDefaultNamespace("potato"), rL("beefsteak_tomato"), 1.0f)
+        CropMutationRecipeBuilder.direct(rL("roma_tomato"), Identifier.withDefaultNamespace("potato"), rL("beefsteak_tomato"), 0.5f)
                 .save(recipeOutput, rL("pollination/beefsteak_tomato"));
-        CropMutationRecipeBuilder.direct(rL("beefsteak_tomato"), rL("roma_tomato"), rL("black_beauty_tomato"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("beefsteak_tomato"), rL("roma_tomato"), rL("black_beauty_tomato"), 0.2f)
                 .save(recipeOutput, rL("pollination/black_beauty_tomato"));
-        CropMutationRecipeBuilder.direct(rL("beefsteak_tomato"), rL("roma_tomato"), rL("blue_beauty_tomato"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("beefsteak_tomato"), rL("roma_tomato"), rL("blue_beauty_tomato"), 0.2f)
                 .save(recipeOutput, rL("pollination/blue_beauty_tomato"));
-        CropMutationRecipeBuilder.direct(rL("beefsteak_tomato"), rL("roma_tomato"), rL("white_wonder_tomato"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("beefsteak_tomato"), rL("roma_tomato"), rL("white_wonder_tomato"), 0.2f)
                 .save(recipeOutput, rL("pollination/white_wonder_tomato"));
 
         // Cherry tomato mutations
-        CropMutationRecipeBuilder.direct(rL("cherry_tomato"), Identifier.withDefaultNamespace("beetroot"), rL("chocolate_pear_tomato"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("cherry_tomato"), Identifier.withDefaultNamespace("beetroot"), rL("chocolate_pear_tomato"), 0.2f)
                 .save(recipeOutput, rL("pollination/chocolate_pear_tomato"));
-        CropMutationRecipeBuilder.direct(rL("cherry_tomato"), rL("chocolate_pear_tomato"), rL("yellow_pear_tomato"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("cherry_tomato"), rL("chocolate_pear_tomato"), rL("yellow_pear_tomato"), 0.2f)
                 .save(recipeOutput, rL("pollination/yellow_pear_tomato"));
-        CropMutationRecipeBuilder.direct(rL("yellow_pear_tomato"), rL("chocolate_pear_tomato"), rL("sungold_tomato"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("yellow_pear_tomato"), rL("chocolate_pear_tomato"), rL("sungold_tomato"), 0.2f)
                 .save(recipeOutput, rL("pollination/sungold_tomato"));
 
         // Bell Pepper mutations
-        CropMutationRecipeBuilder.direct(rL("yellow_bell_pepper"), rL("red_bell_pepper"), rL("orange_bell_pepper"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("yellow_bell_pepper"), rL("red_bell_pepper"), rL("orange_bell_pepper"), 0.2f)
                 .save(recipeOutput, rL("pollination/orange_bell_pepper"));
-        CropMutationRecipeBuilder.direct(rL("green_bell_pepper"), rL("orange_bell_pepper"), rL("black_bell_pepper"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("green_bell_pepper"), rL("orange_bell_pepper"), rL("black_bell_pepper"), 0.2f)
                 .save(recipeOutput, rL("pollination/black_bell_pepper"));
-        CropMutationRecipeBuilder.direct(rL("black_bell_pepper"), rL("red_bell_pepper"), rL("purple_bell_pepper"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("black_bell_pepper"), rL("red_bell_pepper"), rL("purple_bell_pepper"), 0.2f)
                 .save(recipeOutput, rL("pollination/purple_bell_pepper"));
-        CropMutationRecipeBuilder.direct(rL("yellow_bell_pepper"), rL("orange_bell_pepper"), rL("white_bell_pepper"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("yellow_bell_pepper"), rL("orange_bell_pepper"), rL("white_bell_pepper"), 0.2f)
                 .save(recipeOutput, rL("pollination/white_bell_pepper"));
 
         // Grape mutations
-        CropMutationRecipeBuilder.direct(rL("red_grape"), rL("green_grape"), rL("concord_grape"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("red_grape"), rL("green_grape"), rL("concord_grape"), 0.2f)
                 .save(recipeOutput, rL("pollination/concord_grape"));
-        CropMutationRecipeBuilder.direct(rL("concord_grape"), rL("green_grape"), rL("cotton_candy_grape"), 0.3f)
+        CropMutationRecipeBuilder.direct(rL("concord_grape"), rL("green_grape"), rL("cotton_candy_grape"), 0.2f)
                 .save(recipeOutput, rL("pollination/cotton_candy_grape"));
 
         // Berry mutation (miracle berry, golden raspberry)
-        CropMutationRecipeBuilder.direct(rL("raspberry"), rL("sungold_tomato"), rL("golden_raspberry"), 0.7f)
+        CropMutationRecipeBuilder.direct(rL("raspberry"), rL("sungold_tomato"), rL("golden_raspberry"), 0.35f)
                 .save(recipeOutput, rL("pollination/golden_raspberry"));
-        CropMutationRecipeBuilder.direct(rL("golden_raspberry"), rL("goji_berry"), rL("miracle_berry"), 0.5f)
+        CropMutationRecipeBuilder.direct(rL("golden_raspberry"), rL("goji_berry"), rL("miracle_berry"), 0.25f)
                 .save(recipeOutput, rL("pollination/miracle_berry"));
     }
 

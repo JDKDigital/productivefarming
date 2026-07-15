@@ -1,6 +1,7 @@
 {
   "values": [
     "#minecraft:flowers",
-    "#minecraft:crops"
+    "#minecraft:crops",
+    "#productivefarming:external_stat_crops"
   ]
 }

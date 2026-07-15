@@ -1,6 +1,6 @@
 {
   "type": "productivefarming:crop_mutation",
-  "chance": 0.8,
+  "chance": 0.4,
   "mutation": "productivefarming:sugar_pearl_corn",
   "pollen": "productivefarming:black_aztec_corn",
   "target": "productivefarming:blue_jade_corn"

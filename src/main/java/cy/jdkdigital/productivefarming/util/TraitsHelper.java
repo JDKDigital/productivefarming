@@ -24,7 +24,7 @@ public class TraitsHelper
     public static final String GROWTH = "growth"; // the speed at which the plant grows, affects random tick growth and when applying bonemeal
     public static final String YIELD = "yield"; // how many crops you get when harvested
     public static final String RESISTANCE = "resistance"; // increases chance of dropping seeds with improved stats
-    public static final String MUTABILITY = "mutability"; // affects how easily the crop can be mutated, max stat can make the crop mutate spontaneously
+    public static final String MUTABILITY = "mutability"; // raises the chance that applied pollen takes hold and mutates the crop
 
     public static final String[] STAT_NAMES = {GROWTH, YIELD, RESISTANCE, MUTABILITY};
 
@@ -57,6 +57,10 @@ public class TraitsHelper
             return TRAIT_VALUES.get(trait).size() - 1;
         }
         return 0;
+    }
+
+    public static float mutationChance(float baseChance, int mutability) {
+        return baseChance * (1 + mutability * 0.5f);
     }
 
     public static void setDefaultsOnStack(ItemStack stack) {

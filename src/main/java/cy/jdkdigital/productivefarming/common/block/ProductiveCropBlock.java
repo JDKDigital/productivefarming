@@ -80,11 +80,13 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
                 var recipe = RecipeHelper.getPollinationRecipe(level, BuiltInRegistries.BLOCK.getKey(state.getBlock()), stack.get(FarmingDataComponents.POLLEN_BLOCK_COMPONENT));
                 if (recipe != null) {
                     if (!level.isClientSide()) {
-                        cropBlockEntity.setMutation(recipe.value().mutation());
+                        if (level.getRandom().nextFloat() <= TraitsHelper.mutationChance(recipe.value().chance(), cropBlockEntity.getMutability())) {
+                            cropBlockEntity.setMutation(recipe.value().mutation());
+                            level.levelEvent(2005, pos, 0);
+                        }
                         if (!player.hasInfiniteMaterials()) {
                             stack.shrink(1);
                         }
-                        level.levelEvent(2005, pos, 0);
                         return InteractionResult.FAIL;
                     }
                     return InteractionResult.SUCCESS;

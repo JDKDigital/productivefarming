@@ -5,6 +5,8 @@ import cy.jdkdigital.productivefarming.inventory.FarmControllerContainer;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import cy.jdkdigital.productivefarming.registry.ModTags;
+import cy.jdkdigital.productivefarming.integrations.productivetrees.ProductiveTreesCompat;
+import cy.jdkdigital.productivefarming.integrations.productivetrees.TreeFruitCache;
 import cy.jdkdigital.productivelib.common.block.entity.IMultiBlockControllerBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.IUpgradeableBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
@@ -33,6 +35,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.neoforged.fml.ModList;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -53,6 +56,7 @@ import java.util.stream.Collectors;
 public class FarmControllerBlockEntity extends TickingBlockEntity implements IMultiBlockControllerBlockEntity, IUpgradeableBlockEntity, MenuProvider
 {
     private MultiBlockDetector.MultiBlockData farmConfig;
+    private final TreeFruitCache treeFruitCache = new TreeFruitCache();
 
     public final InventoryHandlerHelper.BlockEntityItemStackHandler inventoryHandler = new InventoryHandlerHelper.BlockEntityItemStackHandler(27, this)
     {
@@ -295,18 +299,44 @@ public class FarmControllerBlockEntity extends TickingBlockEntity implements IMu
         }
     }
 
+    private boolean hasOutputSpace() {
+        for (int slot : InventoryHandlerHelper.OUTPUT_SLOTS) {
+            ItemStack stack = inventoryHandler.getStackInSlot(slot);
+            if (stack.isEmpty() || stack.getCount() < stack.getMaxStackSize()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void processCropFarm(List<BlockPos> cropPositions) {
         if (level instanceof ServerLevel serverLevel) {
+            if (ModList.get().isLoaded("productivetrees")) {
+                ProductiveTreesCompat.processTreeFruit(serverLevel, cropPositions, treeFruitCache, serverLevel.getGameTime(), () -> {
+                    if (fluidHandler.getFluidInTank(0).getAmount() >= 50) {
+                        fluidHandler.drain(50, true);
+                        return true;
+                    }
+                    return false;
+                }, this::hasOutputSpace, itemEntity -> {
+                    if (inventoryHandler.addOutput(itemEntity.getItem()).isEmpty()) {
+                        itemEntity.kill(serverLevel);
+                    }
+                });
+            }
+            boolean hasSpace = hasOutputSpace();
             Collections.shuffle(cropPositions);
             cropPositions.forEach(p -> {
                 for (BlockPos pos: new BlockPos[]{p, p.above()}) {
-                    HarvestCompatHandler.harvestBlock(serverLevel, pos);
+                    if (hasSpace) {
+                        HarvestCompatHandler.harvestBlock(serverLevel, pos);
+                    }
 
-                    if (fluidHandler.getFluidInTank(0).getAmount() >= 100) {
+                    if (fluidHandler.getFluidInTank(0).getAmount() >= 50) {
                         var state = serverLevel.getBlockState(pos);
                         if (state.getBlock() instanceof BonemealableBlock bonemealableBlock && bonemealableBlock.isValidBonemealTarget(serverLevel, pos, state)) {
                             bonemealableBlock.performBonemeal(serverLevel, serverLevel.getRandom(), pos, state);
-                            fluidHandler.drain(100, true);
+                            fluidHandler.drain(50, true);
                             level.levelEvent(1505, pos, 15);
                         }
                     }

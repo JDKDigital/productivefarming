@@ -1,3 +1,19 @@
+26.1.2-0.12.0
+
+- The mutability crop stat now does something: it raises the chance that pollen takes hold, up to 3x at max mutability. Pollen is consumed even when a mutation fails to take, so crops with low mutability are harder and more expensive to mutate
+- Lowered the base mutation chance on all pollination recipes, so mutating crops is more of a grind and leveling up mutability matters more
+- Bees can now cross-pollinate and mutate supported external crops (vanilla and modded), not just Productive Farming's own crops
+
+
+26.1.2-0.11.0
+
+- Added Productive Trees compat: the Farm Controller now harvests ripe fruit from fruit trees
+- Nutrient water now accelerates fruit tree growth as well as crops
+- Harvested fruit is collected straight into the controller instead of dropping on the ground
+- The Farm Controller now stops harvesting crops and fruit while its output is full, instead of harvesting and destroying the overflow
+- Lowered nutrient water usage per growth tick from 100 to 50 mB
+
+
 26.1.2-0.10.0
 
 - Reworked the AgriTech and AgriTech: Evolved integration to use AgriTech's official events instead of mixins

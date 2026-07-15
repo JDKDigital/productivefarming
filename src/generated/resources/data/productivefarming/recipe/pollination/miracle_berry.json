@@ -1,6 +1,6 @@
 {
   "type": "productivefarming:crop_mutation",
-  "chance": 0.5,
+  "chance": 0.25,
   "mutation": "productivefarming:miracle_berry",
   "pollen": "productivefarming:goji_berry",
   "target": "productivefarming:golden_raspberry"

@@ -1,6 +1,6 @@
 {
   "type": "productivefarming:crop_mutation",
-  "chance": 0.3,
+  "chance": 0.2,
   "mutation": "productivefarming:chocolate_pear_tomato",
   "pollen": "minecraft:beetroot",
   "target": "productivefarming:cherry_tomato"

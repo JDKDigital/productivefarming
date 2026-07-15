@@ -1,6 +1,6 @@
 {
   "type": "productivefarming:crop_mutation",
-  "chance": 1.0,
+  "chance": 0.5,
   "mutation": "productivefarming:beefsteak_tomato",
   "pollen": "minecraft:potato",
   "target": "productivefarming:roma_tomato"

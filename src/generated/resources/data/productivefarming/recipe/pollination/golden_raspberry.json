@@ -1,6 +1,6 @@
 {
   "type": "productivefarming:crop_mutation",
-  "chance": 0.7,
+  "chance": 0.35,
   "mutation": "productivefarming:golden_raspberry",
   "pollen": "productivefarming:sungold_tomato",
   "target": "productivefarming:raspberry"
