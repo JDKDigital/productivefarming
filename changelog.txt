@@ -1,3 +1,9 @@
+1.21.1-0.5.3
+
+- Fixed texture sizes
+- Updated PT_BR translation (PrincessStellar)
+
+
 1.21.1-0.5.2
 
 - Fixed flowers in flower pots
