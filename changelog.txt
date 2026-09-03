@@ -1,8 +1,9 @@
 26.1.2-0.12.0
 
-- The mutability crop stat now does something: it raises the chance that pollen takes hold, up to 3x at max mutability. Pollen is consumed even when a mutation fails to take, so crops with low mutability are harder and more expensive to mutate
-- Lowered the base mutation chance on all pollination recipes, so mutating crops is more of a grind and leveling up mutability matters more
-- Bees can now cross-pollinate and mutate supported external crops (vanilla and modded), not just Productive Farming's own crops
+- The mutability crop stat now raises the chance that pollen takes hold
+- Lowered the base mutation chance on all pollination recipes
+- Bees can now cross-pollinate and mutate supported external crops, not just Productive Farming's own crops
+- Fixed texture sizes
 
 
 26.1.2-0.11.0

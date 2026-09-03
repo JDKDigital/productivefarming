@@ -156,9 +156,17 @@ public class FarmControllerBlock extends CapabilityContainerBlock implements IMu
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FarmControllerBlockEntity blockEntity) {
             try {
-                blockEntity.setMultiBlockData(detectMultiblock(level, pos));
+                MultiBlockDetector.MultiBlockData previous = blockEntity.getMultiblockData();
+                MultiBlockDetector.MultiBlockData current = detectMultiblock(level, pos);
+                blockEntity.setMultiBlockData(current);
                 level.setBlockAndUpdate(pos, blockEntity.getBlockState().setValue(BlockStateProperties.ATTACHED, true));
-                player.sendSystemMessage(Component.translatable(ProductiveFarming.MODID + ".message.farm_formed", blockEntity.getMultiblockData().height() + 1));
+                if (!state.getValue(BlockStateProperties.ATTACHED)
+                        || previous == null
+                        || previous.height() != current.height()
+                        || previous.volume() != current.volume()
+                        || !previous.topCorners().equals(current.topCorners())) {
+                    player.sendSystemMessage(Component.translatable(ProductiveFarming.MODID + ".message.farm_formed", current.height() + 1));
+                }
                 if (player instanceof ServerPlayer serverPlayer) {
                     openGui(serverPlayer, blockEntity);
                 }

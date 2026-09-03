@@ -139,15 +139,15 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
-    // productivebees: local 26.1 build in libs/ (compile + dev-runtime for the optional integration).
-    compileOnly "local.libs:productivebees-${pb_version}"
-    localRuntime "local.libs:productivebees-${pb_version}"
+    // productivebees: from CurseForge (compile + dev-runtime for the optional integration).
+    compileOnly "curse.maven:productivebees-377897:8223351"  // productivebees-26.1.2-14.5.2
+    localRuntime "curse.maven:productivebees-377897:8223351"
     // productivebees' own hard dep — needed at dev-runtime so its entities/recipes initialize.
     localRuntime "curse.maven:geckolib-388172:7913641"
 
-    // productivetrees: local 26.1 build in libs/ (compile + dev-runtime for the fruit-tree harvest integration).
-    compileOnly "local.libs:productivetrees-${pt_version}"
-    localRuntime "local.libs:productivetrees-${pt_version}"
+    // productivetrees: from CurseForge (compile + dev-runtime for the fruit-tree harvest integration).
+    compileOnly "curse.maven:productivetrees-867074:8303910"  // productivetrees-26.1.2-1.1.1
+    localRuntime "curse.maven:productivetrees-867074:8303910"
 
     // Mod-compat dependencies — file IDs must be resolved against MC 26.1.2 on CurseForge before
     // restoring the matching integrations/** sources. Commented until each publishes a 26.1.2 build.
