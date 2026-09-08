@@ -7,7 +7,6 @@ import cy.jdkdigital.productivefarming.client.color.FlowerItemTintSource;
 import cy.jdkdigital.productivefarming.client.color.PollenItemTintSource;
 import cy.jdkdigital.productivefarming.client.color.StemAgeTintSource;
 import cy.jdkdigital.productivefarming.client.render.block.FencedCropBlockEntityRenderer;
-import cy.jdkdigital.productivefarming.client.render.entity.layers.WolfHotdogLayer;
 import cy.jdkdigital.productivefarming.client.render.item.SeedBagItemRenderer;
 import cy.jdkdigital.productivefarming.inventory.screen.FarmControllerScreen;
 import cy.jdkdigital.productivefarming.inventory.screen.FeedingTroughScreen;
@@ -17,16 +16,12 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.block.FluidModel;
-import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.core.BlockPos;
 import net.neoforged.api.distmarker.Dist;
@@ -129,15 +124,15 @@ public class ClientEventHandler
         });
     }
 
-    @SubscribeEvent
-    public static void layerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(WolfHotdogLayer.HOTDOG_LAYER, () -> LayerDefinition.create(WolfHotdogLayer.createMeshDefinition(CubeDeformation.NONE), 64, 64));
-    }
+//    @SubscribeEvent
+//    public static void layerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+//        event.registerLayerDefinition(WolfHotdogLayer.HOTDOG_LAYER, () -> LayerDefinition.create(WolfHotdogLayer.createMeshDefinition(CubeDeformation.NONE), 64, 64));
+//    }
 
-    @SubscribeEvent
-    public static void addLayers(EntityRenderersEvent.AddLayers event) {
-        if (event.getRenderer(EntityType.WOLF) instanceof WolfRenderer wolfRenderer) {
-            wolfRenderer.addLayer(new WolfHotdogLayer(wolfRenderer, event.getEntityModels()));
-        }
-    }
+//    @SubscribeEvent
+//    public static void addLayers(EntityRenderersEvent.AddLayers event) {
+//        if (event.getRenderer(EntityType.WOLF) instanceof WolfRenderer wolfRenderer) {
+//            wolfRenderer.addLayer(new WolfHotdogLayer(wolfRenderer, event.getEntityModels()));
+//        }
+//    }
 }
