@@ -31,19 +31,20 @@ public abstract class FencedCropBlockEntity extends CropBlockEntity
         super.loadPacketNBT(input);
         input.getString("fence").ifPresent(fenceId -> {
             var fence = BuiltInRegistries.BLOCK.getValue(Identifier.parse(fenceId)).defaultBlockState();
-            fence = fence
-                    .setValue(FenceBlock.NORTH, input.getBooleanOr("north", false))
-                    .setValue(FenceBlock.SOUTH, input.getBooleanOr("south", false))
-                    .setValue(FenceBlock.EAST, input.getBooleanOr("east", false))
-                    .setValue(FenceBlock.WEST, input.getBooleanOr("west", false));
-            setFence(fence);
+            if (fence.hasProperty(FenceBlock.NORTH)) {
+                setFence(fence
+                        .setValue(FenceBlock.NORTH, input.getBooleanOr("north", false))
+                        .setValue(FenceBlock.SOUTH, input.getBooleanOr("south", false))
+                        .setValue(FenceBlock.EAST, input.getBooleanOr("east", false))
+                        .setValue(FenceBlock.WEST, input.getBooleanOr("west", false)));
+            }
         });
     }
 
     @Override
     public void savePacketNBT(ValueOutput output) {
         super.savePacketNBT(output);
-        if (this.fence != null) {
+        if (this.fence != null && this.fence.hasProperty(FenceBlock.NORTH)) {
             output.putString("fence", BuiltInRegistries.BLOCK.getKey(this.fence.getBlock()).toString());
             output.putBoolean("north", this.fence.getValue(FenceBlock.NORTH));
             output.putBoolean("south", this.fence.getValue(FenceBlock.SOUTH));

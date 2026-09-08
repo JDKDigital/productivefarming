@@ -38,7 +38,7 @@ public class StemGrowinSeedItem extends CropBlockItem
             return interactionResult;
         }
         // Set fence state on the crop
-        if (!level.isClientSide() && level.getBlockEntity(context.getClickedPos().above()) instanceof FencedCropBlockEntity fencedCropBlockEntity) {
+        if (!level.isClientSide() && state.is(Tags.Blocks.FENCES) && level.getBlockEntity(context.getClickedPos().above()) instanceof FencedCropBlockEntity fencedCropBlockEntity) {
             fencedCropBlockEntity.setFence(state.getBlock().defaultBlockState());
         }
         return interactionresult;
