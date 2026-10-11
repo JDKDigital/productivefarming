@@ -648,6 +648,7 @@ public class FarmingRegistrator
                 .canExtinguish(true)
                 .canConvertToSource(false)
                 .supportsBoating(true)
+                .isWaterLike(true)
                 .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
                 .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
                 .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)

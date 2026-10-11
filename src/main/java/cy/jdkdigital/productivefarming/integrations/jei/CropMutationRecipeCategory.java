@@ -40,14 +40,14 @@ public class CropMutationRecipeCategory extends AbstractRecipeCategory<RecipeHol
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<CropMutationRecipe> recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 13, 27)
-                .addItemStack(BuiltInRegistries.ITEM.getValue(recipe.value().pollenCrop()).getDefaultInstance())
+                .add(BuiltInRegistries.ITEM.getValue(recipe.value().pollenCrop()).getDefaultInstance())
                 .setSlotName("pollenCrop");
         builder.addSlot(RecipeIngredientRole.INPUT, 56, 27)
-                .addItemStack(BuiltInRegistries.ITEM.getValue(recipe.value().targetCrop()).getDefaultInstance())
+                .add(BuiltInRegistries.ITEM.getValue(recipe.value().targetCrop()).getDefaultInstance())
                 .setSlotName("targetCrop");
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 109, 27)
-                .addItemStack(BuiltInRegistries.ITEM.getValue(recipe.value().mutation()).getDefaultInstance())
+                .add(BuiltInRegistries.ITEM.getValue(recipe.value().mutation()).getDefaultInstance())
                 .setSlotName("result");
     }
 }

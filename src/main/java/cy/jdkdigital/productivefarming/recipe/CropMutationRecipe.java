@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
@@ -49,15 +50,17 @@ public record CropMutationRecipe(Identifier targetCrop, Identifier pollenCrop, I
     }
 
     public boolean matches(Identifier targetCrop, Identifier pollenCrop) {
+        // If vanilla crop find the item from the state because of course vanilla can't name them the same
+        if (targetCrop.getNamespace().equals("minecraft")) {
+            targetCrop = BuiltInRegistries.ITEM.getKey(BuiltInRegistries.BLOCK.getValue(targetCrop).asItem());
+        }
+        if (pollenCrop.getNamespace().equals("minecraft")) {
+            pollenCrop = BuiltInRegistries.ITEM.getKey(BuiltInRegistries.BLOCK.getValue(pollenCrop).asItem());
+        }
+
         if (this.targetCrop.equals(targetCrop) && this.pollenCrop.equals(pollenCrop)) {
+            ProductiveFarming.LOGGER.info("match");
             return true;
-        }
-        // if we have vanilla crops enabled, check anything with default namespace as mod namespace instead
-        if (Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, this.targetCrop.getPath()).equals(targetCrop)) {
-            return this.pollenCrop.equals(pollenCrop) || Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, this.pollenCrop.getPath()).equals(pollenCrop);
-        }
-        if (Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, this.pollenCrop.getPath()).equals(targetCrop)) {
-            return this.targetCrop.equals(pollenCrop) || Identifier.fromNamespaceAndPath(ProductiveFarming.MODID, this.targetCrop.getPath()).equals(pollenCrop);
         }
 
         // check for _leaves as well to match grapes and the likes

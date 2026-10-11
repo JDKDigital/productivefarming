@@ -37,7 +37,7 @@ public class CompatHandler
                     if (sieveUpgrades > 0 && level.getRandom().nextInt(100) < (Config.SERVER.pollenChanceFromSieve.get() * (isSpecialPollinator ? 5 : 1))) {
                         Identifier pollenCrop = uniqueCrops.get(level.getRandom().nextInt(uniqueCrops.size()));
                         var pollenStack = FarmUtil.getPollen(pollenCrop);
-                        ((InventoryHandlerHelper.BlockEntityItemStackHandler) advancedBeehiveBlockEntity.inventoryHandler).addOutput(pollenStack);
+                        advancedBeehiveBlockEntity.inventoryHandler.addOutput(pollenStack);
                     }
                 }
             }

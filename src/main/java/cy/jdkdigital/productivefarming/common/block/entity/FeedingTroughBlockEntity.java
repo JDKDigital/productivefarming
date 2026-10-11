@@ -27,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -111,29 +110,32 @@ public class FeedingTroughBlockEntity extends TickingBlockEntity implements Menu
 
     @Override
     public void tickServer(ServerLevel level, BlockPos blockPos, BlockState blockState, TickingBlockEntity blockEntity) {
-        List<ItemStack> stacks = new ArrayList<>();
-        for (int i = 0; i < inventoryHandler.size(); i++) {
-            var stack = inventoryHandler.getStackInSlot(i);
-            if (!stack.isEmpty()) {
-                stacks.add(stack);
+        boolean hasFood = false;
+        for (int slot = 0; slot < inventoryHandler.size(); slot++) {
+            if (!inventoryHandler.getResource(slot).isEmpty()) {
+                hasFood = true;
+                break;
             }
         }
-        if (!stacks.isEmpty()) {
+        if (hasFood) {
             var range = 4d + (getUpgradeCount(LibItems.UPGRADE_RANGE.get()));
             var hasChildUpgrade = getUpgradeCount(LibItems.UPGRADE_CHILD.get()) > 0;
             List<Animal> entities = level.getEntitiesOfClass(Animal.class, (new AABB(blockPos).inflate(range, range - 3d, range))).stream().toList();
             if (!entities.isEmpty()) {
                 Player fakePlayer = FakePlayerFactory.get(level, new GameProfile(PLAYER_UUID, "feeding_trough"));
                 entities.forEach(animal -> {
-                    for (ItemStack stack : stacks) {
+                    for (int slot = 0; slot < inventoryHandler.size(); slot++) {
+                        var stack = inventoryHandler.getStackInSlot(slot);
                         if (!stack.isEmpty() && animal.isFood(stack) && (hasChildUpgrade || !animal.isBaby())) {
-                            fakePlayer.setItemInHand(InteractionHand.MAIN_HAND, stack);
+                            fakePlayer.setItemInHand(InteractionHand.MAIN_HAND, stack.copyWithCount(1));
                             if (animal.mobInteract(fakePlayer, InteractionHand.MAIN_HAND).consumesAction()) {
+                                inventoryHandler.extractItem(slot, 1, false);
                                 break;
                             }
                         }
                     }
                 });
+                fakePlayer.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             }
         }
     }

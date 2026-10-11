@@ -40,11 +40,11 @@ public class CropFruitingRecipeCategory extends AbstractRecipeCategory<RecipeHol
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<CropFruitingRecipe> recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 28, 27)
-                .addIngredients(recipe.value().crop)
+                .add(recipe.value().crop)
                 .setSlotName("targetCrop");
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 94, 27)
-                .addItemStack(recipe.value().result)
+                .add(recipe.value().result)
                 .setSlotName("result");
     }
 }
