@@ -21,7 +21,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -74,7 +73,7 @@ public class FencedStemBlock extends StemBlock implements IAgeableCropBlock, Ent
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!level.isAreaLoaded(pos, 1)) return;
         if (level.getRawBrightness(pos, 0) >= 9) {
-            float f = CropBlock.getGrowthSpeed(state, level, pos);
+            float f = ProductiveCropBlock.getModifiedGrowthSpeed(state, level, pos);
             if (CommonHooks.canCropGrow(level, pos, state, random.nextInt((int)(25.0F / f) + 1) == 0)) {
                 var stemBlockEntity = level.getBlockEntity(pos);
                 if (stemBlockEntity instanceof FencedCropBlockEntity fencedStemBlockEntity && fencedStemBlockEntity.getFence() != null) {

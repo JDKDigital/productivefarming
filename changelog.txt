@@ -1,3 +1,20 @@
+26.1.2-0.13.0
+
+- Fixed the Growth trait making crops grow slower instead of faster
+- Fixed crop mutations involving vanilla crops
+- The Feeding Trough now uses up the food it feeds to animals, instead of breeding them without consuming anything
+- Flowers now generate in patches instead of single scattered plants
+- Small, double and large flowers now generate separately, each with its own rarity, with small the most common and large the rarest
+- Removed vanilla flower variants from worldgen
+
+
+26.1.2-0.12.1
+
+- Added Japanese translation (hamutaromaru)
+- Fixed a server crash while trellis crops such as cucumber were growing on something else than a fence
+- Right clicking a tamed wolf no longer puts your held item into its armor slot
+
+
 26.1.2-0.12.0
 
 - The mutability crop stat now raises the chance that pollen takes hold

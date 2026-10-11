@@ -315,7 +315,7 @@ public class ProductiveFarmingGameTests
         helper.setBlock(relPos, BuiltInRegistries.BLOCK.getValue(romaId).defaultBlockState());
         CropBlockEntity be = helper.getBlockEntity(relPos, CropBlockEntity.class);
 
-        var recipe = RecipeHelper.getPollinationRecipe(level, romaId, Identifier.withDefaultNamespace("potato"));
+        var recipe = RecipeHelper.getPollinationRecipe(level, romaId, Identifier.withDefaultNamespace("potatoes"));
         if (recipe == null) {
             helper.fail("no pollination recipe found for roma_tomato + potato (recipe lookup broken)", relPos);
             return;

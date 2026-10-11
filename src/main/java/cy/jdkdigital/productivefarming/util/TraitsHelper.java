@@ -3,6 +3,7 @@ package cy.jdkdigital.productivefarming.util;
 import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingDataComponents;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
+import cy.jdkdigital.productivefarming.registry.ModTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
@@ -77,6 +78,8 @@ public class TraitsHelper
         stack.set(FarmingDataComponents.MUTABILITY, in.getOrDefault(FarmingDataComponents.MUTABILITY, 0));
     }
 
+    public static final double UNTIERED_INCREASE_CHANCE = 0.01;
+
     public static String rollIncreasedStat(RandomSource random, Holder<Item> seed) {
         if (random.nextFloat() >= getIncreaseChance(seed)) {
             return null;
@@ -85,8 +88,14 @@ public class TraitsHelper
     }
 
     public static double getIncreaseChance(Holder<Item> seed) {
-        Double chance = seed == null ? null : seed.getData(FarmingRegistrator.STAT_INCREASE_CHANCE);
-        return chance != null ? chance : 0.0;
+        if (seed == null) {
+            return 0.0;
+        }
+        Double chance = seed.getData(FarmingRegistrator.STAT_INCREASE_CHANCE);
+        if (chance != null) {
+            return chance;
+        }
+        return seed.is(ModTags.Items.EXTERNAL_SEEDS) ? UNTIERED_INCREASE_CHANCE : 0.0;
     }
 
     public static ItemStack applyTraits(ItemStack stack, int growth, int yield, int resistance, int mutability) {

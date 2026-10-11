@@ -3,7 +3,6 @@ package cy.jdkdigital.productivefarming.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import cy.jdkdigital.productivefarming.ProductiveFarming;
 import cy.jdkdigital.productivefarming.registry.FarmingRegistrator;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -59,7 +58,6 @@ public record CropMutationRecipe(Identifier targetCrop, Identifier pollenCrop, I
         }
 
         if (this.targetCrop.equals(targetCrop) && this.pollenCrop.equals(pollenCrop)) {
-            ProductiveFarming.LOGGER.info("match");
             return true;
         }
 

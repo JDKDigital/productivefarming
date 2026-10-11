@@ -112,7 +112,7 @@ abstract class FencedPlantLeafBlock extends ProductiveCropBlock
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!level.isAreaLoaded(pos, 1)) return;
         if (level.getRawBrightness(pos, 0) >= 9) {
-            float f = getGrowthSpeed(state, level, pos);
+            float f = getModifiedGrowthSpeed(state, level, pos);
             // Check if there's any fences touching the leaf and replace with leaf copies
             for (Direction dir : validGrowthDirections(level, pos)) {
                 var fenceState = level.getBlockState(pos.relative(dir));
