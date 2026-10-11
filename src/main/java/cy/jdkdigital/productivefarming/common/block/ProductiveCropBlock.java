@@ -214,7 +214,7 @@ public class ProductiveCropBlock extends CropBlock implements IAgeableCropBlock,
     public static float getModifiedGrowthSpeed(BlockState blockState, BlockGetter level, BlockPos pos) {
         float speed = getGrowthSpeed(blockState, level, pos) * 2;
         if (level.getBlockEntity(pos) instanceof SimpleCropBlockEntity cropBlockEntity) {
-            speed /= (cropBlockEntity.getGrowth() + 1);
+            speed *= (cropBlockEntity.getGrowth() + 1);
         }
         return Math.max(1, speed);
     }
